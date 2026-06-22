@@ -1,0 +1,1224 @@
+2025-11-18 17:06:31,780 - root - INFO - Logging configured successfully.
+2025-11-18 17:06:31,780 - root - INFO - Log level: INFO, Log file: logs\last.log
+2025-11-18 17:06:31,781 - corrector.core.run - INFO - Starting hysteresis data collection script
+2025-11-18 17:06:31,781 - flexsem.state.manager - INFO - Connecting to 192.168.1.1:3000
+2025-11-18 17:06:31,782 - flexsem.state.manager - INFO - Connected to 192.168.1.1:3000
+2025-11-18 17:06:31,783 - corrector.core.run - INFO - Connected to 0300 SEM device
+2025-11-18 17:06:31,835 - corrector.core.run - INFO - Dataset will be saved to hysteresis_dataset_20251118_170631.jsonl
+2025-11-18 17:06:31,931 - corrector.core.run - INFO - --- Starting Iteration 1 at Base: (-24000, -48150) ---
+2025-11-18 17:06:32,058 - corrector.core.run - INFO - Magnification and focus set for experiment 'major_minor_x'
+2025-11-18 17:06:32,473 - corrector.core.run - INFO - Moved to base position for experiment: x=-24000, y=-48150
+2025-11-18 17:06:37,787 - corrector.core.run - INFO - Step 1/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:06:43,056 - corrector.core.drift - INFO - Phase correlation: shift=(4.849787404693075, 1.7986657545979483) conf=0.9758028621759676
+2025-11-18 17:06:43,136 - corrector.core.run - INFO - Drift detected: (dx=-60, dy=22) with conf=0.9758
+2025-11-18 17:06:43,868 - corrector.core.run - INFO - Step 2/200: Moving to target x=-23200, y=-48150
+2025-11-18 17:06:49,103 - corrector.core.drift - INFO - Phase correlation: shift=(5.903488410882801, 1.8503611768582005) conf=0.9780838067899934
+2025-11-18 17:06:49,182 - corrector.core.run - INFO - Drift detected: (dx=-73, dy=23) with conf=0.9781
+2025-11-18 17:06:49,854 - corrector.core.run - INFO - Step 3/200: Moving to target x=-22800, y=-48150
+2025-11-18 17:06:55,505 - corrector.core.drift - INFO - Phase correlation: shift=(5.978163374436008, 1.9422658640361306) conf=0.9878510161058576
+2025-11-18 17:06:55,602 - corrector.core.run - INFO - Drift detected: (dx=-74, dy=24) with conf=0.9879
+2025-11-18 17:06:56,350 - corrector.core.run - INFO - Step 4/200: Moving to target x=-22400, y=-48150
+2025-11-18 17:07:01,685 - corrector.core.drift - INFO - Phase correlation: shift=(6.557402679574693, 1.9201325908503577) conf=0.9305919547262855
+2025-11-18 17:07:01,748 - corrector.core.run - INFO - Drift detected: (dx=-81, dy=24) with conf=0.9306
+2025-11-18 17:07:02,435 - corrector.core.run - INFO - Step 5/200: Moving to target x=-22000, y=-48150
+2025-11-18 17:07:07,929 - corrector.core.drift - INFO - Phase correlation: shift=(6.2495686685664396, 1.9448406482463838) conf=0.9734433801582529
+2025-11-18 17:07:07,976 - corrector.core.run - INFO - Drift detected: (dx=-78, dy=24) with conf=0.9734
+2025-11-18 17:07:08,615 - corrector.core.run - INFO - Step 6/200: Moving to target x=-21600, y=-48150
+2025-11-18 17:07:12,730 - corrector.core.drift - INFO - Phase correlation: shift=(7.971187999839799, 2.1161696127398386) conf=0.9880359494565826
+2025-11-18 17:07:12,762 - corrector.core.run - INFO - Drift detected: (dx=-99, dy=26) with conf=0.9880
+2025-11-18 17:07:13,481 - corrector.core.run - INFO - Step 7/200: Moving to target x=-21200, y=-48150
+2025-11-18 17:07:19,045 - corrector.core.drift - INFO - Phase correlation: shift=(25.066870597469233, 7.146410580259271) conf=0.9601846447193698
+2025-11-18 17:07:19,125 - corrector.core.run - INFO - Drift detected: (dx=-311, dy=89) with conf=0.9602
+2025-11-18 17:07:19,858 - corrector.core.run - INFO - Step 8/200: Moving to target x=-20800, y=-48150
+2025-11-18 17:07:25,272 - corrector.core.drift - INFO - Phase correlation: shift=(48.79410433701173, 13.010129440078401) conf=0.9287984431537992
+2025-11-18 17:07:25,351 - corrector.core.run - INFO - Drift detected: (dx=-605, dy=161) with conf=0.9288
+2025-11-18 17:07:26,100 - corrector.core.run - INFO - Step 9/200: Moving to target x=-20400, y=-48150
+2025-11-18 17:07:31,561 - corrector.core.drift - INFO - Phase correlation: shift=(74.98025170491815, 19.70483746400049) conf=0.9043792850339429
+2025-11-18 17:07:31,626 - corrector.core.run - INFO - Drift detected: (dx=-930, dy=244) with conf=0.9044
+2025-11-18 17:07:32,422 - corrector.core.run - INFO - Step 10/200: Moving to target x=-20000, y=-48150
+2025-11-18 17:07:37,771 - corrector.core.drift - INFO - Phase correlation: shift=(102.89695769735135, 26.125234478551818) conf=0.8734908634226374
+2025-11-18 17:07:37,852 - corrector.core.run - INFO - Drift detected: (dx=-1276, dy=324) with conf=0.8735
+2025-11-18 17:07:38,569 - corrector.core.run - INFO - Step 11/200: Moving to target x=-20400, y=-48150
+2025-11-18 17:07:42,479 - corrector.core.drift - INFO - Phase correlation: shift=(99.133498710082, 25.035400539465343) conf=0.8886312959577531
+2025-11-18 17:07:42,560 - corrector.core.run - INFO - Drift detected: (dx=-1229, dy=310) with conf=0.8886
+2025-11-18 17:07:43,261 - corrector.core.run - INFO - Step 12/200: Moving to target x=-20800, y=-48150
+2025-11-18 17:07:47,443 - corrector.core.drift - INFO - Phase correlation: shift=(98.813049680272, 24.850893857779567) conf=0.8827604540851479
+2025-11-18 17:07:47,491 - corrector.core.run - INFO - Drift detected: (dx=-1226, dy=308) with conf=0.8828
+2025-11-18 17:07:48,114 - corrector.core.run - INFO - Step 13/200: Moving to target x=-21200, y=-48150
+2025-11-18 17:07:52,280 - corrector.core.drift - INFO - Phase correlation: shift=(98.8992791924934, 24.782519814012574) conf=0.8720069931297947
+2025-11-18 17:07:52,343 - corrector.core.run - INFO - Drift detected: (dx=-1227, dy=307) with conf=0.8720
+2025-11-18 17:07:52,963 - corrector.core.run - INFO - Step 14/200: Moving to target x=-21600, y=-48150
+2025-11-18 17:07:57,066 - corrector.core.drift - INFO - Phase correlation: shift=(98.87343597692939, 24.81748731777634) conf=0.8764738228580257
+2025-11-18 17:07:57,146 - corrector.core.run - INFO - Drift detected: (dx=-1226, dy=308) with conf=0.8765
+2025-11-18 17:07:57,863 - corrector.core.run - INFO - Step 15/200: Moving to target x=-22000, y=-48150
+2025-11-18 17:08:03,369 - corrector.core.drift - INFO - Phase correlation: shift=(98.91956499526702, 24.885792209602926) conf=0.8858926233118092
+2025-11-18 17:08:03,465 - corrector.core.run - INFO - Drift detected: (dx=-1227, dy=309) with conf=0.8859
+2025-11-18 17:08:04,135 - corrector.core.run - INFO - Step 16/200: Moving to target x=-22400, y=-48150
+2025-11-18 17:08:09,608 - corrector.core.drift - INFO - Phase correlation: shift=(96.74181024795871, 24.10128211269341) conf=0.8754097294975122
+2025-11-18 17:08:09,688 - corrector.core.run - INFO - Drift detected: (dx=-1200, dy=299) with conf=0.8754
+2025-11-18 17:08:10,422 - corrector.core.run - INFO - Step 17/200: Moving to target x=-22800, y=-48150
+2025-11-18 17:08:15,881 - corrector.core.drift - INFO - Phase correlation: shift=(80.83979406855599, 19.738333119906827) conf=0.8773295561960774
+2025-11-18 17:08:15,945 - corrector.core.run - INFO - Drift detected: (dx=-1003, dy=245) with conf=0.8773
+2025-11-18 17:08:16,648 - corrector.core.run - INFO - Step 18/200: Moving to target x=-23200, y=-48150
+2025-11-18 17:08:22,154 - corrector.core.drift - INFO - Phase correlation: shift=(57.7898088643816, 13.7740545025124) conf=0.9313984686767314
+2025-11-18 17:08:22,218 - corrector.core.run - INFO - Drift detected: (dx=-717, dy=171) with conf=0.9314
+2025-11-18 17:08:23,001 - corrector.core.run - INFO - Step 19/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:08:28,489 - corrector.core.drift - INFO - Phase correlation: shift=(31.17371479698511, 7.165280405016404) conf=0.9569420101035776
+2025-11-18 17:08:28,553 - corrector.core.run - INFO - Drift detected: (dx=-387, dy=89) with conf=0.9569
+2025-11-18 17:08:29,239 - corrector.core.run - INFO - Step 20/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:08:34,793 - corrector.core.drift - INFO - Phase correlation: shift=(3.7967125806492277, 0.2698278840916828) conf=0.9673580152456676
+2025-11-18 17:08:34,873 - corrector.core.run - INFO - Drift detected: (dx=-47, dy=3) with conf=0.9674
+2025-11-18 17:08:35,526 - corrector.core.run - INFO - Step 21/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:08:41,049 - corrector.core.drift - INFO - Phase correlation: shift=(-25.191151269013403, -6.235375777777847) conf=0.945562608620812
+2025-11-18 17:08:41,129 - corrector.core.run - INFO - Drift detected: (dx=312, dy=-77) with conf=0.9456
+2025-11-18 17:08:41,814 - corrector.core.run - INFO - Step 22/200: Moving to target x=-24800, y=-48150
+2025-11-18 17:08:47,427 - corrector.core.drift - INFO - Phase correlation: shift=(-55.73584846252345, -13.11110713648435) conf=0.9114256585986381
+2025-11-18 17:08:47,507 - corrector.core.run - INFO - Drift detected: (dx=691, dy=-163) with conf=0.9114
+2025-11-18 17:08:48,223 - corrector.core.run - INFO - Step 23/200: Moving to target x=-25200, y=-48150
+2025-11-18 17:08:53,731 - corrector.core.drift - INFO - Phase correlation: shift=(-85.8174384056349, -19.989617241546796) conf=0.868956189869459
+2025-11-18 17:08:53,811 - corrector.core.run - INFO - Drift detected: (dx=1064, dy=-248) with conf=0.8690
+2025-11-18 17:08:54,530 - corrector.core.run - INFO - Step 24/200: Moving to target x=-25600, y=-48150
+2025-11-18 17:08:59,971 - corrector.core.drift - INFO - Phase correlation: shift=(-115.89179811520603, -26.971365561393327) conf=0.8184662738014109
+2025-11-18 17:09:00,050 - corrector.core.run - INFO - Drift detected: (dx=1437, dy=-335) with conf=0.8185
+2025-11-18 17:09:00,786 - corrector.core.run - INFO - Step 25/200: Moving to target x=-26000, y=-48150
+2025-11-18 17:09:06,351 - corrector.core.drift - INFO - Phase correlation: shift=(-146.79092907602615, -33.922801171679964) conf=0.7781945139354395
+2025-11-18 17:09:06,431 - corrector.core.run - INFO - Drift detected: (dx=1821, dy=-421) with conf=0.7782
+2025-11-18 17:09:07,132 - corrector.core.run - INFO - Step 26/200: Moving to target x=-26400, y=-48150
+2025-11-18 17:09:12,550 - corrector.core.drift - INFO - Phase correlation: shift=(-177.828706641169, -41.07185125718382) conf=0.7335435983400213
+2025-11-18 17:09:12,614 - corrector.core.run - INFO - Drift detected: (dx=2205, dy=-509) with conf=0.7335
+2025-11-18 17:09:13,364 - corrector.core.run - INFO - Step 27/200: Moving to target x=-26800, y=-48150
+2025-11-18 17:09:18,838 - corrector.core.drift - INFO - Phase correlation: shift=(-208.761109407761, -48.22382284254223) conf=0.6878493826026237
+2025-11-18 17:09:18,886 - corrector.core.run - INFO - Drift detected: (dx=2589, dy=-598) with conf=0.6878
+2025-11-18 17:09:19,603 - corrector.core.run - INFO - Step 28/200: Moving to target x=-27200, y=-48150
+2025-11-18 17:09:25,187 - corrector.core.drift - INFO - Phase correlation: shift=(-239.2429866260788, -55.0211023843226) conf=0.665426030956742
+2025-11-18 17:09:25,267 - corrector.core.run - INFO - Drift detected: (dx=2967, dy=-682) with conf=0.6654
+2025-11-18 17:09:25,935 - corrector.core.run - INFO - Step 29/200: Moving to target x=-27600, y=-48150
+2025-11-18 17:09:31,525 - corrector.core.drift - INFO - Phase correlation: shift=(-270.1203281715074, -61.870182625223094) conf=0.6425635806417798
+2025-11-18 17:09:31,572 - corrector.core.run - INFO - Drift detected: (dx=3350, dy=-767) with conf=0.6426
+2025-11-18 17:09:32,242 - corrector.core.run - INFO - Step 30/200: Moving to target x=-28000, y=-48150
+2025-11-18 17:09:37,781 - corrector.core.drift - INFO - Phase correlation: shift=(-300.9619821221523, -68.71281753594371) conf=0.6011560041758047
+2025-11-18 17:09:37,861 - corrector.core.run - INFO - Drift detected: (dx=3733, dy=-852) with conf=0.6012
+2025-11-18 17:09:38,578 - corrector.core.run - INFO - Step 31/200: Moving to target x=-27600, y=-48150
+2025-11-18 17:09:44,023 - corrector.core.drift - INFO - Phase correlation: shift=(-296.9271298907052, -66.84717136594537) conf=0.6132970323843652
+2025-11-18 17:09:44,085 - corrector.core.run - INFO - Drift detected: (dx=3683, dy=-829) with conf=0.6133
+2025-11-18 17:09:44,724 - corrector.core.run - INFO - Step 32/200: Moving to target x=-27200, y=-48150
+2025-11-18 17:09:48,912 - corrector.core.drift - INFO - Phase correlation: shift=(-294.9275904528153, -66.12977941431922) conf=0.6093874725733737
+2025-11-18 17:09:49,008 - corrector.core.run - INFO - Drift detected: (dx=3658, dy=-820) with conf=0.6094
+2025-11-18 17:09:49,663 - corrector.core.run - INFO - Step 33/200: Moving to target x=-26800, y=-48150
+2025-11-18 17:09:55,123 - corrector.core.drift - INFO - Phase correlation: shift=(-293.9815381887414, -65.93847566650084) conf=0.6170285666103006
+2025-11-18 17:09:55,203 - corrector.core.run - INFO - Drift detected: (dx=3646, dy=-818) with conf=0.6170
+2025-11-18 17:09:55,856 - corrector.core.run - INFO - Step 34/200: Moving to target x=-26400, y=-48150
+2025-11-18 17:10:01,572 - corrector.core.drift - INFO - Phase correlation: shift=(-293.18013126500364, -65.93070610607884) conf=0.6130792389302948
+2025-11-18 17:10:01,652 - corrector.core.run - INFO - Drift detected: (dx=3636, dy=-818) with conf=0.6131
+2025-11-18 17:10:02,385 - corrector.core.run - INFO - Step 35/200: Moving to target x=-26000, y=-48150
+2025-11-18 17:10:07,683 - corrector.core.drift - INFO - Phase correlation: shift=(-292.84768686075535, -65.89047378197517) conf=0.6162109615907704
+2025-11-18 17:10:07,731 - corrector.core.run - INFO - Drift detected: (dx=3632, dy=-817) with conf=0.6162
+2025-11-18 17:10:08,384 - corrector.core.run - INFO - Step 36/200: Moving to target x=-25600, y=-48150
+2025-11-18 17:10:14,019 - corrector.core.drift - INFO - Phase correlation: shift=(-292.1131507743269, -65.8762743901417) conf=0.6185314781670083
+2025-11-18 17:10:14,099 - corrector.core.run - INFO - Drift detected: (dx=3623, dy=-817) with conf=0.6185
+2025-11-18 17:10:14,705 - corrector.core.run - INFO - Step 37/200: Moving to target x=-25200, y=-48150
+2025-11-18 17:10:20,420 - corrector.core.drift - INFO - Phase correlation: shift=(-278.6844044675073, -61.816716702714984) conf=0.6118617491904564
+2025-11-18 17:10:20,499 - corrector.core.run - INFO - Drift detected: (dx=3456, dy=-767) with conf=0.6119
+2025-11-18 17:10:21,122 - corrector.core.run - INFO - Step 38/200: Moving to target x=-24800, y=-48150
+2025-11-18 17:10:26,736 - corrector.core.drift - INFO - Phase correlation: shift=(-255.79945009004837, -55.74965544687325) conf=0.6460736678710397
+2025-11-18 17:10:26,816 - corrector.core.run - INFO - Drift detected: (dx=3173, dy=-691) with conf=0.6461
+2025-11-18 17:10:27,471 - corrector.core.run - INFO - Step 39/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:10:32,951 - corrector.core.drift - INFO - Phase correlation: shift=(-229.81754401725135, -49.10920580607478) conf=0.675069287123504
+2025-11-18 17:10:33,047 - corrector.core.run - INFO - Drift detected: (dx=2850, dy=-609) with conf=0.6751
+2025-11-18 17:10:33,748 - corrector.core.run - INFO - Step 40/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:10:39,225 - corrector.core.drift - INFO - Phase correlation: shift=(-201.98790839530665, -42.6846033413774) conf=0.7036206518736244
+2025-11-18 17:10:39,304 - corrector.core.run - INFO - Drift detected: (dx=2505, dy=-529) with conf=0.7036
+2025-11-18 17:10:39,908 - corrector.core.run - INFO - Step 41/200: Moving to target x=-23700, y=-48150
+2025-11-18 17:10:45,429 - corrector.core.drift - INFO - Phase correlation: shift=(-179.90314339820242, -37.228250472646266) conf=0.7463201419023255
+2025-11-18 17:10:45,509 - corrector.core.run - INFO - Drift detected: (dx=2231, dy=-462) with conf=0.7463
+2025-11-18 17:10:46,116 - corrector.core.run - INFO - Step 42/200: Moving to target x=-23400, y=-48150
+2025-11-18 17:10:51,942 - corrector.core.drift - INFO - Phase correlation: shift=(-158.2755968632003, -32.30232436497539) conf=0.738750934644227
+2025-11-18 17:10:52,022 - corrector.core.run - INFO - Drift detected: (dx=1963, dy=-401) with conf=0.7388
+2025-11-18 17:10:52,579 - corrector.core.run - INFO - Step 43/200: Moving to target x=-23100, y=-48150
+2025-11-18 17:10:57,988 - corrector.core.drift - INFO - Phase correlation: shift=(-137.0333988154897, -27.33872127490116) conf=0.7770767465565246
+2025-11-18 17:10:58,068 - corrector.core.run - INFO - Drift detected: (dx=1700, dy=-339) with conf=0.7771
+2025-11-18 17:10:58,673 - corrector.core.run - INFO - Step 44/200: Moving to target x=-22800, y=-48150
+2025-11-18 17:11:04,334 - corrector.core.drift - INFO - Phase correlation: shift=(-114.2163746806965, -22.28725867860976) conf=0.8016493960780167
+2025-11-18 17:11:04,398 - corrector.core.run - INFO - Drift detected: (dx=1417, dy=-276) with conf=0.8016
+2025-11-18 17:11:04,957 - corrector.core.run - INFO - Step 45/200: Moving to target x=-22500, y=-48150
+2025-11-18 17:11:09,169 - corrector.core.drift - INFO - Phase correlation: shift=(-91.8869059509409, -17.317171779443754) conf=0.8300364129786333
+2025-11-18 17:11:09,249 - corrector.core.run - INFO - Drift detected: (dx=1140, dy=-215) with conf=0.8300
+2025-11-18 17:11:09,953 - corrector.core.run - INFO - Step 46/200: Moving to target x=-22200, y=-48150
+2025-11-18 17:11:15,299 - corrector.core.drift - INFO - Phase correlation: shift=(-66.98956486880581, -12.02523793636442) conf=0.9200876465494311
+2025-11-18 17:11:15,347 - corrector.core.run - INFO - Drift detected: (dx=831, dy=-149) with conf=0.9201
+2025-11-18 17:11:15,921 - corrector.core.run - INFO - Step 47/200: Moving to target x=-21900, y=-48150
+2025-11-18 17:11:20,333 - corrector.core.drift - INFO - Phase correlation: shift=(-43.168540351792785, -6.945852165280712) conf=0.918533279713476
+2025-11-18 17:11:20,412 - corrector.core.run - INFO - Drift detected: (dx=535, dy=-86) with conf=0.9185
+2025-11-18 17:11:21,019 - corrector.core.run - INFO - Step 48/200: Moving to target x=-21600, y=-48150
+2025-11-18 17:11:26,537 - corrector.core.drift - INFO - Phase correlation: shift=(-18.08577533302355, -1.297551533015394) conf=0.9583945273892043
+2025-11-18 17:11:26,633 - corrector.core.run - INFO - Drift detected: (dx=224, dy=-16) with conf=0.9584
+2025-11-18 17:11:27,255 - corrector.core.run - INFO - Step 49/200: Moving to target x=-21300, y=-48150
+2025-11-18 17:11:32,914 - corrector.core.drift - INFO - Phase correlation: shift=(6.840538923529607, 3.820148524476849) conf=0.9650672704019743
+2025-11-18 17:11:32,978 - corrector.core.run - INFO - Drift detected: (dx=-85, dy=47) with conf=0.9651
+2025-11-18 17:11:33,680 - corrector.core.run - INFO - Step 50/200: Moving to target x=-21000, y=-48150
+2025-11-18 17:11:39,155 - corrector.core.drift - INFO - Phase correlation: shift=(31.938838028755526, 9.088773011026205) conf=0.9612098676659171
+2025-11-18 17:11:39,251 - corrector.core.run - INFO - Drift detected: (dx=-396, dy=113) with conf=0.9612
+2025-11-18 17:11:39,954 - corrector.core.run - INFO - Step 51/200: Moving to target x=-21300, y=-48150
+2025-11-18 17:11:45,442 - corrector.core.drift - INFO - Phase correlation: shift=(30.201580909321024, 8.738963389358616) conf=0.9331245462665824
+2025-11-18 17:11:45,522 - corrector.core.run - INFO - Drift detected: (dx=-375, dy=108) with conf=0.9331
+2025-11-18 17:11:46,225 - corrector.core.run - INFO - Step 52/200: Moving to target x=-21600, y=-48150
+2025-11-18 17:11:51,794 - corrector.core.drift - INFO - Phase correlation: shift=(29.23684476503786, 8.1230592535955) conf=0.9572398925326325
+2025-11-18 17:11:51,874 - corrector.core.run - INFO - Drift detected: (dx=-363, dy=101) with conf=0.9572
+2025-11-18 17:11:53,613 - corrector.core.run - INFO - Step 53/200: Moving to target x=-21900, y=-48150
+2025-11-18 17:11:59,614 - corrector.core.drift - INFO - Phase correlation: shift=(29.77796707042637, 8.13627557554355) conf=0.9535941223283161
+2025-11-18 17:11:59,694 - corrector.core.run - INFO - Drift detected: (dx=-369, dy=101) with conf=0.9536
+2025-11-18 17:12:00,251 - corrector.core.run - INFO - Step 54/200: Moving to target x=-22200, y=-48150
+2025-11-18 17:12:05,855 - corrector.core.drift - INFO - Phase correlation: shift=(29.97688780221756, 8.171552774050156) conf=0.9749892196984516
+2025-11-18 17:12:05,951 - corrector.core.run - INFO - Drift detected: (dx=-372, dy=101) with conf=0.9750
+2025-11-18 17:12:06,570 - corrector.core.run - INFO - Step 55/200: Moving to target x=-22500, y=-48150
+2025-11-18 17:12:12,012 - corrector.core.drift - INFO - Phase correlation: shift=(30.014020052232354, 8.222545240044099) conf=0.9689133124534891
+2025-11-18 17:12:12,075 - corrector.core.run - INFO - Drift detected: (dx=-372, dy=102) with conf=0.9689
+2025-11-18 17:12:12,697 - corrector.core.run - INFO - Step 56/200: Moving to target x=-22800, y=-48150
+2025-11-18 17:12:16,748 - corrector.core.drift - INFO - Phase correlation: shift=(30.209507254360005, 8.201603689010142) conf=0.9611751665770211
+2025-11-18 17:12:16,811 - corrector.core.run - INFO - Drift detected: (dx=-375, dy=102) with conf=0.9612
+2025-11-18 17:12:17,385 - corrector.core.run - INFO - Step 57/200: Moving to target x=-23100, y=-48150
+2025-11-18 17:12:23,275 - corrector.core.drift - INFO - Phase correlation: shift=(30.25406565207959, 8.028103908996457) conf=0.9596026540202343
+2025-11-18 17:12:23,339 - corrector.core.run - INFO - Drift detected: (dx=-375, dy=100) with conf=0.9596
+2025-11-18 17:12:23,930 - corrector.core.run - INFO - Step 58/200: Moving to target x=-23400, y=-48150
+2025-11-18 17:12:29,490 - corrector.core.drift - INFO - Phase correlation: shift=(27.077476583608245, 7.085537726401299) conf=0.9753622865522357
+2025-11-18 17:12:29,586 - corrector.core.run - INFO - Drift detected: (dx=-336, dy=88) with conf=0.9754
+2025-11-18 17:12:30,208 - corrector.core.run - INFO - Step 59/200: Moving to target x=-23700, y=-48150
+2025-11-18 17:12:35,567 - corrector.core.drift - INFO - Phase correlation: shift=(15.116505095434945, 3.2340569980769374) conf=0.9679161067465692
+2025-11-18 17:12:35,662 - corrector.core.run - INFO - Drift detected: (dx=-187, dy=40) with conf=0.9679
+2025-11-18 17:12:36,251 - corrector.core.run - INFO - Step 60/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:12:40,588 - corrector.core.drift - INFO - Phase correlation: shift=(-0.1728385373879746, -0.9025278494464146) conf=0.9804995073770058
+2025-11-18 17:12:40,667 - corrector.core.run - INFO - Drift detected: (dx=2, dy=-11) with conf=0.9805
+2025-11-18 17:12:41,288 - corrector.core.run - INFO - Step 61/200: Moving to target x=-24300, y=-48150
+2025-11-18 17:12:46,799 - corrector.core.drift - INFO - Phase correlation: shift=(-18.776424262752585, -5.227610841713215) conf=0.9452584887023365
+2025-11-18 17:12:46,831 - corrector.core.run - INFO - Drift detected: (dx=233, dy=-65) with conf=0.9453
+2025-11-18 17:12:47,993 - corrector.core.run - INFO - Step 62/200: Moving to target x=-24600, y=-48150
+2025-11-18 17:12:53,086 - corrector.core.drift - INFO - Phase correlation: shift=(-38.18342063071918, -10.171769111080948) conf=0.9335689754084742
+2025-11-18 17:12:53,134 - corrector.core.run - INFO - Drift detected: (dx=474, dy=-126) with conf=0.9336
+2025-11-18 17:12:53,677 - corrector.core.run - INFO - Step 63/200: Moving to target x=-24900, y=-48150
+2025-11-18 17:12:57,795 - corrector.core.drift - INFO - Phase correlation: shift=(-58.075856340232235, -15.03033580975466) conf=0.9171424279036535
+2025-11-18 17:12:57,875 - corrector.core.run - INFO - Drift detected: (dx=720, dy=-186) with conf=0.9171
+2025-11-18 17:12:58,579 - corrector.core.run - INFO - Step 64/200: Moving to target x=-25200, y=-48150
+2025-11-18 17:13:04,103 - corrector.core.drift - INFO - Phase correlation: shift=(-79.22125489021835, -20.22708759081121) conf=0.8577486358440872
+2025-11-18 17:13:04,136 - corrector.core.run - INFO - Drift detected: (dx=983, dy=-251) with conf=0.8577
+2025-11-18 17:13:04,868 - corrector.core.run - INFO - Step 65/200: Moving to target x=-25500, y=-48150
+2025-11-18 17:13:10,404 - corrector.core.drift - INFO - Phase correlation: shift=(-101.06234128280539, -25.332857377370885) conf=0.8263802833753785
+2025-11-18 17:13:10,468 - corrector.core.run - INFO - Drift detected: (dx=1253, dy=-314) with conf=0.8264
+2025-11-18 17:13:11,187 - corrector.core.run - INFO - Step 66/200: Moving to target x=-25800, y=-48150
+2025-11-18 17:13:16,804 - corrector.core.drift - INFO - Phase correlation: shift=(-123.12706168455077, -30.745787153219) conf=0.7998179411845205
+2025-11-18 17:13:16,883 - corrector.core.run - INFO - Drift detected: (dx=1527, dy=-381) with conf=0.7998
+2025-11-18 17:13:17,521 - corrector.core.run - INFO - Step 67/200: Moving to target x=-26100, y=-48150
+2025-11-18 17:13:23,058 - corrector.core.drift - INFO - Phase correlation: shift=(-145.97458823567007, -35.894093837236085) conf=0.777535789059891
+2025-11-18 17:13:23,139 - corrector.core.run - INFO - Drift detected: (dx=1810, dy=-445) with conf=0.7775
+2025-11-18 17:13:23,777 - corrector.core.run - INFO - Step 68/200: Moving to target x=-26400, y=-48150
+2025-11-18 17:13:29,177 - corrector.core.drift - INFO - Phase correlation: shift=(-169.0233513560171, -41.03703351097488) conf=0.7621677668908233
+2025-11-18 17:13:29,225 - corrector.core.run - INFO - Drift detected: (dx=2096, dy=-509) with conf=0.7622
+2025-11-18 17:13:29,815 - corrector.core.run - INFO - Step 69/200: Moving to target x=-26700, y=-48150
+2025-11-18 17:13:34,113 - corrector.core.drift - INFO - Phase correlation: shift=(-191.17111314608405, -46.10123202846626) conf=0.7283543601723961
+2025-11-18 17:13:34,193 - corrector.core.run - INFO - Drift detected: (dx=2371, dy=-572) with conf=0.7284
+2025-11-18 17:13:34,908 - corrector.core.run - INFO - Step 70/200: Moving to target x=-27000, y=-48150
+2025-11-18 17:13:40,292 - corrector.core.drift - INFO - Phase correlation: shift=(-214.9562121599626, -51.25416167982854) conf=0.6858599933703519
+2025-11-18 17:13:40,355 - corrector.core.run - INFO - Drift detected: (dx=2666, dy=-636) with conf=0.6859
+2025-11-18 17:13:40,962 - corrector.core.run - INFO - Step 71/200: Moving to target x=-26700, y=-48150
+2025-11-18 17:13:44,990 - corrector.core.drift - INFO - Phase correlation: shift=(-212.12537664043288, -50.77361985000715) conf=0.7044223330053121
+2025-11-18 17:13:45,037 - corrector.core.run - INFO - Drift detected: (dx=2631, dy=-630) with conf=0.7044
+2025-11-18 17:13:45,644 - corrector.core.run - INFO - Step 72/200: Moving to target x=-26400, y=-48150
+2025-11-18 17:13:49,804 - corrector.core.drift - INFO - Phase correlation: shift=(-205.0544185973048, -48.272341097347464) conf=0.7026782861156008
+2025-11-18 17:13:49,868 - corrector.core.run - INFO - Drift detected: (dx=2543, dy=-599) with conf=0.7027
+2025-11-18 17:13:50,554 - corrector.core.run - INFO - Step 73/200: Moving to target x=-26100, y=-48150
+2025-11-18 17:13:54,527 - corrector.core.drift - INFO - Phase correlation: shift=(-202.04131801310933, -47.72878940279526) conf=0.7105069628124019
+2025-11-18 17:13:54,591 - corrector.core.run - INFO - Drift detected: (dx=2506, dy=-592) with conf=0.7105
+2025-11-18 17:13:55,323 - corrector.core.run - INFO - Step 74/200: Moving to target x=-25800, y=-48150
+2025-11-18 17:13:59,469 - corrector.core.drift - INFO - Phase correlation: shift=(-200.71539033449977, -46.96813670655723) conf=0.7043600180768868
+2025-11-18 17:13:59,532 - corrector.core.run - INFO - Drift detected: (dx=2489, dy=-583) with conf=0.7044
+2025-11-18 17:14:00,120 - corrector.core.run - INFO - Step 75/200: Moving to target x=-25500, y=-48150
+2025-11-18 17:14:06,679 - corrector.core.drift - INFO - Phase correlation: shift=(-199.00138052899604, -46.7955040740772) conf=0.7122558853967321
+2025-11-18 17:14:06,766 - corrector.core.run - INFO - Drift detected: (dx=2468, dy=-580) with conf=0.7123
+2025-11-18 17:14:07,348 - corrector.core.run - INFO - Step 76/200: Moving to target x=-25200, y=-48150
+2025-11-18 17:14:11,947 - corrector.core.drift - INFO - Phase correlation: shift=(-198.12348540902377, -46.34922435197586) conf=0.6912441685608177
+2025-11-18 17:14:12,042 - corrector.core.run - INFO - Drift detected: (dx=2457, dy=-575) with conf=0.6912
+2025-11-18 17:14:12,617 - corrector.core.run - INFO - Step 77/200: Moving to target x=-24900, y=-48150
+2025-11-18 17:14:16,721 - corrector.core.drift - INFO - Phase correlation: shift=(-197.75714896071304, -46.154948461547576) conf=0.7022304791783344
+2025-11-18 17:14:16,801 - corrector.core.run - INFO - Drift detected: (dx=2453, dy=-572) with conf=0.7022
+2025-11-18 17:14:17,486 - corrector.core.run - INFO - Step 78/200: Moving to target x=-24600, y=-48150
+2025-11-18 17:14:23,141 - corrector.core.drift - INFO - Phase correlation: shift=(-196.7400547654873, -46.060957102943576) conf=0.7057158715654874
+2025-11-18 17:14:23,221 - corrector.core.run - INFO - Drift detected: (dx=2440, dy=-571) with conf=0.7057
+2025-11-18 17:14:23,795 - corrector.core.run - INFO - Step 79/200: Moving to target x=-24300, y=-48150
+2025-11-18 17:14:27,934 - corrector.core.drift - INFO - Phase correlation: shift=(-194.03679471665134, -45.83849397119877) conf=0.7234514128165128
+2025-11-18 17:14:27,998 - corrector.core.run - INFO - Drift detected: (dx=2407, dy=-569) with conf=0.7235
+2025-11-18 17:14:28,586 - corrector.core.run - INFO - Step 80/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:14:34,174 - corrector.core.drift - INFO - Phase correlation: shift=(-179.0460537423936, -41.9875126855697) conf=0.7585952290243828
+2025-11-18 17:14:34,222 - corrector.core.run - INFO - Drift detected: (dx=2221, dy=-521) with conf=0.7586
+2025-11-18 17:14:34,762 - corrector.core.run - INFO - Step 81/200: Moving to target x=-23800, y=-48150
+2025-11-18 17:14:38,837 - corrector.core.drift - INFO - Phase correlation: shift=(-166.75673522641296, -38.79641087795619) conf=0.7515597746030459
+2025-11-18 17:14:38,917 - corrector.core.run - INFO - Drift detected: (dx=2068, dy=-481) with conf=0.7516
+2025-11-18 17:14:39,443 - corrector.core.run - INFO - Step 82/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:14:43,596 - corrector.core.drift - INFO - Phase correlation: shift=(-154.1948267038769, -35.73654031478776) conf=0.7656691348489868
+2025-11-18 17:14:43,660 - corrector.core.run - INFO - Drift detected: (dx=1912, dy=-443) with conf=0.7657
+2025-11-18 17:14:44,282 - corrector.core.run - INFO - Step 83/200: Moving to target x=-23400, y=-48150
+2025-11-18 17:14:48,472 - corrector.core.drift - INFO - Phase correlation: shift=(-141.1685020650308, -32.59551417002041) conf=0.7548514225147668
+2025-11-18 17:14:48,536 - corrector.core.run - INFO - Drift detected: (dx=1751, dy=-404) with conf=0.7549
+2025-11-18 17:14:49,110 - corrector.core.run - INFO - Step 84/200: Moving to target x=-23200, y=-48150
+2025-11-18 17:14:54,775 - corrector.core.drift - INFO - Phase correlation: shift=(-127.99855496788985, -29.065005537823197) conf=0.8006236066079945
+2025-11-18 17:14:54,855 - corrector.core.run - INFO - Drift detected: (dx=1587, dy=-360) with conf=0.8006
+2025-11-18 17:14:55,412 - corrector.core.run - INFO - Step 85/200: Moving to target x=-23000, y=-48150
+2025-11-18 17:15:00,944 - corrector.core.drift - INFO - Phase correlation: shift=(-114.0353637297485, -25.94973968740544) conf=0.8288774310914812
+2025-11-18 17:15:01,008 - corrector.core.run - INFO - Drift detected: (dx=1414, dy=-322) with conf=0.8289
+2025-11-18 17:15:01,616 - corrector.core.run - INFO - Step 86/200: Moving to target x=-22800, y=-48150
+2025-11-18 17:15:05,832 - corrector.core.drift - INFO - Phase correlation: shift=(-100.226742602478, -23.009553299789445) conf=0.8324437344454519
+2025-11-18 17:15:05,896 - corrector.core.run - INFO - Drift detected: (dx=1243, dy=-285) with conf=0.8324
+2025-11-18 17:15:06,502 - corrector.core.run - INFO - Step 87/200: Moving to target x=-22600, y=-48150
+2025-11-18 17:15:12,023 - corrector.core.drift - INFO - Phase correlation: shift=(-85.98010798985388, -19.17366043218732) conf=0.8715985143313674
+2025-11-18 17:15:12,087 - corrector.core.run - INFO - Drift detected: (dx=1066, dy=-238) with conf=0.8716
+2025-11-18 17:15:12,678 - corrector.core.run - INFO - Step 88/200: Moving to target x=-22400, y=-48150
+2025-11-18 17:15:16,921 - corrector.core.drift - INFO - Phase correlation: shift=(-71.85852890207514, -15.928168793654379) conf=0.8921587216711528
+2025-11-18 17:15:17,001 - corrector.core.run - INFO - Drift detected: (dx=891, dy=-198) with conf=0.8922
+2025-11-18 17:15:17,605 - corrector.core.run - INFO - Step 89/200: Moving to target x=-22200, y=-48150
+2025-11-18 17:15:23,192 - corrector.core.drift - INFO - Phase correlation: shift=(-56.18001809557927, -12.257425877482206) conf=0.9141364359896055
+2025-11-18 17:15:23,288 - corrector.core.run - INFO - Drift detected: (dx=697, dy=-152) with conf=0.9141
+2025-11-18 17:15:23,830 - corrector.core.run - INFO - Step 90/200: Moving to target x=-22000, y=-48150
+2025-11-18 17:15:29,338 - corrector.core.drift - INFO - Phase correlation: shift=(-40.78154593653676, -8.872651001099769) conf=0.9348502769515428
+2025-11-18 17:15:29,433 - corrector.core.run - INFO - Drift detected: (dx=506, dy=-110) with conf=0.9349
+2025-11-18 17:15:30,581 - corrector.core.run - INFO - Step 91/200: Moving to target x=-22200, y=-48150
+2025-11-18 17:15:35,497 - corrector.core.drift - INFO - Phase correlation: shift=(-41.83062176434942, -9.167510795356918) conf=0.9406195430908302
+2025-11-18 17:15:35,546 - corrector.core.run - INFO - Drift detected: (dx=519, dy=-114) with conf=0.9406
+2025-11-18 17:15:36,119 - corrector.core.run - INFO - Step 92/200: Moving to target x=-22400, y=-48150
+2025-11-18 17:15:40,527 - corrector.core.drift - INFO - Phase correlation: shift=(-43.1784308134487, -9.840372429737442) conf=0.9303402051364551
+2025-11-18 17:15:40,607 - corrector.core.run - INFO - Drift detected: (dx=536, dy=-122) with conf=0.9303
+2025-11-18 17:15:41,134 - corrector.core.run - INFO - Step 93/200: Moving to target x=-22600, y=-48150
+2025-11-18 17:15:45,341 - corrector.core.drift - INFO - Phase correlation: shift=(-43.13644135119034, -9.770318485084601) conf=0.9297242677780104
+2025-11-18 17:15:45,414 - corrector.core.run - INFO - Drift detected: (dx=535, dy=-121) with conf=0.9297
+2025-11-18 17:15:46,084 - corrector.core.run - INFO - Step 94/200: Moving to target x=-22800, y=-48150
+2025-11-18 17:15:51,524 - corrector.core.drift - INFO - Phase correlation: shift=(-43.05272471883677, -9.691974656062428) conf=0.9356660028695465
+2025-11-18 17:15:51,572 - corrector.core.run - INFO - Drift detected: (dx=534, dy=-120) with conf=0.9357
+2025-11-18 17:15:52,163 - corrector.core.run - INFO - Step 95/200: Moving to target x=-23000, y=-48150
+2025-11-18 17:15:57,542 - corrector.core.drift - INFO - Phase correlation: shift=(-42.90220391224602, -9.722343428187912) conf=0.9274120991964558
+2025-11-18 17:15:57,590 - corrector.core.run - INFO - Drift detected: (dx=532, dy=-121) with conf=0.9274
+2025-11-18 17:15:58,132 - corrector.core.run - INFO - Step 96/200: Moving to target x=-23200, y=-48150
+2025-11-18 17:16:02,554 - corrector.core.drift - INFO - Phase correlation: shift=(-42.972708983666166, -9.27865118883227) conf=0.9311407776385628
+2025-11-18 17:16:02,634 - corrector.core.run - INFO - Drift detected: (dx=533, dy=-115) with conf=0.9311
+2025-11-18 17:16:03,208 - corrector.core.run - INFO - Step 97/200: Moving to target x=-23400, y=-48150
+2025-11-18 17:16:07,407 - corrector.core.drift - INFO - Phase correlation: shift=(-43.01540960073396, -9.24812947613043) conf=0.9369537020323857
+2025-11-18 17:16:07,503 - corrector.core.run - INFO - Drift detected: (dx=533, dy=-115) with conf=0.9370
+2025-11-18 17:16:08,062 - corrector.core.run - INFO - Step 98/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:16:13,726 - corrector.core.drift - INFO - Phase correlation: shift=(-42.907347692158964, -9.193684250256297) conf=0.932035120537234
+2025-11-18 17:16:13,806 - corrector.core.run - INFO - Drift detected: (dx=532, dy=-114) with conf=0.9320
+2025-11-18 17:16:14,393 - corrector.core.run - INFO - Step 99/200: Moving to target x=-23800, y=-48150
+2025-11-18 17:16:19,851 - corrector.core.drift - INFO - Phase correlation: shift=(-42.84583528734322, -9.1182436096027) conf=0.9518944034675498
+2025-11-18 17:16:19,931 - corrector.core.run - INFO - Drift detected: (dx=531, dy=-113) with conf=0.9519
+2025-11-18 17:16:21,067 - corrector.core.run - INFO - Step 100/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:16:26,272 - corrector.core.drift - INFO - Phase correlation: shift=(-42.79636546230108, -9.110531051175656) conf=0.9323649315844879
+2025-11-18 17:16:26,337 - corrector.core.run - INFO - Drift detected: (dx=531, dy=-113) with conf=0.9324
+2025-11-18 17:16:27,071 - corrector.core.run - INFO - Step 101/200: Moving to target x=-24200, y=-48150
+2025-11-18 17:16:32,596 - corrector.core.drift - INFO - Phase correlation: shift=(-42.86315534646701, -9.170979520762387) conf=0.942707166055752
+2025-11-18 17:16:32,644 - corrector.core.run - INFO - Drift detected: (dx=532, dy=-114) with conf=0.9427
+2025-11-18 17:16:33,169 - corrector.core.run - INFO - Step 102/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:16:37,408 - corrector.core.drift - INFO - Phase correlation: shift=(-47.12263761860004, -10.841450001892781) conf=0.9365341059327508
+2025-11-18 17:16:37,504 - corrector.core.run - INFO - Drift detected: (dx=584, dy=-134) with conf=0.9365
+2025-11-18 17:16:38,155 - corrector.core.run - INFO - Step 103/200: Moving to target x=-24600, y=-48150
+2025-11-18 17:16:43,691 - corrector.core.drift - INFO - Phase correlation: shift=(-55.0344367459212, -13.100189750247921) conf=0.9292991620246914
+2025-11-18 17:16:43,770 - corrector.core.run - INFO - Drift detected: (dx=683, dy=-162) with conf=0.9293
+2025-11-18 17:16:44,423 - corrector.core.run - INFO - Step 104/200: Moving to target x=-24800, y=-48150
+2025-11-18 17:16:49,732 - corrector.core.drift - INFO - Phase correlation: shift=(-64.83715510511001, -15.909143279358887) conf=0.9109797619950113
+2025-11-18 17:16:49,796 - corrector.core.run - INFO - Drift detected: (dx=804, dy=-197) with conf=0.9110
+2025-11-18 17:16:50,368 - corrector.core.run - INFO - Step 105/200: Moving to target x=-25000, y=-48150
+2025-11-18 17:16:56,279 - corrector.core.drift - INFO - Phase correlation: shift=(-75.18192194513495, -19.151523867032097) conf=0.8815423919877713
+2025-11-18 17:16:56,360 - corrector.core.run - INFO - Drift detected: (dx=932, dy=-238) with conf=0.8815
+2025-11-18 17:16:56,934 - corrector.core.run - INFO - Step 106/200: Moving to target x=-25200, y=-48150
+2025-11-18 17:17:02,423 - corrector.core.drift - INFO - Phase correlation: shift=(-87.06267920029791, -22.00953082829625) conf=0.8734274279315667
+2025-11-18 17:17:02,503 - corrector.core.run - INFO - Drift detected: (dx=1080, dy=-273) with conf=0.8734
+2025-11-18 17:17:03,095 - corrector.core.run - INFO - Step 107/200: Moving to target x=-25400, y=-48150
+2025-11-18 17:17:07,229 - corrector.core.drift - INFO - Phase correlation: shift=(-99.10979191881665, -25.199360816616547) conf=0.846875525516974
+2025-11-18 17:17:07,293 - corrector.core.run - INFO - Drift detected: (dx=1229, dy=-313) with conf=0.8469
+2025-11-18 17:17:07,866 - corrector.core.run - INFO - Step 108/200: Moving to target x=-25600, y=-48150
+2025-11-18 17:17:15,102 - corrector.core.drift - INFO - Phase correlation: shift=(-112.204999025745, -28.81060509735437) conf=0.8178704502146386
+2025-11-18 17:17:15,182 - corrector.core.run - INFO - Drift detected: (dx=1392, dy=-357) with conf=0.8179
+2025-11-18 17:17:15,881 - corrector.core.run - INFO - Step 109/200: Moving to target x=-25800, y=-48150
+2025-11-18 17:17:20,567 - corrector.core.drift - INFO - Phase correlation: shift=(-126.03007491010123, -31.954083726593467) conf=0.8164910743380683
+2025-11-18 17:17:20,647 - corrector.core.run - INFO - Drift detected: (dx=1563, dy=-396) with conf=0.8165
+2025-11-18 17:17:21,223 - corrector.core.run - INFO - Step 110/200: Moving to target x=-26000, y=-48150
+2025-11-18 17:17:26,862 - corrector.core.drift - INFO - Phase correlation: shift=(-139.96811169368362, -35.28485440925505) conf=0.777427095915186
+2025-11-18 17:17:26,895 - corrector.core.run - INFO - Drift detected: (dx=1736, dy=-438) with conf=0.7774
+2025-11-18 17:17:27,434 - corrector.core.run - INFO - Step 111/200: Moving to target x=-25800, y=-48150
+2025-11-18 17:17:33,070 - corrector.core.drift - INFO - Phase correlation: shift=(-138.11964893414887, -34.84551291169822) conf=0.7957469478341919
+2025-11-18 17:17:33,166 - corrector.core.run - INFO - Drift detected: (dx=1713, dy=-432) with conf=0.7957
+2025-11-18 17:17:33,740 - corrector.core.run - INFO - Step 112/200: Moving to target x=-25600, y=-48150
+2025-11-18 17:17:37,926 - corrector.core.drift - INFO - Phase correlation: shift=(-133.88909655248506, -33.2750726745474) conf=0.7807491977976433
+2025-11-18 17:17:37,974 - corrector.core.run - INFO - Drift detected: (dx=1661, dy=-413) with conf=0.7807
+2025-11-18 17:17:39,106 - corrector.core.run - INFO - Step 113/200: Moving to target x=-25400, y=-48150
+2025-11-18 17:17:44,200 - corrector.core.drift - INFO - Phase correlation: shift=(-130.9571288083239, -32.712582529219276) conf=0.8034739845138701
+2025-11-18 17:17:44,280 - corrector.core.run - INFO - Drift detected: (dx=1624, dy=-406) with conf=0.8035
+2025-11-18 17:17:44,851 - corrector.core.run - INFO - Step 114/200: Moving to target x=-25200, y=-48150
+2025-11-18 17:17:50,581 - corrector.core.drift - INFO - Phase correlation: shift=(-130.06115616312604, -32.220932145478514) conf=0.7914956988582956
+2025-11-18 17:17:50,661 - corrector.core.run - INFO - Drift detected: (dx=1613, dy=-400) with conf=0.7915
+2025-11-18 17:17:51,300 - corrector.core.run - INFO - Step 115/200: Moving to target x=-25000, y=-48150
+2025-11-18 17:17:56,784 - corrector.core.drift - INFO - Phase correlation: shift=(-129.76043302656723, -32.27793823370126) conf=0.7770643945046504
+2025-11-18 17:17:56,846 - corrector.core.run - INFO - Drift detected: (dx=1609, dy=-400) with conf=0.7771
+2025-11-18 17:17:57,418 - corrector.core.run - INFO - Step 116/200: Moving to target x=-24800, y=-48150
+2025-11-18 17:18:03,054 - corrector.core.drift - INFO - Phase correlation: shift=(-128.95106265557513, -32.263107361830976) conf=0.785993925460535
+2025-11-18 17:18:03,150 - corrector.core.run - INFO - Drift detected: (dx=1599, dy=-400) with conf=0.7860
+2025-11-18 17:18:03,790 - corrector.core.run - INFO - Step 117/200: Moving to target x=-24600, y=-48150
+2025-11-18 17:18:09,272 - corrector.core.drift - INFO - Phase correlation: shift=(-128.71424424416904, -32.23167822733592) conf=0.7791860069113425
+2025-11-18 17:18:09,320 - corrector.core.run - INFO - Drift detected: (dx=1596, dy=-400) with conf=0.7792
+2025-11-18 17:18:09,910 - corrector.core.run - INFO - Step 118/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:18:15,509 - corrector.core.drift - INFO - Phase correlation: shift=(-128.08556821132981, -32.16239060006092) conf=0.8105404699366452
+2025-11-18 17:18:15,573 - corrector.core.run - INFO - Drift detected: (dx=1589, dy=-399) with conf=0.8105
+2025-11-18 17:18:16,212 - corrector.core.run - INFO - Step 119/200: Moving to target x=-24200, y=-48150
+2025-11-18 17:18:21,993 - corrector.core.drift - INFO - Phase correlation: shift=(-128.0350785467656, -32.176080119088795) conf=0.8073660008407546
+2025-11-18 17:18:22,089 - corrector.core.run - INFO - Drift detected: (dx=1588, dy=-399) with conf=0.8074
+2025-11-18 17:18:22,646 - corrector.core.run - INFO - Step 120/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:18:28,062 - corrector.core.drift - INFO - Phase correlation: shift=(-127.94354440099755, -32.07497336572561) conf=0.808707853939693
+2025-11-18 17:18:28,158 - corrector.core.run - INFO - Drift detected: (dx=1587, dy=-398) with conf=0.8087
+2025-11-18 17:18:28,701 - corrector.core.run - INFO - Step 121/200: Moving to target x=-23900, y=-48150
+2025-11-18 17:18:32,753 - corrector.core.drift - INFO - Phase correlation: shift=(-127.18658930215099, -31.913277613719117) conf=0.8025097476339862
+2025-11-18 17:18:32,801 - corrector.core.run - INFO - Drift detected: (dx=1577, dy=-396) with conf=0.8025
+2025-11-18 17:18:33,327 - corrector.core.run - INFO - Step 122/200: Moving to target x=-23800, y=-48150
+2025-11-18 17:18:37,603 - corrector.core.drift - INFO - Phase correlation: shift=(-126.35803787888165, -31.853257319660088) conf=0.7638920623489083
+2025-11-18 17:18:37,698 - corrector.core.run - INFO - Drift detected: (dx=1567, dy=-395) with conf=0.7639
+2025-11-18 17:18:38,193 - corrector.core.run - INFO - Step 123/200: Moving to target x=-23700, y=-48150
+2025-11-18 17:18:42,518 - corrector.core.drift - INFO - Phase correlation: shift=(-126.09698525424119, -31.37692006133983) conf=0.804214094404738
+2025-11-18 17:18:42,566 - corrector.core.run - INFO - Drift detected: (dx=1564, dy=-389) with conf=0.8042
+2025-11-18 17:18:43,061 - corrector.core.run - INFO - Step 124/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:18:47,164 - corrector.core.drift - INFO - Phase correlation: shift=(-125.12450187789409, -31.244604494345424) conf=0.8080092716982147
+2025-11-18 17:18:47,245 - corrector.core.run - INFO - Drift detected: (dx=1552, dy=-388) with conf=0.8080
+2025-11-18 17:18:47,771 - corrector.core.run - INFO - Step 125/200: Moving to target x=-23500, y=-48150
+2025-11-18 17:18:52,018 - corrector.core.drift - INFO - Phase correlation: shift=(-124.13444422936243, -31.075653296081555) conf=0.8086970920291311
+2025-11-18 17:18:52,098 - corrector.core.run - INFO - Drift detected: (dx=1540, dy=-385) with conf=0.8087
+2025-11-18 17:18:52,637 - corrector.core.run - INFO - Step 126/200: Moving to target x=-23400, y=-48150
+2025-11-18 17:18:58,350 - corrector.core.drift - INFO - Phase correlation: shift=(-121.93994207838955, -30.116802407298167) conf=0.8103995783315088
+2025-11-18 17:18:58,430 - corrector.core.run - INFO - Drift detected: (dx=1512, dy=-374) with conf=0.8104
+2025-11-18 17:18:59,004 - corrector.core.run - INFO - Step 127/200: Moving to target x=-23300, y=-48150
+2025-11-18 17:19:04,447 - corrector.core.drift - INFO - Phase correlation: shift=(-117.1932460429332, -29.043950773253698) conf=0.8219806143072165
+2025-11-18 17:19:04,511 - corrector.core.run - INFO - Drift detected: (dx=1453, dy=-360) with conf=0.8220
+2025-11-18 17:19:05,038 - corrector.core.run - INFO - Step 128/200: Moving to target x=-23200, y=-48150
+2025-11-18 17:19:09,366 - corrector.core.drift - INFO - Phase correlation: shift=(-112.2411163235289, -27.837303402649013) conf=0.8157621571479875
+2025-11-18 17:19:09,461 - corrector.core.run - INFO - Drift detected: (dx=1392, dy=-345) with conf=0.8158
+2025-11-18 17:19:09,972 - corrector.core.run - INFO - Step 129/200: Moving to target x=-23100, y=-48150
+2025-11-18 17:19:14,075 - corrector.core.drift - INFO - Phase correlation: shift=(-107.16734493490549, -26.24701269895388) conf=0.8126911369512471
+2025-11-18 17:19:14,107 - corrector.core.run - INFO - Drift detected: (dx=1329, dy=-326) with conf=0.8127
+2025-11-18 17:19:14,665 - corrector.core.run - INFO - Step 130/200: Moving to target x=-23000, y=-48150
+2025-11-18 17:19:18,786 - corrector.core.drift - INFO - Phase correlation: shift=(-101.80711251076366, -25.045719394683715) conf=0.8322004488124883
+2025-11-18 17:19:18,850 - corrector.core.run - INFO - Drift detected: (dx=1263, dy=-311) with conf=0.8322
+2025-11-18 17:19:19,408 - corrector.core.run - INFO - Step 131/200: Moving to target x=-23100, y=-48150
+2025-11-18 17:19:23,524 - corrector.core.drift - INFO - Phase correlation: shift=(-101.81117197851506, -25.151526048128858) conf=0.8267138959430216
+2025-11-18 17:19:23,605 - corrector.core.run - INFO - Drift detected: (dx=1263, dy=-312) with conf=0.8267
+2025-11-18 17:19:24,692 - corrector.core.run - INFO - Step 132/200: Moving to target x=-23200, y=-48150
+2025-11-18 17:19:29,706 - corrector.core.drift - INFO - Phase correlation: shift=(-102.11260575469498, -25.413719438058536) conf=0.8069225226816745
+2025-11-18 17:19:29,770 - corrector.core.run - INFO - Drift detected: (dx=1266, dy=-315) with conf=0.8069
+2025-11-18 17:19:30,329 - corrector.core.run - INFO - Step 133/200: Moving to target x=-23300, y=-48150
+2025-11-18 17:19:34,570 - corrector.core.drift - INFO - Phase correlation: shift=(-102.24858558700066, -25.834378565397458) conf=0.827636201268759
+2025-11-18 17:19:34,650 - corrector.core.run - INFO - Drift detected: (dx=1268, dy=-320) with conf=0.8276
+2025-11-18 17:19:35,192 - corrector.core.run - INFO - Step 134/200: Moving to target x=-23400, y=-48150
+2025-11-18 17:19:39,199 - corrector.core.drift - INFO - Phase correlation: shift=(-102.27418177738707, -25.74566968190703) conf=0.8128439673661745
+2025-11-18 17:19:39,263 - corrector.core.run - INFO - Drift detected: (dx=1268, dy=-319) with conf=0.8128
+2025-11-18 17:19:39,772 - corrector.core.run - INFO - Step 135/200: Moving to target x=-23500, y=-48150
+2025-11-18 17:19:44,222 - corrector.core.drift - INFO - Phase correlation: shift=(-102.7279271838961, -25.31085241026682) conf=0.8023319841534942
+2025-11-18 17:19:44,286 - corrector.core.run - INFO - Drift detected: (dx=1274, dy=-314) with conf=0.8023
+2025-11-18 17:19:44,796 - corrector.core.run - INFO - Step 136/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:19:49,007 - corrector.core.drift - INFO - Phase correlation: shift=(-102.18592863129288, -25.26822159968293) conf=0.8412674706117718
+2025-11-18 17:19:49,102 - corrector.core.run - INFO - Drift detected: (dx=1267, dy=-313) with conf=0.8413
+2025-11-18 17:19:49,645 - corrector.core.run - INFO - Step 137/200: Moving to target x=-23700, y=-48150
+2025-11-18 17:19:53,844 - corrector.core.drift - INFO - Phase correlation: shift=(-102.05505127972958, -25.733433931091326) conf=0.8258678625470942
+2025-11-18 17:19:53,908 - corrector.core.run - INFO - Drift detected: (dx=1266, dy=-319) with conf=0.8259
+2025-11-18 17:19:54,449 - corrector.core.run - INFO - Step 138/200: Moving to target x=-23800, y=-48150
+2025-11-18 17:19:58,611 - corrector.core.drift - INFO - Phase correlation: shift=(-102.02399664569225, -25.20972109930301) conf=0.846910418225784
+2025-11-18 17:19:58,691 - corrector.core.run - INFO - Drift detected: (dx=1265, dy=-313) with conf=0.8469
+2025-11-18 17:19:59,234 - corrector.core.run - INFO - Step 139/200: Moving to target x=-23900, y=-48150
+2025-11-18 17:20:03,416 - corrector.core.drift - INFO - Phase correlation: shift=(-101.92945642631332, -25.17112683610401) conf=0.8374899554909201
+2025-11-18 17:20:03,480 - corrector.core.run - INFO - Drift detected: (dx=1264, dy=-312) with conf=0.8375
+2025-11-18 17:20:04,054 - corrector.core.run - INFO - Step 140/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:20:09,691 - corrector.core.drift - INFO - Phase correlation: shift=(-101.77313459177947, -25.181524570171348) conf=0.8365550341593281
+2025-11-18 17:20:09,739 - corrector.core.run - INFO - Drift detected: (dx=1262, dy=-312) with conf=0.8366
+2025-11-18 17:20:10,293 - corrector.core.run - INFO - Step 141/200: Moving to target x=-24100, y=-48150
+2025-11-18 17:20:14,345 - corrector.core.drift - INFO - Phase correlation: shift=(-101.2091506433768, -25.211480268571677) conf=0.8274756623254655
+2025-11-18 17:20:14,393 - corrector.core.run - INFO - Drift detected: (dx=1255, dy=-313) with conf=0.8275
+2025-11-18 17:20:14,854 - corrector.core.run - INFO - Step 142/200: Moving to target x=-24200, y=-48150
+2025-11-18 17:20:19,176 - corrector.core.drift - INFO - Phase correlation: shift=(-101.11663108021958, -25.200662658339922) conf=0.8395357371346784
+2025-11-18 17:20:19,256 - corrector.core.run - INFO - Drift detected: (dx=1254, dy=-313) with conf=0.8395
+2025-11-18 17:20:19,749 - corrector.core.run - INFO - Step 143/200: Moving to target x=-24300, y=-48150
+2025-11-18 17:20:23,915 - corrector.core.drift - INFO - Phase correlation: shift=(-101.08451964882977, -25.151873239965084) conf=0.8428733745649329
+2025-11-18 17:20:23,979 - corrector.core.run - INFO - Drift detected: (dx=1254, dy=-312) with conf=0.8429
+2025-11-18 17:20:24,554 - corrector.core.run - INFO - Step 144/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:20:28,671 - corrector.core.drift - INFO - Phase correlation: shift=(-101.04711670655468, -25.174457304701207) conf=0.8417551133694762
+2025-11-18 17:20:28,751 - corrector.core.run - INFO - Drift detected: (dx=1253, dy=-312) with conf=0.8418
+2025-11-18 17:20:29,388 - corrector.core.run - INFO - Step 145/200: Moving to target x=-24500, y=-48150
+2025-11-18 17:20:33,520 - corrector.core.drift - INFO - Phase correlation: shift=(-100.92280577830275, -25.174551608256877) conf=0.8451463479499793
+2025-11-18 17:20:33,568 - corrector.core.run - INFO - Drift detected: (dx=1252, dy=-312) with conf=0.8451
+2025-11-18 17:20:34,080 - corrector.core.run - INFO - Step 146/200: Moving to target x=-24600, y=-48150
+2025-11-18 17:20:38,190 - corrector.core.drift - INFO - Phase correlation: shift=(-100.8548921764608, -25.16243780444836) conf=0.8386981570947596
+2025-11-18 17:20:38,286 - corrector.core.run - INFO - Drift detected: (dx=1251, dy=-312) with conf=0.8387
+2025-11-18 17:20:38,856 - corrector.core.run - INFO - Step 147/200: Moving to target x=-24700, y=-48150
+2025-11-18 17:20:42,974 - corrector.core.drift - INFO - Phase correlation: shift=(-100.87381540715535, -25.199361067235373) conf=0.8341650985235463
+2025-11-18 17:20:43,037 - corrector.core.run - INFO - Drift detected: (dx=1251, dy=-313) with conf=0.8342
+2025-11-18 17:20:43,596 - corrector.core.run - INFO - Step 148/200: Moving to target x=-24800, y=-48150
+2025-11-18 17:20:47,795 - corrector.core.drift - INFO - Phase correlation: shift=(-100.77282652365943, -25.219126838975797) conf=0.824633870297118
+2025-11-18 17:20:47,875 - corrector.core.run - INFO - Drift detected: (dx=1250, dy=-313) with conf=0.8246
+2025-11-18 17:20:48,386 - corrector.core.run - INFO - Step 149/200: Moving to target x=-24900, y=-48150
+2025-11-18 17:20:52,474 - corrector.core.drift - INFO - Phase correlation: shift=(-100.13315888425359, -25.70197692580615) conf=0.8271564655072735
+2025-11-18 17:20:52,538 - corrector.core.run - INFO - Drift detected: (dx=1242, dy=-319) with conf=0.8272
+2025-11-18 17:20:53,031 - corrector.core.run - INFO - Step 150/200: Moving to target x=-25000, y=-48150
+2025-11-18 17:20:57,357 - corrector.core.drift - INFO - Phase correlation: shift=(-100.10872025086212, -25.71949364108343) conf=0.8372806592926303
+2025-11-18 17:20:57,405 - corrector.core.run - INFO - Drift detected: (dx=1242, dy=-319) with conf=0.8373
+2025-11-18 17:20:57,917 - corrector.core.run - INFO - Step 151/200: Moving to target x=-24900, y=-48150
+2025-11-18 17:21:02,075 - corrector.core.drift - INFO - Phase correlation: shift=(-99.97878724778832, -25.382324126946003) conf=0.8182767810067939
+2025-11-18 17:21:02,155 - corrector.core.run - INFO - Drift detected: (dx=1240, dy=-315) with conf=0.8183
+2025-11-18 17:21:02,779 - corrector.core.run - INFO - Step 152/200: Moving to target x=-24800, y=-48150
+2025-11-18 17:21:06,923 - corrector.core.drift - INFO - Phase correlation: shift=(-99.92806114655059, -25.748614430177213) conf=0.8405010896634173
+2025-11-18 17:21:06,970 - corrector.core.run - INFO - Drift detected: (dx=1239, dy=-319) with conf=0.8405
+2025-11-18 17:21:07,464 - corrector.core.run - INFO - Step 153/200: Moving to target x=-24700, y=-48150
+2025-11-18 17:21:11,584 - corrector.core.drift - INFO - Phase correlation: shift=(-99.92352930086872, -25.705673015477544) conf=0.8339476619795466
+2025-11-18 17:21:11,632 - corrector.core.run - INFO - Drift detected: (dx=1239, dy=-319) with conf=0.8339
+2025-11-18 17:21:12,174 - corrector.core.run - INFO - Step 154/200: Moving to target x=-24600, y=-48150
+2025-11-18 17:21:16,534 - corrector.core.drift - INFO - Phase correlation: shift=(-99.95960209459452, -25.422764095541027) conf=0.821841317793816
+2025-11-18 17:21:16,614 - corrector.core.run - INFO - Drift detected: (dx=1240, dy=-315) with conf=0.8218
+2025-11-18 17:21:17,213 - corrector.core.run - INFO - Step 155/200: Moving to target x=-24500, y=-48150
+2025-11-18 17:21:22,727 - corrector.core.drift - INFO - Phase correlation: shift=(-99.93244863478753, -25.75979979789804) conf=0.8472489901579553
+2025-11-18 17:21:22,807 - corrector.core.run - INFO - Drift detected: (dx=1239, dy=-319) with conf=0.8472
+2025-11-18 17:21:23,349 - corrector.core.run - INFO - Step 156/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:21:27,565 - corrector.core.drift - INFO - Phase correlation: shift=(-99.98350146906796, -25.684959877638505) conf=0.8369815550202654
+2025-11-18 17:21:27,629 - corrector.core.run - INFO - Drift detected: (dx=1240, dy=-319) with conf=0.8370
+2025-11-18 17:21:28,173 - corrector.core.run - INFO - Step 157/200: Moving to target x=-24300, y=-48150
+2025-11-18 17:21:33,551 - corrector.core.drift - INFO - Phase correlation: shift=(-99.32516949718365, -25.758434486268698) conf=0.8104516407950219
+2025-11-18 17:21:33,614 - corrector.core.run - INFO - Drift detected: (dx=1232, dy=-319) with conf=0.8105
+2025-11-18 17:21:34,109 - corrector.core.run - INFO - Step 158/200: Moving to target x=-24200, y=-48150
+2025-11-18 17:21:40,000 - corrector.core.drift - INFO - Phase correlation: shift=(-99.23250763491694, -25.88131223076016) conf=0.8298635599372246
+2025-11-18 17:21:40,080 - corrector.core.run - INFO - Drift detected: (dx=1231, dy=-321) with conf=0.8299
+2025-11-18 17:21:40,607 - corrector.core.run - INFO - Step 159/200: Moving to target x=-24100, y=-48150
+2025-11-18 17:21:44,756 - corrector.core.drift - INFO - Phase correlation: shift=(-99.15877507396408, -25.894458324817776) conf=0.8359483175909954
+2025-11-18 17:21:44,820 - corrector.core.run - INFO - Drift detected: (dx=1230, dy=-321) with conf=0.8359
+2025-11-18 17:21:45,314 - corrector.core.run - INFO - Step 160/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:21:49,589 - corrector.core.drift - INFO - Phase correlation: shift=(-99.10440305746988, -25.9104609163914) conf=0.8607102664962137
+2025-11-18 17:21:49,685 - corrector.core.run - INFO - Drift detected: (dx=1229, dy=-321) with conf=0.8607
+2025-11-18 17:21:50,180 - corrector.core.run - INFO - Step 161/200: Moving to target x=-23950, y=-48150
+2025-11-18 17:21:54,235 - corrector.core.drift - INFO - Phase correlation: shift=(-99.13855179064558, -25.897340574331167) conf=0.8526500192562061
+2025-11-18 17:21:54,299 - corrector.core.run - INFO - Drift detected: (dx=1230, dy=-321) with conf=0.8527
+2025-11-18 17:21:54,841 - corrector.core.run - INFO - Step 162/200: Moving to target x=-23900, y=-48150
+2025-11-18 17:21:59,214 - corrector.core.drift - INFO - Phase correlation: shift=(-99.15912532997561, -25.905282729608018) conf=0.8367080577117046
+2025-11-18 17:21:59,310 - corrector.core.run - INFO - Drift detected: (dx=1230, dy=-321) with conf=0.8367
+2025-11-18 17:21:59,854 - corrector.core.run - INFO - Step 163/200: Moving to target x=-23850, y=-48150
+2025-11-18 17:22:03,924 - corrector.core.drift - INFO - Phase correlation: shift=(-99.1612473404407, -25.86509044532727) conf=0.8491080494495662
+2025-11-18 17:22:03,941 - corrector.core.run - INFO - Drift detected: (dx=1230, dy=-321) with conf=0.8491
+2025-11-18 17:22:04,467 - corrector.core.run - INFO - Step 164/200: Moving to target x=-23800, y=-48150
+2025-11-18 17:22:08,775 - corrector.core.drift - INFO - Phase correlation: shift=(-99.1782959665062, -25.850580043237073) conf=0.8365821787763822
+2025-11-18 17:22:08,823 - corrector.core.run - INFO - Drift detected: (dx=1230, dy=-321) with conf=0.8366
+2025-11-18 17:22:09,350 - corrector.core.run - INFO - Step 165/200: Moving to target x=-23750, y=-48150
+2025-11-18 17:22:15,032 - corrector.core.drift - INFO - Phase correlation: shift=(-99.08525556494055, -25.81771916936981) conf=0.8484030474062297
+2025-11-18 17:22:15,080 - corrector.core.run - INFO - Drift detected: (dx=1229, dy=-320) with conf=0.8484
+2025-11-18 17:22:15,575 - corrector.core.run - INFO - Step 166/200: Moving to target x=-23700, y=-48150
+2025-11-18 17:22:19,802 - corrector.core.drift - INFO - Phase correlation: shift=(-99.00964329666408, -25.82797960326411) conf=0.853525853644565
+2025-11-18 17:22:19,882 - corrector.core.run - INFO - Drift detected: (dx=1228, dy=-320) with conf=0.8535
+2025-11-18 17:22:20,408 - corrector.core.run - INFO - Step 167/200: Moving to target x=-23650, y=-48150
+2025-11-18 17:22:26,011 - corrector.core.drift - INFO - Phase correlation: shift=(-99.01724561022763, -25.8443047252469) conf=0.8522765953530637
+2025-11-18 17:22:26,059 - corrector.core.run - INFO - Drift detected: (dx=1228, dy=-321) with conf=0.8523
+2025-11-18 17:22:26,554 - corrector.core.run - INFO - Step 168/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:22:30,784 - corrector.core.drift - INFO - Phase correlation: shift=(-98.94120640852509, -25.981143888810436) conf=0.8458036963262113
+2025-11-18 17:22:30,848 - corrector.core.run - INFO - Drift detected: (dx=1227, dy=-322) with conf=0.8458
+2025-11-18 17:22:31,374 - corrector.core.run - INFO - Step 169/200: Moving to target x=-23550, y=-48150
+2025-11-18 17:22:35,586 - corrector.core.drift - INFO - Phase correlation: shift=(-98.95083194001722, -25.878406619927205) conf=0.8478960438303894
+2025-11-18 17:22:35,666 - corrector.core.run - INFO - Drift detected: (dx=1227, dy=-321) with conf=0.8479
+2025-11-18 17:22:36,192 - corrector.core.run - INFO - Step 170/200: Moving to target x=-23500, y=-48150
+2025-11-18 17:22:40,420 - corrector.core.drift - INFO - Phase correlation: shift=(-98.8827024932558, -25.81733800675852) conf=0.8477295026831865
+2025-11-18 17:22:40,516 - corrector.core.run - INFO - Drift detected: (dx=1226, dy=-320) with conf=0.8477
+2025-11-18 17:22:41,012 - corrector.core.run - INFO - Step 171/200: Moving to target x=-23550, y=-48150
+2025-11-18 17:22:45,194 - corrector.core.drift - INFO - Phase correlation: shift=(-98.9742548636259, -25.820199202593187) conf=0.851525849851275
+2025-11-18 17:22:45,274 - corrector.core.run - INFO - Drift detected: (dx=1228, dy=-320) with conf=0.8515
+2025-11-18 17:22:45,799 - corrector.core.run - INFO - Step 172/200: Moving to target x=-23600, y=-48150
+2025-11-18 17:22:51,402 - corrector.core.drift - INFO - Phase correlation: shift=(-98.90456164013403, -25.80826907931828) conf=0.8397794256943488
+2025-11-18 17:22:51,498 - corrector.core.run - INFO - Drift detected: (dx=1227, dy=-320) with conf=0.8398
+2025-11-18 17:22:52,039 - corrector.core.run - INFO - Step 173/200: Moving to target x=-23650, y=-48150
+2025-11-18 17:22:56,253 - corrector.core.drift - INFO - Phase correlation: shift=(-98.761751488242, -25.808507140871825) conf=0.8272238716270948
+2025-11-18 17:22:56,334 - corrector.core.run - INFO - Drift detected: (dx=1225, dy=-320) with conf=0.8272
+2025-11-18 17:22:56,859 - corrector.core.run - INFO - Step 174/200: Moving to target x=-23700, y=-48150
+2025-11-18 17:23:01,121 - corrector.core.drift - INFO - Phase correlation: shift=(-98.22435982930995, -25.830292734934858) conf=0.8381118476083677
+2025-11-18 17:23:01,168 - corrector.core.run - INFO - Drift detected: (dx=1218, dy=-320) with conf=0.8381
+2025-11-18 17:23:01,662 - corrector.core.run - INFO - Step 175/200: Moving to target x=-23750, y=-48150
+2025-11-18 17:23:05,889 - corrector.core.drift - INFO - Phase correlation: shift=(-97.98708167937662, -25.829253456883578) conf=0.8513072822366339
+2025-11-18 17:23:05,970 - corrector.core.run - INFO - Drift detected: (dx=1215, dy=-320) with conf=0.8513
+2025-11-18 17:23:06,494 - corrector.core.run - INFO - Step 176/200: Moving to target x=-23800, y=-48150
+2025-11-18 17:23:12,201 - corrector.core.drift - INFO - Phase correlation: shift=(-97.8479190526798, -25.880350349397133) conf=0.8520681161185271
+2025-11-18 17:23:12,265 - corrector.core.run - INFO - Drift detected: (dx=1214, dy=-321) with conf=0.8521
+2025-11-18 17:23:12,808 - corrector.core.run - INFO - Step 177/200: Moving to target x=-23850, y=-48150
+2025-11-18 17:23:18,371 - corrector.core.drift - INFO - Phase correlation: shift=(-97.78377883447376, -26.03698941709945) conf=0.8554686832617778
+2025-11-18 17:23:18,450 - corrector.core.run - INFO - Drift detected: (dx=1213, dy=-323) with conf=0.8555
+2025-11-18 17:23:18,977 - corrector.core.run - INFO - Step 178/200: Moving to target x=-23900, y=-48150
+2025-11-18 17:23:23,220 - corrector.core.drift - INFO - Phase correlation: shift=(-97.17424714268247, -26.021045492615656) conf=0.8520445970037451
+2025-11-18 17:23:23,300 - corrector.core.run - INFO - Drift detected: (dx=1205, dy=-323) with conf=0.8520
+2025-11-18 17:23:23,810 - corrector.core.run - INFO - Step 179/200: Moving to target x=-23950, y=-48150
+2025-11-18 17:23:29,390 - corrector.core.drift - INFO - Phase correlation: shift=(-97.12102149743203, -26.020474031180697) conf=0.8589740642866824
+2025-11-18 17:23:29,470 - corrector.core.run - INFO - Drift detected: (dx=1205, dy=-323) with conf=0.8590
+2025-11-18 17:23:29,962 - corrector.core.run - INFO - Step 180/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:23:34,212 - corrector.core.drift - INFO - Phase correlation: shift=(-97.07539598214532, -26.12284605649728) conf=0.8562938869532578
+2025-11-18 17:23:34,245 - corrector.core.run - INFO - Drift detected: (dx=1204, dy=-324) with conf=0.8563
+2025-11-18 17:23:34,765 - corrector.core.run - INFO - Step 181/200: Moving to target x=-24050, y=-48150
+2025-11-18 17:23:38,838 - corrector.core.drift - INFO - Phase correlation: shift=(-97.02398670583159, -25.965451806667545) conf=0.8571255643320554
+2025-11-18 17:23:38,886 - corrector.core.run - INFO - Drift detected: (dx=1203, dy=-322) with conf=0.8571
+2025-11-18 17:23:39,394 - corrector.core.run - INFO - Step 182/200: Moving to target x=-24100, y=-48150
+2025-11-18 17:23:43,719 - corrector.core.drift - INFO - Phase correlation: shift=(-96.96569509468111, -25.924254266952403) conf=0.8587784289562226
+2025-11-18 17:23:43,799 - corrector.core.run - INFO - Drift detected: (dx=1203, dy=-322) with conf=0.8588
+2025-11-18 17:23:44,274 - corrector.core.run - INFO - Step 183/200: Moving to target x=-24150, y=-48150
+2025-11-18 17:23:48,574 - corrector.core.drift - INFO - Phase correlation: shift=(-96.91116313499742, -25.86907077518788) conf=0.8578270572168367
+2025-11-18 17:23:48,670 - corrector.core.run - INFO - Drift detected: (dx=1202, dy=-321) with conf=0.8578
+2025-11-18 17:23:49,197 - corrector.core.run - INFO - Step 184/200: Moving to target x=-24200, y=-48150
+2025-11-18 17:23:54,807 - corrector.core.drift - INFO - Phase correlation: shift=(-96.88148288530851, -25.88965524328978) conf=0.8543169275236755
+2025-11-18 17:23:54,886 - corrector.core.run - INFO - Drift detected: (dx=1202, dy=-321) with conf=0.8543
+2025-11-18 17:23:55,395 - corrector.core.run - INFO - Step 185/200: Moving to target x=-24250, y=-48150
+2025-11-18 17:23:59,528 - corrector.core.drift - INFO - Phase correlation: shift=(-96.26746557473871, -26.00832439925847) conf=0.8370467023636128
+2025-11-18 17:23:59,576 - corrector.core.run - INFO - Drift detected: (dx=1194, dy=-323) with conf=0.8370
+2025-11-18 17:24:00,066 - corrector.core.run - INFO - Step 186/200: Moving to target x=-24300, y=-48150
+2025-11-18 17:24:03,651 - corrector.core.drift - INFO - Phase correlation: shift=(-96.1268437591076, -26.051776307467378) conf=0.8559461541237952
+2025-11-18 17:24:03,731 - corrector.core.run - INFO - Drift detected: (dx=1192, dy=-323) with conf=0.8559
+2025-11-18 17:24:04,178 - corrector.core.run - INFO - Step 187/200: Moving to target x=-24350, y=-48150
+2025-11-18 17:24:09,197 - corrector.core.drift - INFO - Phase correlation: shift=(-96.09684758290643, -26.073451935587514) conf=0.859266282182524
+2025-11-18 17:24:09,277 - corrector.core.run - INFO - Drift detected: (dx=1192, dy=-323) with conf=0.8593
+2025-11-18 17:24:09,813 - corrector.core.run - INFO - Step 188/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:24:15,376 - corrector.core.drift - INFO - Phase correlation: shift=(-96.01645756697701, -26.01528848307231) conf=0.856335312152112
+2025-11-18 17:24:15,440 - corrector.core.run - INFO - Drift detected: (dx=1191, dy=-323) with conf=0.8563
+2025-11-18 17:24:15,963 - corrector.core.run - INFO - Step 189/200: Moving to target x=-24450, y=-48150
+2025-11-18 17:24:20,286 - corrector.core.drift - INFO - Phase correlation: shift=(-96.01198843925295, -26.08052570201619) conf=0.8606595750242598
+2025-11-18 17:24:20,350 - corrector.core.run - INFO - Drift detected: (dx=1191, dy=-323) with conf=0.8607
+2025-11-18 17:24:20,845 - corrector.core.run - INFO - Step 190/200: Moving to target x=-24500, y=-48150
+2025-11-18 17:24:26,386 - corrector.core.drift - INFO - Phase correlation: shift=(-95.9134278704181, -26.089114700094626) conf=0.867152158232192
+2025-11-18 17:24:26,482 - corrector.core.run - INFO - Drift detected: (dx=1190, dy=-324) with conf=0.8672
+2025-11-18 17:24:26,977 - corrector.core.run - INFO - Step 191/200: Moving to target x=-24450, y=-48150
+2025-11-18 17:24:31,256 - corrector.core.drift - INFO - Phase correlation: shift=(-95.21394672221572, -26.19448884529487) conf=0.8484834204502263
+2025-11-18 17:24:31,336 - corrector.core.run - INFO - Drift detected: (dx=1181, dy=-325) with conf=0.8485
+2025-11-18 17:24:31,863 - corrector.core.run - INFO - Step 192/200: Moving to target x=-24400, y=-48150
+2025-11-18 17:24:37,386 - corrector.core.drift - INFO - Phase correlation: shift=(-95.14191398914431, -26.171794915499675) conf=0.8500627371521438
+2025-11-18 17:24:37,451 - corrector.core.run - INFO - Drift detected: (dx=1180, dy=-325) with conf=0.8501
+2025-11-18 17:24:38,022 - corrector.core.run - INFO - Step 193/200: Moving to target x=-24350, y=-48150
+2025-11-18 17:24:42,287 - corrector.core.drift - INFO - Phase correlation: shift=(-95.02987694904539, -26.231976761941894) conf=0.8446702285644492
+2025-11-18 17:24:42,351 - corrector.core.run - INFO - Drift detected: (dx=1179, dy=-325) with conf=0.8447
+2025-11-18 17:24:42,862 - corrector.core.run - INFO - Step 194/200: Moving to target x=-24300, y=-48150
+2025-11-18 17:24:47,156 - corrector.core.drift - INFO - Phase correlation: shift=(-94.9698259394554, -26.574424110913128) conf=0.8233901494622373
+2025-11-18 17:24:47,236 - corrector.core.run - INFO - Drift detected: (dx=1178, dy=-330) with conf=0.8234
+2025-11-18 17:24:47,779 - corrector.core.run - INFO - Step 195/200: Moving to target x=-24250, y=-48150
+2025-11-18 17:24:53,460 - corrector.core.drift - INFO - Phase correlation: shift=(-94.98405816560205, -26.280526239105313) conf=0.8482582227919124
+2025-11-18 17:24:53,524 - corrector.core.run - INFO - Drift detected: (dx=1178, dy=-326) with conf=0.8483
+2025-11-18 17:24:54,051 - corrector.core.run - INFO - Step 196/200: Moving to target x=-24200, y=-48150
+2025-11-18 17:24:58,216 - corrector.core.drift - INFO - Phase correlation: shift=(-94.83945092338797, -26.668724744274698) conf=0.8324940966478858
+2025-11-18 17:24:58,296 - corrector.core.run - INFO - Drift detected: (dx=1176, dy=-331) with conf=0.8325
+2025-11-18 17:24:58,823 - corrector.core.run - INFO - Step 197/200: Moving to target x=-24150, y=-48150
+2025-11-18 17:25:03,121 - corrector.core.drift - INFO - Phase correlation: shift=(-94.83592582804181, -26.64246010220819) conf=0.8323192751816658
+2025-11-18 17:25:03,186 - corrector.core.run - INFO - Drift detected: (dx=1176, dy=-330) with conf=0.8323
+2025-11-18 17:25:03,726 - corrector.core.run - INFO - Step 198/200: Moving to target x=-24100, y=-48150
+2025-11-18 17:25:09,266 - corrector.core.drift - INFO - Phase correlation: shift=(-94.30893808464828, -26.75545186830476) conf=0.8202118726667461
+2025-11-18 17:25:09,361 - corrector.core.run - INFO - Drift detected: (dx=1170, dy=-332) with conf=0.8202
+2025-11-18 17:25:09,887 - corrector.core.run - INFO - Step 199/200: Moving to target x=-24050, y=-48150
+2025-11-18 17:25:13,972 - corrector.core.drift - INFO - Phase correlation: shift=(-94.2557357490083, -26.70472963115293) conf=0.8282218314918163
+2025-11-18 17:25:14,036 - corrector.core.run - INFO - Drift detected: (dx=1169, dy=-331) with conf=0.8282
+2025-11-18 17:25:14,595 - corrector.core.run - INFO - Step 200/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:25:18,617 - corrector.core.drift - INFO - Phase correlation: shift=(-94.75417028667619, -26.33474524510615) conf=0.8272417128676932
+2025-11-18 17:25:18,697 - corrector.core.run - INFO - Drift detected: (dx=1175, dy=-327) with conf=0.8272
+2025-11-18 17:25:19,224 - corrector.core.run - INFO - Trajectory 'major_minor_x' finished. Returning to base position.
+2025-11-18 17:25:23,576 - corrector.core.drift - INFO - Phase correlation: shift=(-94.78497654561136, -26.27348001697999) conf=0.8229945787924765
+2025-11-18 17:25:23,640 - corrector.core.run - INFO - Drift detected: (dx=1176, dy=-326) with conf=0.8230
+2025-11-18 17:25:23,848 - corrector.core.run - INFO - Magnification and focus set for experiment 'major_minor_y'
+2025-11-18 17:25:24,360 - corrector.core.run - INFO - Moved to base position for experiment: x=-24000, y=-48150
+2025-11-18 17:25:29,735 - corrector.core.run - INFO - Step 1/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:25:34,650 - corrector.core.drift - INFO - Phase correlation: shift=(3.1813357883844446, -12.840350064411666) conf=0.9536662844707924
+2025-11-18 17:25:34,731 - corrector.core.run - INFO - Drift detected: (dx=-39, dy=-159) with conf=0.9537
+2025-11-18 17:25:35,476 - corrector.core.run - INFO - Step 2/200: Moving to target x=-24000, y=-47350
+2025-11-18 17:25:41,198 - corrector.core.drift - INFO - Phase correlation: shift=(7.122823877364112, -27.965665354269163) conf=0.9386298757362306
+2025-11-18 17:25:41,262 - corrector.core.run - INFO - Drift detected: (dx=-88, dy=-347) with conf=0.9386
+2025-11-18 17:25:41,852 - corrector.core.run - INFO - Step 3/200: Moving to target x=-24000, y=-46950
+2025-11-18 17:25:47,406 - corrector.core.drift - INFO - Phase correlation: shift=(11.185506949817523, -45.088618572011114) conf=0.8911997450526189
+2025-11-18 17:25:47,423 - corrector.core.run - INFO - Drift detected: (dx=-139, dy=-559) with conf=0.8912
+2025-11-18 17:25:48,138 - corrector.core.run - INFO - Step 4/200: Moving to target x=-24000, y=-46550
+2025-11-18 17:25:53,695 - corrector.core.drift - INFO - Phase correlation: shift=(16.826456700189283, -66.94838918407703) conf=0.8485378790818241
+2025-11-18 17:25:53,759 - corrector.core.run - INFO - Drift detected: (dx=-209, dy=-830) with conf=0.8485
+2025-11-18 17:25:54,427 - corrector.core.run - INFO - Step 5/200: Moving to target x=-24000, y=-46150
+2025-11-18 17:25:59,921 - corrector.core.drift - INFO - Phase correlation: shift=(22.983861386719468, -93.19237659185762) conf=0.8169269829852527
+2025-11-18 17:26:00,002 - corrector.core.run - INFO - Drift detected: (dx=-285, dy=-1156) with conf=0.8169
+2025-11-18 17:26:00,717 - corrector.core.run - INFO - Step 6/200: Moving to target x=-24000, y=-45750
+2025-11-18 17:26:06,139 - corrector.core.drift - INFO - Phase correlation: shift=(29.147120506677652, -120.94558310810567) conf=0.7606743181411743
+2025-11-18 17:26:06,187 - corrector.core.run - INFO - Drift detected: (dx=-361, dy=-1500) with conf=0.7607
+2025-11-18 17:26:06,897 - corrector.core.run - INFO - Step 7/200: Moving to target x=-24000, y=-45350
+2025-11-18 17:26:10,815 - corrector.core.drift - INFO - Phase correlation: shift=(34.87929178900686, -146.24657332388688) conf=0.6917435867882066
+2025-11-18 17:26:10,894 - corrector.core.run - INFO - Drift detected: (dx=-433, dy=-1814) with conf=0.6917
+2025-11-18 17:26:11,649 - corrector.core.run - INFO - Step 8/200: Moving to target x=-24000, y=-44950
+2025-11-18 17:26:17,319 - corrector.core.drift - INFO - Phase correlation: shift=(41.76972214400075, -177.04544116963427) conf=0.6509738402068853
+2025-11-18 17:26:17,383 - corrector.core.run - INFO - Drift detected: (dx=-518, dy=-2196) with conf=0.6510
+2025-11-18 17:26:18,024 - corrector.core.run - INFO - Step 9/200: Moving to target x=-24000, y=-44550
+2025-11-18 17:26:22,119 - corrector.core.drift - INFO - Phase correlation: shift=(46.91321896024476, -201.2650456021962) conf=0.5903940298268335
+2025-11-18 17:26:22,183 - corrector.core.run - INFO - Drift detected: (dx=-582, dy=-2496) with conf=0.5904
+2025-11-18 17:26:22,806 - corrector.core.run - INFO - Step 10/200: Moving to target x=-24000, y=-44150
+2025-11-18 17:26:28,392 - corrector.core.drift - INFO - Phase correlation: shift=(53.155881078144034, -232.15742952072827) conf=0.5698257281623192
+2025-11-18 17:26:28,472 - corrector.core.run - INFO - Drift detected: (dx=-659, dy=-2879) with conf=0.5698
+2025-11-18 17:26:29,093 - corrector.core.run - INFO - Step 11/200: Moving to target x=-24000, y=-44550
+2025-11-18 17:26:34,582 - corrector.core.drift - INFO - Phase correlation: shift=(53.02013312286351, -234.31974489528787) conf=0.5886024443365062
+2025-11-18 17:26:34,662 - corrector.core.run - INFO - Drift detected: (dx=-658, dy=-2906) with conf=0.5886
+2025-11-18 17:26:35,317 - corrector.core.run - INFO - Step 12/200: Moving to target x=-24000, y=-44950
+2025-11-18 17:26:39,519 - corrector.core.drift - INFO - Phase correlation: shift=(51.21117239859825, -228.68800148419425) conf=0.5787470580026275
+2025-11-18 17:26:39,567 - corrector.core.run - INFO - Drift detected: (dx=-635, dy=-2836) with conf=0.5787
+2025-11-18 17:26:40,301 - corrector.core.run - INFO - Step 13/200: Moving to target x=-24000, y=-45350
+2025-11-18 17:26:45,731 - corrector.core.drift - INFO - Phase correlation: shift=(49.061309971061405, -219.91121475095366) conf=0.6230320623619499
+2025-11-18 17:26:45,811 - corrector.core.run - INFO - Drift detected: (dx=-608, dy=-2727) with conf=0.6230
+2025-11-18 17:26:46,509 - corrector.core.run - INFO - Step 14/200: Moving to target x=-24000, y=-45750
+2025-11-18 17:26:52,006 - corrector.core.drift - INFO - Phase correlation: shift=(46.820721253722695, -209.69228466032496) conf=0.6091302912699371
+2025-11-18 17:26:52,038 - corrector.core.run - INFO - Drift detected: (dx=-581, dy=-2601) with conf=0.6091
+2025-11-18 17:26:52,785 - corrector.core.run - INFO - Step 15/200: Moving to target x=-24000, y=-46150
+2025-11-18 17:26:58,379 - corrector.core.drift - INFO - Phase correlation: shift=(43.02793453667846, -198.0291354198892) conf=0.6542874497216455
+2025-11-18 17:26:58,475 - corrector.core.run - INFO - Drift detected: (dx=-534, dy=-2456) with conf=0.6543
+2025-11-18 17:26:59,209 - corrector.core.run - INFO - Step 16/200: Moving to target x=-24000, y=-46550
+2025-11-18 17:27:04,654 - corrector.core.drift - INFO - Phase correlation: shift=(40.00665254902549, -185.17041644578563) conf=0.6716972548556647
+2025-11-18 17:27:04,702 - corrector.core.run - INFO - Drift detected: (dx=-496, dy=-2297) with conf=0.6717
+2025-11-18 17:27:05,383 - corrector.core.run - INFO - Step 17/200: Moving to target x=-24000, y=-46950
+2025-11-18 17:27:11,032 - corrector.core.drift - INFO - Phase correlation: shift=(36.177904096607335, -170.9358329404531) conf=0.6817616398244972
+2025-11-18 17:27:11,112 - corrector.core.run - INFO - Drift detected: (dx=-449, dy=-2120) with conf=0.6818
+2025-11-18 17:27:11,846 - corrector.core.run - INFO - Step 18/200: Moving to target x=-24000, y=-47350
+2025-11-18 17:27:17,319 - corrector.core.drift - INFO - Phase correlation: shift=(32.15651663388974, -154.8080704093212) conf=0.713984833546184
+2025-11-18 17:27:17,399 - corrector.core.run - INFO - Drift detected: (dx=-399, dy=-1920) with conf=0.7140
+2025-11-18 17:27:18,132 - corrector.core.run - INFO - Step 19/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:27:25,120 - corrector.core.drift - INFO - Phase correlation: shift=(27.94264236139111, -136.31376346384576) conf=0.7615014939206353
+2025-11-18 17:27:25,169 - corrector.core.run - INFO - Drift detected: (dx=-347, dy=-1691) with conf=0.7615
+2025-11-18 17:27:25,887 - corrector.core.run - INFO - Step 20/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:27:30,373 - corrector.core.drift - INFO - Phase correlation: shift=(23.01167062881359, -116.67704730667202) conf=0.791817912784259
+2025-11-18 17:27:30,453 - corrector.core.run - INFO - Drift detected: (dx=-285, dy=-1447) with conf=0.7918
+2025-11-18 17:27:31,108 - corrector.core.run - INFO - Step 21/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:27:36,666 - corrector.core.drift - INFO - Phase correlation: shift=(17.95113918037157, -95.00189832709248) conf=0.832075190484281
+2025-11-18 17:27:36,730 - corrector.core.run - INFO - Drift detected: (dx=-223, dy=-1178) with conf=0.8321
+2025-11-18 17:27:37,415 - corrector.core.run - INFO - Step 22/200: Moving to target x=-24000, y=-48950
+2025-11-18 17:27:43,083 - corrector.core.drift - INFO - Phase correlation: shift=(12.92129229942418, -72.18950149667256) conf=0.8563310170933369
+2025-11-18 17:27:43,130 - corrector.core.run - INFO - Drift detected: (dx=-160, dy=-895) with conf=0.8563
+2025-11-18 17:27:43,865 - corrector.core.run - INFO - Step 23/200: Moving to target x=-24000, y=-49350
+2025-11-18 17:27:49,404 - corrector.core.drift - INFO - Phase correlation: shift=(7.299370904439684, -48.80950953138921) conf=0.8672436953003893
+2025-11-18 17:27:49,452 - corrector.core.run - INFO - Drift detected: (dx=-91, dy=-605) with conf=0.8672
+2025-11-18 17:27:50,330 - corrector.core.run - INFO - Step 24/200: Moving to target x=-24000, y=-49750
+2025-11-18 17:27:55,665 - corrector.core.drift - INFO - Phase correlation: shift=(2.1543382429626945, -24.34140001845276) conf=0.8985047814491397
+2025-11-18 17:27:55,745 - corrector.core.run - INFO - Drift detected: (dx=-27, dy=-302) with conf=0.8985
+2025-11-18 17:27:56,432 - corrector.core.run - INFO - Step 25/200: Moving to target x=-24000, y=-50150
+2025-11-18 17:28:01,982 - corrector.core.drift - INFO - Phase correlation: shift=(-3.0475836061362997, 0.7177141730464314) conf=0.9411414399794904
+2025-11-18 17:28:02,062 - corrector.core.run - INFO - Drift detected: (dx=38, dy=9) with conf=0.9411
+2025-11-18 17:28:02,743 - corrector.core.run - INFO - Step 26/200: Moving to target x=-24000, y=-50550
+2025-11-18 17:28:08,118 - corrector.core.drift - INFO - Phase correlation: shift=(-8.789649732274256, 26.808287578161412) conf=0.8964064018717958
+2025-11-18 17:28:08,198 - corrector.core.run - INFO - Drift detected: (dx=109, dy=332) with conf=0.8964
+2025-11-18 17:28:08,867 - corrector.core.run - INFO - Step 27/200: Moving to target x=-24000, y=-50950
+2025-11-18 17:28:14,500 - corrector.core.drift - INFO - Phase correlation: shift=(-14.150294866991771, 54.75000636381867) conf=0.8643157462161778
+2025-11-18 17:28:14,564 - corrector.core.run - INFO - Drift detected: (dx=175, dy=679) with conf=0.8643
+2025-11-18 17:28:16,635 - corrector.core.run - INFO - Step 28/200: Moving to target x=-24000, y=-51350
+2025-11-18 17:28:22,350 - corrector.core.drift - INFO - Phase correlation: shift=(-20.03999186288945, 84.2135094170211) conf=0.8454532904880069
+2025-11-18 17:28:22,429 - corrector.core.run - INFO - Drift detected: (dx=249, dy=1044) with conf=0.8455
+2025-11-18 17:28:23,163 - corrector.core.run - INFO - Step 29/200: Moving to target x=-24000, y=-51750
+2025-11-18 17:28:28,578 - corrector.core.drift - INFO - Phase correlation: shift=(-25.875445511803832, 111.78617043721522) conf=0.7986468216718041
+2025-11-18 17:28:28,658 - corrector.core.run - INFO - Drift detected: (dx=321, dy=1386) with conf=0.7986
+2025-11-18 17:28:29,470 - corrector.core.run - INFO - Step 30/200: Moving to target x=-24000, y=-52150
+2025-11-18 17:28:34,829 - corrector.core.drift - INFO - Phase correlation: shift=(-31.87822967174145, 141.672591566012) conf=0.7465571378886853
+2025-11-18 17:28:34,925 - corrector.core.run - INFO - Drift detected: (dx=395, dy=1757) with conf=0.7466
+2025-11-18 17:28:35,658 - corrector.core.run - INFO - Step 31/200: Moving to target x=-24000, y=-51750
+2025-11-18 17:28:41,209 - corrector.core.drift - INFO - Phase correlation: shift=(-31.258942986923785, 143.82485296186883) conf=0.7575695445088386
+2025-11-18 17:28:41,289 - corrector.core.run - INFO - Drift detected: (dx=388, dy=1784) with conf=0.7576
+2025-11-18 17:28:41,927 - corrector.core.run - INFO - Step 32/200: Moving to target x=-24000, y=-51350
+2025-11-18 17:28:47,485 - corrector.core.drift - INFO - Phase correlation: shift=(-29.09651691502927, 137.75793510233814) conf=0.7758551073952908
+2025-11-18 17:28:47,581 - corrector.core.run - INFO - Drift detected: (dx=361, dy=1709) with conf=0.7759
+2025-11-18 17:28:48,234 - corrector.core.run - INFO - Step 33/200: Moving to target x=-24000, y=-50950
+2025-11-18 17:28:53,705 - corrector.core.drift - INFO - Phase correlation: shift=(-26.757607995910575, 128.96288968467059) conf=0.7870512552239306
+2025-11-18 17:28:53,785 - corrector.core.run - INFO - Drift detected: (dx=332, dy=1599) with conf=0.7871
+2025-11-18 17:28:54,454 - corrector.core.run - INFO - Step 34/200: Moving to target x=-24000, y=-50550
+2025-11-18 17:29:00,141 - corrector.core.drift - INFO - Phase correlation: shift=(-23.114290378571923, 118.16573677702866) conf=0.8060818627514835
+2025-11-18 17:29:00,189 - corrector.core.run - INFO - Drift detected: (dx=287, dy=1466) with conf=0.8061
+2025-11-18 17:29:00,906 - corrector.core.run - INFO - Step 35/200: Moving to target x=-24000, y=-50150
+2025-11-18 17:29:06,270 - corrector.core.drift - INFO - Phase correlation: shift=(-19.98743815632804, 106.04244974516905) conf=0.8412159123428453
+2025-11-18 17:29:06,366 - corrector.core.run - INFO - Drift detected: (dx=248, dy=1315) with conf=0.8412
+2025-11-18 17:29:07,085 - corrector.core.run - INFO - Step 36/200: Moving to target x=-24000, y=-49750
+2025-11-18 17:29:12,640 - corrector.core.drift - INFO - Phase correlation: shift=(-16.745314520850116, 92.90578495060129) conf=0.8279126887262211
+2025-11-18 17:29:12,720 - corrector.core.run - INFO - Drift detected: (dx=208, dy=1152) with conf=0.8279
+2025-11-18 17:29:13,421 - corrector.core.run - INFO - Step 37/200: Moving to target x=-24000, y=-49350
+2025-11-18 17:29:18,957 - corrector.core.drift - INFO - Phase correlation: shift=(-12.897734292063546, 78.10453114012421) conf=0.8672274059281823
+2025-11-18 17:29:19,037 - corrector.core.run - INFO - Drift detected: (dx=160, dy=969) with conf=0.8672
+2025-11-18 17:29:19,690 - corrector.core.run - INFO - Step 38/200: Moving to target x=-24000, y=-48950
+2025-11-18 17:29:25,174 - corrector.core.drift - INFO - Phase correlation: shift=(-8.81357066650014, 61.75514826883477) conf=0.875188799059965
+2025-11-18 17:29:25,254 - corrector.core.run - INFO - Drift detected: (dx=109, dy=766) with conf=0.8752
+2025-11-18 17:29:25,921 - corrector.core.run - INFO - Step 39/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:29:31,494 - corrector.core.drift - INFO - Phase correlation: shift=(-3.959789341130204, 42.97855068666877) conf=0.9157309682557914
+2025-11-18 17:29:31,574 - corrector.core.run - INFO - Drift detected: (dx=49, dy=533) with conf=0.9157
+2025-11-18 17:29:32,212 - corrector.core.run - INFO - Step 40/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:29:37,643 - corrector.core.drift - INFO - Phase correlation: shift=(0.908877604997997, 22.9708909830498) conf=0.9446807684237706
+2025-11-18 17:29:37,723 - corrector.core.run - INFO - Drift detected: (dx=-11, dy=285) with conf=0.9447
+2025-11-18 17:29:38,314 - corrector.core.run - INFO - Step 41/200: Moving to target x=-24000, y=-47850
+2025-11-18 17:29:44,075 - corrector.core.drift - INFO - Phase correlation: shift=(5.117853662613584, 5.912423228468356) conf=0.9596442410651499
+2025-11-18 17:29:44,139 - corrector.core.run - INFO - Drift detected: (dx=-63, dy=73) with conf=0.9596
+2025-11-18 17:29:44,826 - corrector.core.run - INFO - Step 42/200: Moving to target x=-24000, y=-47550
+2025-11-18 17:29:50,297 - corrector.core.drift - INFO - Phase correlation: shift=(9.23266661678349, -11.053941028858958) conf=0.9500316157422826
+2025-11-18 17:29:50,377 - corrector.core.run - INFO - Drift detected: (dx=-115, dy=-137) with conf=0.9500
+2025-11-18 17:29:51,062 - corrector.core.run - INFO - Step 43/200: Moving to target x=-24000, y=-47250
+2025-11-18 17:29:56,645 - corrector.core.drift - INFO - Phase correlation: shift=(13.880943148989218, -28.72645988115687) conf=0.9128416375432297
+2025-11-18 17:29:56,741 - corrector.core.run - INFO - Drift detected: (dx=-172, dy=-356) with conf=0.9128
+2025-11-18 17:29:57,332 - corrector.core.run - INFO - Step 44/200: Moving to target x=-24000, y=-46950
+2025-11-18 17:30:02,765 - corrector.core.drift - INFO - Phase correlation: shift=(17.960408323359616, -46.780837155846996) conf=0.8648990442036781
+2025-11-18 17:30:02,844 - corrector.core.run - INFO - Drift detected: (dx=-223, dy=-580) with conf=0.8649
+2025-11-18 17:30:03,547 - corrector.core.run - INFO - Step 45/200: Moving to target x=-24000, y=-46650
+2025-11-18 17:30:09,246 - corrector.core.drift - INFO - Phase correlation: shift=(22.124986638059, -65.66910733321055) conf=0.8263681277503407
+2025-11-18 17:30:09,326 - corrector.core.run - INFO - Drift detected: (dx=-274, dy=-814) with conf=0.8264
+2025-11-18 17:30:09,995 - corrector.core.run - INFO - Step 46/200: Moving to target x=-24000, y=-46350
+2025-11-18 17:30:15,487 - corrector.core.drift - INFO - Phase correlation: shift=(26.290030081993564, -84.70440056037643) conf=0.7946830163772485
+2025-11-18 17:30:15,551 - corrector.core.run - INFO - Drift detected: (dx=-326, dy=-1051) with conf=0.7947
+2025-11-18 17:30:16,170 - corrector.core.run - INFO - Step 47/200: Moving to target x=-24000, y=-46050
+2025-11-18 17:30:21,804 - corrector.core.drift - INFO - Phase correlation: shift=(31.075646152804552, -104.73448100655497) conf=0.7912815741531619
+2025-11-18 17:30:21,901 - corrector.core.run - INFO - Drift detected: (dx=-385, dy=-1299) with conf=0.7913
+2025-11-18 17:30:22,554 - corrector.core.run - INFO - Step 48/200: Moving to target x=-24000, y=-45750
+2025-11-18 17:30:27,919 - corrector.core.drift - INFO - Phase correlation: shift=(35.31335194962196, -125.03046159583607) conf=0.7523940678571366
+2025-11-18 17:30:28,000 - corrector.core.run - INFO - Drift detected: (dx=-438, dy=-1551) with conf=0.7524
+2025-11-18 17:30:28,590 - corrector.core.run - INFO - Step 49/200: Moving to target x=-24000, y=-45450
+2025-11-18 17:30:32,834 - corrector.core.drift - INFO - Phase correlation: shift=(39.90386619799631, -143.3583877208294) conf=0.6936410176954299
+2025-11-18 17:30:32,914 - corrector.core.run - INFO - Drift detected: (dx=-495, dy=-1778) with conf=0.6936
+2025-11-18 17:30:33,521 - corrector.core.run - INFO - Step 50/200: Moving to target x=-24000, y=-45150
+2025-11-18 17:30:38,984 - corrector.core.drift - INFO - Phase correlation: shift=(44.84986303692199, -166.68635140978995) conf=0.6557230356278745
+2025-11-18 17:30:39,065 - corrector.core.run - INFO - Drift detected: (dx=-556, dy=-2067) with conf=0.6557
+2025-11-18 17:30:39,621 - corrector.core.run - INFO - Step 51/200: Moving to target x=-24000, y=-45450
+2025-11-18 17:30:43,820 - corrector.core.drift - INFO - Phase correlation: shift=(44.256105746057756, -168.814676861483) conf=0.6684062935579701
+2025-11-18 17:30:43,916 - corrector.core.run - INFO - Drift detected: (dx=-549, dy=-2094) with conf=0.6684
+2025-11-18 17:30:44,538 - corrector.core.run - INFO - Step 52/200: Moving to target x=-24000, y=-45750
+2025-11-18 17:30:50,248 - corrector.core.drift - INFO - Phase correlation: shift=(43.088834863194734, -164.89145585365299) conf=0.6928173093166379
+2025-11-18 17:30:50,327 - corrector.core.run - INFO - Drift detected: (dx=-534, dy=-2045) with conf=0.6928
+2025-11-18 17:30:50,916 - corrector.core.run - INFO - Step 53/200: Moving to target x=-24000, y=-46050
+2025-11-18 17:30:56,485 - corrector.core.drift - INFO - Phase correlation: shift=(41.83008936601232, -159.1586874047578) conf=0.7028812197670444
+2025-11-18 17:30:56,533 - corrector.core.run - INFO - Drift detected: (dx=-519, dy=-1974) with conf=0.7029
+2025-11-18 17:30:57,108 - corrector.core.run - INFO - Step 54/200: Moving to target x=-24000, y=-46350
+2025-11-18 17:31:02,601 - corrector.core.drift - INFO - Phase correlation: shift=(40.01287764084066, -152.2087657725948) conf=0.7175948113856373
+2025-11-18 17:31:02,697 - corrector.core.run - INFO - Drift detected: (dx=-496, dy=-1888) with conf=0.7176
+2025-11-18 17:31:03,304 - corrector.core.run - INFO - Step 55/200: Moving to target x=-24000, y=-46650
+2025-11-18 17:31:08,687 - corrector.core.drift - INFO - Phase correlation: shift=(38.05158656215201, -144.4036533280949) conf=0.7165684827808935
+2025-11-18 17:31:08,783 - corrector.core.run - INFO - Drift detected: (dx=-472, dy=-1791) with conf=0.7166
+2025-11-18 17:31:09,405 - corrector.core.run - INFO - Step 56/200: Moving to target x=-24000, y=-46950
+2025-11-18 17:31:13,682 - corrector.core.drift - INFO - Phase correlation: shift=(36.075429822455135, -136.16594408684216) conf=0.7595748990665112
+2025-11-18 17:31:13,778 - corrector.core.run - INFO - Drift detected: (dx=-447, dy=-1689) with conf=0.7596
+2025-11-18 17:31:14,335 - corrector.core.run - INFO - Step 57/200: Moving to target x=-24000, y=-47250
+2025-11-18 17:31:20,012 - corrector.core.drift - INFO - Phase correlation: shift=(33.87765571886507, -127.03292430513807) conf=0.787866158163425
+2025-11-18 17:31:20,092 - corrector.core.run - INFO - Drift detected: (dx=-420, dy=-1576) with conf=0.7879
+2025-11-18 17:31:20,731 - corrector.core.run - INFO - Step 58/200: Moving to target x=-24000, y=-47550
+2025-11-18 17:31:26,364 - corrector.core.drift - INFO - Phase correlation: shift=(31.27126088721036, -117.23762697345495) conf=0.7694714323634937
+2025-11-18 17:31:26,428 - corrector.core.run - INFO - Drift detected: (dx=-388, dy=-1454) with conf=0.7695
+2025-11-18 17:31:27,035 - corrector.core.run - INFO - Step 59/200: Moving to target x=-24000, y=-47850
+2025-11-18 17:31:32,555 - corrector.core.drift - INFO - Phase correlation: shift=(28.89820072557802, -106.44192109884028) conf=0.7844426712868174
+2025-11-18 17:31:32,604 - corrector.core.run - INFO - Drift detected: (dx=-358, dy=-1320) with conf=0.7844
+2025-11-18 17:31:33,178 - corrector.core.run - INFO - Step 60/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:31:37,361 - corrector.core.drift - INFO - Phase correlation: shift=(26.023447784552673, -94.81155241302167) conf=0.8282797911646183
+2025-11-18 17:31:37,441 - corrector.core.run - INFO - Drift detected: (dx=-323, dy=-1176) with conf=0.8283
+2025-11-18 17:31:38,032 - corrector.core.run - INFO - Step 61/200: Moving to target x=-24000, y=-48450
+2025-11-18 17:31:43,568 - corrector.core.drift - INFO - Phase correlation: shift=(22.84894617409782, -81.17499649451139) conf=0.8423682539797136
+2025-11-18 17:31:43,648 - corrector.core.run - INFO - Drift detected: (dx=-283, dy=-1007) with conf=0.8424
+2025-11-18 17:31:44,256 - corrector.core.run - INFO - Step 62/200: Moving to target x=-24000, y=-48750
+2025-11-18 17:31:48,436 - corrector.core.drift - INFO - Phase correlation: shift=(19.189204123860577, -67.24629989443395) conf=0.8475224520813498
+2025-11-18 17:31:48,516 - corrector.core.run - INFO - Drift detected: (dx=-238, dy=-834) with conf=0.8475
+2025-11-18 17:31:49,186 - corrector.core.run - INFO - Step 63/200: Moving to target x=-24000, y=-49050
+2025-11-18 17:31:54,566 - corrector.core.drift - INFO - Phase correlation: shift=(15.928624124782573, -52.183201260068756) conf=0.8865549295401244
+2025-11-18 17:31:54,630 - corrector.core.run - INFO - Drift detected: (dx=-198, dy=-647) with conf=0.8866
+2025-11-18 17:31:55,252 - corrector.core.run - INFO - Step 64/200: Moving to target x=-24000, y=-49350
+2025-11-18 17:31:59,321 - corrector.core.drift - INFO - Phase correlation: shift=(12.243116000452801, -36.902990929055306) conf=0.8953700394052604
+2025-11-18 17:31:59,401 - corrector.core.run - INFO - Drift detected: (dx=-152, dy=-458) with conf=0.8954
+2025-11-18 17:32:00,071 - corrector.core.run - INFO - Step 65/200: Moving to target x=-24000, y=-49650
+2025-11-18 17:32:04,110 - corrector.core.drift - INFO - Phase correlation: shift=(8.893641624976112, -20.845350416455574) conf=0.9448634901910615
+2025-11-18 17:32:04,190 - corrector.core.run - INFO - Drift detected: (dx=-110, dy=-259) with conf=0.9449
+2025-11-18 17:32:04,876 - corrector.core.run - INFO - Step 66/200: Moving to target x=-24000, y=-49950
+2025-11-18 17:32:08,883 - corrector.core.drift - INFO - Phase correlation: shift=(4.9318085554572235, -3.241069340479555) conf=0.9428424426780013
+2025-11-18 17:32:08,963 - corrector.core.run - INFO - Drift detected: (dx=-61, dy=-40) with conf=0.9428
+2025-11-18 17:32:09,647 - corrector.core.run - INFO - Step 67/200: Moving to target x=-24000, y=-50250
+2025-11-18 17:32:13,830 - corrector.core.drift - INFO - Phase correlation: shift=(0.9330210172805664, 14.672192157917664) conf=0.9254806796482844
+2025-11-18 17:32:13,910 - corrector.core.run - INFO - Drift detected: (dx=-12, dy=182) with conf=0.9255
+2025-11-18 17:32:14,481 - corrector.core.run - INFO - Step 68/200: Moving to target x=-24000, y=-50550
+2025-11-18 17:32:20,020 - corrector.core.drift - INFO - Phase correlation: shift=(-3.116756916756003, 33.781050214577704) conf=0.9058673544309841
+2025-11-18 17:32:20,099 - corrector.core.run - INFO - Drift detected: (dx=39, dy=419) with conf=0.9059
+2025-11-18 17:32:20,723 - corrector.core.run - INFO - Step 69/200: Moving to target x=-24000, y=-50850
+2025-11-18 17:32:24,826 - corrector.core.drift - INFO - Phase correlation: shift=(-7.059476204278894, 51.72360029090123) conf=0.8832031809305194
+2025-11-18 17:32:24,890 - corrector.core.run - INFO - Drift detected: (dx=88, dy=641) with conf=0.8832
+2025-11-18 17:32:25,464 - corrector.core.run - INFO - Step 70/200: Moving to target x=-24000, y=-51150
+2025-11-18 17:32:29,517 - corrector.core.drift - INFO - Phase correlation: shift=(-10.933595626904435, 70.05735475942924) conf=0.88876560870173
+2025-11-18 17:32:29,613 - corrector.core.run - INFO - Drift detected: (dx=136, dy=869) with conf=0.8888
+2025-11-18 17:32:30,219 - corrector.core.run - INFO - Step 71/200: Moving to target x=-24000, y=-50850
+2025-11-18 17:32:34,448 - corrector.core.drift - INFO - Phase correlation: shift=(-10.809225973841421, 72.1020008027881) conf=0.8787816929674259
+2025-11-18 17:32:34,528 - corrector.core.run - INFO - Drift detected: (dx=134, dy=894) with conf=0.8788
+2025-11-18 17:32:35,151 - corrector.core.run - INFO - Step 72/200: Moving to target x=-24000, y=-50550
+2025-11-18 17:32:40,637 - corrector.core.drift - INFO - Phase correlation: shift=(-9.093271505443909, 67.97767511545419) conf=0.8837254760476752
+2025-11-18 17:32:40,716 - corrector.core.run - INFO - Drift detected: (dx=113, dy=843) with conf=0.8837
+2025-11-18 17:32:41,274 - corrector.core.run - INFO - Step 73/200: Moving to target x=-24000, y=-50250
+2025-11-18 17:32:45,434 - corrector.core.drift - INFO - Phase correlation: shift=(-7.152016622436122, 61.99243415586034) conf=0.890870799929312
+2025-11-18 17:32:45,466 - corrector.core.run - INFO - Drift detected: (dx=89, dy=769) with conf=0.8909
+2025-11-18 17:32:46,056 - corrector.core.run - INFO - Step 74/200: Moving to target x=-24000, y=-49950
+2025-11-18 17:32:50,221 - corrector.core.drift - INFO - Phase correlation: shift=(-5.122443887196027, 54.80557241425856) conf=0.890827097504561
+2025-11-18 17:32:50,301 - corrector.core.run - INFO - Drift detected: (dx=64, dy=680) with conf=0.8908
+2025-11-18 17:32:50,953 - corrector.core.run - INFO - Step 75/200: Moving to target x=-24000, y=-49650
+2025-11-18 17:32:56,395 - corrector.core.drift - INFO - Phase correlation: shift=(-2.8920457552443395, 46.14705322517182) conf=0.9079682964715355
+2025-11-18 17:32:56,475 - corrector.core.run - INFO - Drift detected: (dx=36, dy=572) with conf=0.9080
+2025-11-18 17:32:57,079 - corrector.core.run - INFO - Step 76/200: Moving to target x=-24000, y=-49350
+2025-11-18 17:33:01,083 - corrector.core.drift - INFO - Phase correlation: shift=(-0.18427161441036333, 37.06936655725963) conf=0.9134594028195674
+2025-11-18 17:33:01,164 - corrector.core.run - INFO - Drift detected: (dx=2, dy=460) with conf=0.9135
+2025-11-18 17:33:01,769 - corrector.core.run - INFO - Step 77/200: Moving to target x=-24000, y=-49050
+2025-11-18 17:33:05,969 - corrector.core.drift - INFO - Phase correlation: shift=(2.1661963520284644, 27.37367117660733) conf=0.9084647161546799
+2025-11-18 17:33:06,033 - corrector.core.run - INFO - Drift detected: (dx=-27, dy=339) with conf=0.9085
+2025-11-18 17:33:06,688 - corrector.core.run - INFO - Step 78/200: Moving to target x=-24000, y=-48750
+2025-11-18 17:33:12,311 - corrector.core.drift - INFO - Phase correlation: shift=(5.031234447982115, 17.063909495186294) conf=0.9581390656693592
+2025-11-18 17:33:12,391 - corrector.core.run - INFO - Drift detected: (dx=-62, dy=212) with conf=0.9581
+2025-11-18 17:33:13,078 - corrector.core.run - INFO - Step 79/200: Moving to target x=-24000, y=-48450
+2025-11-18 17:33:18,633 - corrector.core.drift - INFO - Phase correlation: shift=(8.059235829281647, 5.950489837251894) conf=0.9595452311753835
+2025-11-18 17:33:18,697 - corrector.core.run - INFO - Drift detected: (dx=-100, dy=74) with conf=0.9595
+2025-11-18 17:33:19,351 - corrector.core.run - INFO - Step 80/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:33:24,775 - corrector.core.drift - INFO - Phase correlation: shift=(11.143287463715524, -6.30655539449549) conf=0.9309645921404808
+2025-11-18 17:33:24,839 - corrector.core.run - INFO - Drift detected: (dx=-138, dy=-78) with conf=0.9310
+2025-11-18 17:33:25,398 - corrector.core.run - INFO - Step 81/200: Moving to target x=-24000, y=-47950
+2025-11-18 17:33:29,767 - corrector.core.drift - INFO - Phase correlation: shift=(13.892425967131999, -15.925502496078309) conf=0.9498187719554188
+2025-11-18 17:33:29,831 - corrector.core.run - INFO - Drift detected: (dx=-172, dy=-198) with conf=0.9498
+2025-11-18 17:33:30,404 - corrector.core.run - INFO - Step 82/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:33:36,039 - corrector.core.drift - INFO - Phase correlation: shift=(16.136494242716935, -25.306167318087034) conf=0.9102387603861234
+2025-11-18 17:33:36,071 - corrector.core.run - INFO - Drift detected: (dx=-200, dy=-314) with conf=0.9102
+2025-11-18 17:33:36,626 - corrector.core.run - INFO - Step 83/200: Moving to target x=-24000, y=-47550
+2025-11-18 17:33:40,789 - corrector.core.drift - INFO - Phase correlation: shift=(18.837311990231797, -34.92145298137211) conf=0.9004098687601809
+2025-11-18 17:33:40,853 - corrector.core.run - INFO - Drift detected: (dx=-234, dy=-433) with conf=0.9004
+2025-11-18 17:33:41,555 - corrector.core.run - INFO - Step 84/200: Moving to target x=-24000, y=-47350
+2025-11-18 17:33:47,095 - corrector.core.drift - INFO - Phase correlation: shift=(21.14700723176429, -44.98546195009868) conf=0.9024582604404041
+2025-11-18 17:33:47,175 - corrector.core.run - INFO - Drift detected: (dx=-262, dy=-558) with conf=0.9025
+2025-11-18 17:33:47,750 - corrector.core.run - INFO - Step 85/200: Moving to target x=-24000, y=-47150
+2025-11-18 17:33:53,401 - corrector.core.drift - INFO - Phase correlation: shift=(23.83933747515448, -55.19070737817685) conf=0.8669291548368957
+2025-11-18 17:33:53,497 - corrector.core.run - INFO - Drift detected: (dx=-296, dy=-684) with conf=0.8669
+2025-11-18 17:33:54,152 - corrector.core.run - INFO - Step 86/200: Moving to target x=-24000, y=-46950
+2025-11-18 17:33:59,719 - corrector.core.drift - INFO - Phase correlation: shift=(26.205260720372166, -65.93074130182464) conf=0.8598007673094342
+2025-11-18 17:33:59,799 - corrector.core.run - INFO - Drift detected: (dx=-325, dy=-818) with conf=0.8598
+2025-11-18 17:34:00,420 - corrector.core.run - INFO - Step 87/200: Moving to target x=-24000, y=-46750
+2025-11-18 17:34:06,005 - corrector.core.drift - INFO - Phase correlation: shift=(29.055393526724174, -76.8791049971793) conf=0.8447255788094156
+2025-11-18 17:34:06,053 - corrector.core.run - INFO - Drift detected: (dx=-360, dy=-953) with conf=0.8447
+2025-11-18 17:34:06,706 - corrector.core.run - INFO - Step 88/200: Moving to target x=-24000, y=-46550
+2025-11-18 17:34:12,208 - corrector.core.drift - INFO - Phase correlation: shift=(31.927114247358645, -88.0881386390638) conf=0.8395180731591692
+2025-11-18 17:34:12,273 - corrector.core.run - INFO - Drift detected: (dx=-396, dy=-1092) with conf=0.8395
+2025-11-18 17:34:12,796 - corrector.core.run - INFO - Step 89/200: Moving to target x=-24000, y=-46350
+2025-11-18 17:34:17,104 - corrector.core.drift - INFO - Phase correlation: shift=(34.23268562449232, -99.08070461842755) conf=0.8012829654905105
+2025-11-18 17:34:17,153 - corrector.core.run - INFO - Drift detected: (dx=-425, dy=-1229) with conf=0.8013
+2025-11-18 17:34:17,680 - corrector.core.run - INFO - Step 90/200: Moving to target x=-24000, y=-46150
+2025-11-18 17:34:21,779 - corrector.core.drift - INFO - Phase correlation: shift=(37.11785251483036, -110.76781164187042) conf=0.7971200832753127
+2025-11-18 17:34:21,858 - corrector.core.run - INFO - Drift detected: (dx=-460, dy=-1374) with conf=0.7971
+2025-11-18 17:34:22,400 - corrector.core.run - INFO - Step 91/200: Moving to target x=-24000, y=-46350
+2025-11-18 17:34:26,518 - corrector.core.drift - INFO - Phase correlation: shift=(37.14048993688243, -112.24799449829084) conf=0.7914556439859725
+2025-11-18 17:34:26,598 - corrector.core.run - INFO - Drift detected: (dx=-461, dy=-1392) with conf=0.7915
+2025-11-18 17:34:27,188 - corrector.core.run - INFO - Step 92/200: Moving to target x=-24000, y=-46550
+2025-11-18 17:34:31,464 - corrector.core.drift - INFO - Phase correlation: shift=(36.78257995616457, -110.21543221575172) conf=0.8043789298385735
+2025-11-18 17:34:31,528 - corrector.core.run - INFO - Drift detected: (dx=-456, dy=-1367) with conf=0.8044
+2025-11-18 17:34:32,103 - corrector.core.run - INFO - Step 93/200: Moving to target x=-24000, y=-46750
+2025-11-18 17:34:37,607 - corrector.core.drift - INFO - Phase correlation: shift=(35.303611617975776, -107.10227454894954) conf=0.7891391182083541
+2025-11-18 17:34:37,655 - corrector.core.run - INFO - Drift detected: (dx=-438, dy=-1328) with conf=0.7891
+2025-11-18 17:34:38,214 - corrector.core.run - INFO - Step 94/200: Moving to target x=-24000, y=-46950
+2025-11-18 17:34:42,428 - corrector.core.drift - INFO - Phase correlation: shift=(34.750546238601714, -103.17989064703477) conf=0.8015511893891355
+2025-11-18 17:34:42,508 - corrector.core.run - INFO - Drift detected: (dx=-431, dy=-1280) with conf=0.8016
+2025-11-18 17:34:43,098 - corrector.core.run - INFO - Step 95/200: Moving to target x=-24000, y=-47150
+2025-11-18 17:34:48,654 - corrector.core.drift - INFO - Phase correlation: shift=(33.75825351457922, -98.908263438034) conf=0.8080505653033769
+2025-11-18 17:34:48,734 - corrector.core.run - INFO - Drift detected: (dx=-419, dy=-1227) with conf=0.8081
+2025-11-18 17:34:49,293 - corrector.core.run - INFO - Step 96/200: Moving to target x=-24000, y=-47350
+2025-11-18 17:34:53,556 - corrector.core.drift - INFO - Phase correlation: shift=(32.152765016671765, -94.05674394582553) conf=0.8383549163555786
+2025-11-18 17:34:53,636 - corrector.core.run - INFO - Drift detected: (dx=-399, dy=-1167) with conf=0.8384
+2025-11-18 17:34:54,195 - corrector.core.run - INFO - Step 97/200: Moving to target x=-24000, y=-47550
+2025-11-18 17:34:59,859 - corrector.core.drift - INFO - Phase correlation: shift=(31.0260413985676, -88.86299506841306) conf=0.8340618493747979
+2025-11-18 17:34:59,938 - corrector.core.run - INFO - Drift detected: (dx=-385, dy=-1102) with conf=0.8341
+2025-11-18 17:35:00,512 - corrector.core.run - INFO - Step 98/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:35:06,146 - corrector.core.drift - INFO - Phase correlation: shift=(29.869261196338357, -83.58026154817912) conf=0.7999865669595414
+2025-11-18 17:35:06,225 - corrector.core.run - INFO - Drift detected: (dx=-370, dy=-1037) with conf=0.8000
+2025-11-18 17:35:06,767 - corrector.core.run - INFO - Step 99/200: Moving to target x=-24000, y=-47950
+2025-11-18 17:35:12,356 - corrector.core.drift - INFO - Phase correlation: shift=(28.169392387919288, -77.31186784122434) conf=0.8203805020557019
+2025-11-18 17:35:12,436 - corrector.core.run - INFO - Drift detected: (dx=-349, dy=-959) with conf=0.8204
+2025-11-18 17:35:12,996 - corrector.core.run - INFO - Step 100/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:35:18,671 - corrector.core.drift - INFO - Phase correlation: shift=(26.902932249080095, -71.19249634435909) conf=0.8557854815615585
+2025-11-18 17:35:18,719 - corrector.core.run - INFO - Drift detected: (dx=-334, dy=-883) with conf=0.8558
+2025-11-18 17:35:19,358 - corrector.core.run - INFO - Step 101/200: Moving to target x=-24000, y=-48350
+2025-11-18 17:35:24,900 - corrector.core.drift - INFO - Phase correlation: shift=(25.684734030702998, -64.88740307091746) conf=0.8415128040123856
+2025-11-18 17:35:24,980 - corrector.core.run - INFO - Drift detected: (dx=-319, dy=-805) with conf=0.8415
+2025-11-18 17:35:25,602 - corrector.core.run - INFO - Step 102/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:35:31,300 - corrector.core.drift - INFO - Phase correlation: shift=(23.915693108648725, -57.93485390792148) conf=0.879472247562378
+2025-11-18 17:35:31,349 - corrector.core.run - INFO - Drift detected: (dx=-297, dy=-719) with conf=0.8795
+2025-11-18 17:35:31,907 - corrector.core.run - INFO - Step 103/200: Moving to target x=-24000, y=-48750
+2025-11-18 17:35:37,495 - corrector.core.drift - INFO - Phase correlation: shift=(21.96740196263454, -50.265368601134185) conf=0.882412907504217
+2025-11-18 17:35:37,591 - corrector.core.run - INFO - Drift detected: (dx=-272, dy=-623) with conf=0.8824
+2025-11-18 17:35:38,149 - corrector.core.run - INFO - Step 104/200: Moving to target x=-24000, y=-48950
+2025-11-18 17:35:43,802 - corrector.core.drift - INFO - Phase correlation: shift=(19.97387760548588, -42.18768943716918) conf=0.9059716974790947
+2025-11-18 17:35:43,898 - corrector.core.run - INFO - Drift detected: (dx=-248, dy=-523) with conf=0.9060
+2025-11-18 17:35:44,488 - corrector.core.run - INFO - Step 105/200: Moving to target x=-24000, y=-49150
+2025-11-18 17:35:48,737 - corrector.core.drift - INFO - Phase correlation: shift=(18.030755102080775, -33.99347813582875) conf=0.9140145970212078
+2025-11-18 17:35:48,802 - corrector.core.run - INFO - Drift detected: (dx=-224, dy=-422) with conf=0.9140
+2025-11-18 17:35:49,393 - corrector.core.run - INFO - Step 106/200: Moving to target x=-24000, y=-49350
+2025-11-18 17:35:55,044 - corrector.core.drift - INFO - Phase correlation: shift=(15.949083056781205, -24.988662517209036) conf=0.9435028604063149
+2025-11-18 17:35:55,109 - corrector.core.run - INFO - Drift detected: (dx=-198, dy=-310) with conf=0.9435
+2025-11-18 17:35:55,665 - corrector.core.run - INFO - Step 107/200: Moving to target x=-24000, y=-49550
+2025-11-18 17:36:01,299 - corrector.core.drift - INFO - Phase correlation: shift=(14.034569340159237, -15.92303564289466) conf=0.9589889134105986
+2025-11-18 17:36:01,362 - corrector.core.run - INFO - Drift detected: (dx=-174, dy=-197) with conf=0.9590
+2025-11-18 17:36:01,967 - corrector.core.run - INFO - Step 108/200: Moving to target x=-24000, y=-49750
+2025-11-18 17:36:07,479 - corrector.core.drift - INFO - Phase correlation: shift=(11.963689872296868, -6.307568505643474) conf=0.9390976865964638
+2025-11-18 17:36:07,543 - corrector.core.run - INFO - Drift detected: (dx=-148, dy=-78) with conf=0.9391
+2025-11-18 17:36:08,085 - corrector.core.run - INFO - Step 109/200: Moving to target x=-24000, y=-49950
+2025-11-18 17:36:12,109 - corrector.core.drift - INFO - Phase correlation: shift=(9.91582286727487, 3.117652792891704) conf=0.9650470408998547
+2025-11-18 17:36:12,189 - corrector.core.run - INFO - Drift detected: (dx=-123, dy=39) with conf=0.9650
+2025-11-18 17:36:12,725 - corrector.core.run - INFO - Step 110/200: Moving to target x=-24000, y=-50150
+2025-11-18 17:36:17,131 - corrector.core.drift - INFO - Phase correlation: shift=(7.279110200452692, 13.23159356191951) conf=0.931754823389976
+2025-11-18 17:36:17,194 - corrector.core.run - INFO - Drift detected: (dx=-90, dy=164) with conf=0.9318
+2025-11-18 17:36:17,705 - corrector.core.run - INFO - Step 111/200: Moving to target x=-24000, y=-49950
+2025-11-18 17:36:21,886 - corrector.core.drift - INFO - Phase correlation: shift=(7.835004663322366, 13.75585521678721) conf=0.9422854566592682
+2025-11-18 17:36:21,966 - corrector.core.run - INFO - Drift detected: (dx=-97, dy=171) with conf=0.9423
+2025-11-18 17:36:22,537 - corrector.core.run - INFO - Step 112/200: Moving to target x=-24000, y=-49750
+2025-11-18 17:36:28,168 - corrector.core.drift - INFO - Phase correlation: shift=(8.937871675140514, 11.030660541226268) conf=0.9663820493885862
+2025-11-18 17:36:28,264 - corrector.core.run - INFO - Drift detected: (dx=-111, dy=137) with conf=0.9664
+2025-11-18 17:36:28,951 - corrector.core.run - INFO - Step 113/200: Moving to target x=-24000, y=-49550
+2025-11-18 17:36:34,471 - corrector.core.drift - INFO - Phase correlation: shift=(9.967285624339866, 7.8096535110498735) conf=0.9543359803916978
+2025-11-18 17:36:34,551 - corrector.core.run - INFO - Drift detected: (dx=-124, dy=97) with conf=0.9543
+2025-11-18 17:36:35,109 - corrector.core.run - INFO - Step 114/200: Moving to target x=-24000, y=-49350
+2025-11-18 17:36:40,786 - corrector.core.drift - INFO - Phase correlation: shift=(11.021476281376295, 3.755509666691978) conf=0.9465921716837243
+2025-11-18 17:36:40,882 - corrector.core.run - INFO - Drift detected: (dx=-137, dy=47) with conf=0.9466
+2025-11-18 17:36:41,473 - corrector.core.run - INFO - Step 115/200: Moving to target x=-24000, y=-49150
+2025-11-18 17:36:47,039 - corrector.core.drift - INFO - Phase correlation: shift=(12.132462241666303, -0.86015528370433) conf=0.962667650602505
+2025-11-18 17:36:47,119 - corrector.core.run - INFO - Drift detected: (dx=-150, dy=-11) with conf=0.9627
+2025-11-18 17:36:47,692 - corrector.core.run - INFO - Step 116/200: Moving to target x=-24000, y=-48950
+2025-11-18 17:36:53,319 - corrector.core.drift - INFO - Phase correlation: shift=(13.925334184321969, -5.794490540664469) conf=0.9525056515600219
+2025-11-18 17:36:53,383 - corrector.core.run - INFO - Drift detected: (dx=-173, dy=-72) with conf=0.9525
+2025-11-18 17:36:53,956 - corrector.core.run - INFO - Step 117/200: Moving to target x=-24000, y=-48750
+2025-11-18 17:36:59,435 - corrector.core.drift - INFO - Phase correlation: shift=(15.708601244871716, -11.134925603063152) conf=0.9160360708627411
+2025-11-18 17:36:59,499 - corrector.core.run - INFO - Drift detected: (dx=-195, dy=-138) with conf=0.9160
+2025-11-18 17:37:00,043 - corrector.core.run - INFO - Step 118/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:37:04,338 - corrector.core.drift - INFO - Phase correlation: shift=(17.000816310983282, -16.899985981622933) conf=0.9550107536019148
+2025-11-18 17:37:04,418 - corrector.core.run - INFO - Drift detected: (dx=-211, dy=-210) with conf=0.9550
+2025-11-18 17:37:05,055 - corrector.core.run - INFO - Step 119/200: Moving to target x=-24000, y=-48350
+2025-11-18 17:37:09,172 - corrector.core.drift - INFO - Phase correlation: shift=(18.925028459016744, -23.045699365253597) conf=0.9316814501502673
+2025-11-18 17:37:09,252 - corrector.core.run - INFO - Drift detected: (dx=-235, dy=-286) with conf=0.9317
+2025-11-18 17:37:09,780 - corrector.core.run - INFO - Step 120/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:37:13,849 - corrector.core.drift - INFO - Phase correlation: shift=(20.79079866788527, -29.200362312567563) conf=0.9054713277862224
+2025-11-18 17:37:13,929 - corrector.core.run - INFO - Drift detected: (dx=-258, dy=-362) with conf=0.9055
+2025-11-18 17:37:14,424 - corrector.core.run - INFO - Step 121/200: Moving to target x=-24000, y=-48050
+2025-11-18 17:37:18,769 - corrector.core.drift - INFO - Phase correlation: shift=(21.836521735969427, -33.10748318691384) conf=0.9127741566350018
+2025-11-18 17:37:18,818 - corrector.core.run - INFO - Drift detected: (dx=-271, dy=-411) with conf=0.9128
+2025-11-18 17:37:19,360 - corrector.core.run - INFO - Step 122/200: Moving to target x=-24000, y=-47950
+2025-11-18 17:37:23,335 - corrector.core.drift - INFO - Phase correlation: shift=(22.91164397350542, -36.844359257260805) conf=0.9064088873047405
+2025-11-18 17:37:23,415 - corrector.core.run - INFO - Drift detected: (dx=-284, dy=-457) with conf=0.9064
+2025-11-18 17:37:23,939 - corrector.core.run - INFO - Step 123/200: Moving to target x=-24000, y=-47850
+2025-11-18 17:37:28,167 - corrector.core.drift - INFO - Phase correlation: shift=(23.863517697977727, -40.21081657924714) conf=0.8955612818993154
+2025-11-18 17:37:28,230 - corrector.core.run - INFO - Drift detected: (dx=-296, dy=-499) with conf=0.8956
+2025-11-18 17:37:28,788 - corrector.core.run - INFO - Step 124/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:37:33,082 - corrector.core.drift - INFO - Phase correlation: shift=(24.78738327126382, -43.96430316080978) conf=0.8918270058523886
+2025-11-18 17:37:33,113 - corrector.core.run - INFO - Drift detected: (dx=-307, dy=-545) with conf=0.8918
+2025-11-18 17:37:33,640 - corrector.core.run - INFO - Step 125/200: Moving to target x=-24000, y=-47650
+2025-11-18 17:37:37,776 - corrector.core.drift - INFO - Phase correlation: shift=(25.895160866817037, -47.867086656745414) conf=0.8964404914915508
+2025-11-18 17:37:37,856 - corrector.core.run - INFO - Drift detected: (dx=-321, dy=-594) with conf=0.8964
+2025-11-18 17:37:38,381 - corrector.core.run - INFO - Step 126/200: Moving to target x=-24000, y=-47550
+2025-11-18 17:37:42,688 - corrector.core.drift - INFO - Phase correlation: shift=(26.976474017898, -51.80591285156032) conf=0.8803416120455825
+2025-11-18 17:37:42,767 - corrector.core.run - INFO - Drift detected: (dx=-335, dy=-643) with conf=0.8803
+2025-11-18 17:37:43,310 - corrector.core.run - INFO - Step 127/200: Moving to target x=-24000, y=-47450
+2025-11-18 17:37:48,749 - corrector.core.drift - INFO - Phase correlation: shift=(28.175167190045613, -56.0096606615993) conf=0.8821145039394716
+2025-11-18 17:37:48,797 - corrector.core.run - INFO - Drift detected: (dx=-349, dy=-695) with conf=0.8821
+2025-11-18 17:37:49,371 - corrector.core.run - INFO - Step 128/200: Moving to target x=-24000, y=-47350
+2025-11-18 17:37:53,538 - corrector.core.drift - INFO - Phase correlation: shift=(29.21937000406558, -60.0770585052087) conf=0.8504659166084391
+2025-11-18 17:37:53,634 - corrector.core.run - INFO - Drift detected: (dx=-362, dy=-745) with conf=0.8505
+2025-11-18 17:37:54,161 - corrector.core.run - INFO - Step 129/200: Moving to target x=-24000, y=-47250
+2025-11-18 17:37:58,391 - corrector.core.drift - INFO - Phase correlation: shift=(30.716484040490514, -64.28706428858129) conf=0.8299022024149342
+2025-11-18 17:37:58,487 - corrector.core.run - INFO - Drift detected: (dx=-381, dy=-797) with conf=0.8299
+2025-11-18 17:37:59,047 - corrector.core.run - INFO - Step 130/200: Moving to target x=-24000, y=-47150
+2025-11-18 17:38:03,176 - corrector.core.drift - INFO - Phase correlation: shift=(31.781181113250454, -68.76389943470338) conf=0.8423186419105019
+2025-11-18 17:38:03,256 - corrector.core.run - INFO - Drift detected: (dx=-394, dy=-853) with conf=0.8423
+2025-11-18 17:38:03,799 - corrector.core.run - INFO - Step 131/200: Moving to target x=-24000, y=-47250
+2025-11-18 17:38:08,032 - corrector.core.drift - INFO - Phase correlation: shift=(31.79852270651054, -68.784614409938) conf=0.8301055024651185
+2025-11-18 17:38:08,113 - corrector.core.run - INFO - Drift detected: (dx=-394, dy=-853) with conf=0.8301
+2025-11-18 17:38:08,670 - corrector.core.run - INFO - Step 132/200: Moving to target x=-24000, y=-47350
+2025-11-18 17:38:12,835 - corrector.core.drift - INFO - Phase correlation: shift=(31.1944856087855, -67.70501390827604) conf=0.847477718604036
+2025-11-18 17:38:12,915 - corrector.core.run - INFO - Drift detected: (dx=-387, dy=-840) with conf=0.8475
+2025-11-18 17:38:13,456 - corrector.core.run - INFO - Step 133/200: Moving to target x=-24000, y=-47450
+2025-11-18 17:38:18,951 - corrector.core.drift - INFO - Phase correlation: shift=(31.03420600392417, -66.19041015697167) conf=0.854986826583506
+2025-11-18 17:38:19,016 - corrector.core.run - INFO - Drift detected: (dx=-385, dy=-821) with conf=0.8550
+2025-11-18 17:38:19,525 - corrector.core.run - INFO - Step 134/200: Moving to target x=-24000, y=-47550
+2025-11-18 17:38:23,740 - corrector.core.drift - INFO - Phase correlation: shift=(30.8674543258403, -64.87308129905915) conf=0.8629709386342597
+2025-11-18 17:38:23,788 - corrector.core.run - INFO - Drift detected: (dx=-383, dy=-805) with conf=0.8630
+2025-11-18 17:38:24,316 - corrector.core.run - INFO - Step 135/200: Moving to target x=-24000, y=-47650
+2025-11-18 17:38:28,547 - corrector.core.drift - INFO - Phase correlation: shift=(30.210563250222663, -63.16487310141491) conf=0.8441316129803147
+2025-11-18 17:38:28,611 - corrector.core.run - INFO - Drift detected: (dx=-375, dy=-783) with conf=0.8441
+2025-11-18 17:38:29,136 - corrector.core.run - INFO - Step 136/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:38:33,352 - corrector.core.drift - INFO - Phase correlation: shift=(30.021582391942616, -61.63130032317372) conf=0.8502323358692981
+2025-11-18 17:38:33,400 - corrector.core.run - INFO - Drift detected: (dx=-372, dy=-764) with conf=0.8502
+2025-11-18 17:38:33,896 - corrector.core.run - INFO - Step 137/200: Moving to target x=-24000, y=-47850
+2025-11-18 17:38:38,047 - corrector.core.drift - INFO - Phase correlation: shift=(29.198184053734735, -59.27919007975055) conf=0.8376251680704916
+2025-11-18 17:38:38,110 - corrector.core.run - INFO - Drift detected: (dx=-362, dy=-735) with conf=0.8376
+2025-11-18 17:38:38,605 - corrector.core.run - INFO - Step 138/200: Moving to target x=-24000, y=-47950
+2025-11-18 17:38:42,878 - corrector.core.drift - INFO - Phase correlation: shift=(28.956142119588094, -57.29080373713998) conf=0.868677880278572
+2025-11-18 17:38:42,958 - corrector.core.run - INFO - Drift detected: (dx=-359, dy=-711) with conf=0.8687
+2025-11-18 17:38:43,483 - corrector.core.run - INFO - Step 139/200: Moving to target x=-24000, y=-48050
+2025-11-18 17:38:47,555 - corrector.core.drift - INFO - Phase correlation: shift=(28.22202855010562, -55.08091046501829) conf=0.8645010000560963
+2025-11-18 17:38:47,651 - corrector.core.run - INFO - Drift detected: (dx=-350, dy=-683) with conf=0.8645
+2025-11-18 17:38:48,194 - corrector.core.run - INFO - Step 140/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:38:52,441 - corrector.core.drift - INFO - Phase correlation: shift=(28.02567409883659, -53.02652083871425) conf=0.8866261403203402
+2025-11-18 17:38:52,521 - corrector.core.run - INFO - Drift detected: (dx=-348, dy=-658) with conf=0.8866
+2025-11-18 17:38:53,033 - corrector.core.run - INFO - Step 141/200: Moving to target x=-24000, y=-48250
+2025-11-18 17:38:57,312 - corrector.core.drift - INFO - Phase correlation: shift=(27.217769935846377, -50.297308275422836) conf=0.8655617152139996
+2025-11-18 17:38:57,376 - corrector.core.run - INFO - Drift detected: (dx=-338, dy=-624) with conf=0.8656
+2025-11-18 17:38:57,931 - corrector.core.run - INFO - Step 142/200: Moving to target x=-24000, y=-48350
+2025-11-18 17:39:03,502 - corrector.core.drift - INFO - Phase correlation: shift=(26.907563287779908, -47.933606810844765) conf=0.8857258551139298
+2025-11-18 17:39:03,582 - corrector.core.run - INFO - Drift detected: (dx=-334, dy=-594) with conf=0.8857
+2025-11-18 17:39:04,077 - corrector.core.run - INFO - Step 143/200: Moving to target x=-24000, y=-48450
+2025-11-18 17:39:08,322 - corrector.core.drift - INFO - Phase correlation: shift=(26.1318628474221, -45.13371384830964) conf=0.9007792196484566
+2025-11-18 17:39:08,338 - corrector.core.run - INFO - Drift detected: (dx=-324, dy=-560) with conf=0.9008
+2025-11-18 17:39:08,815 - corrector.core.run - INFO - Step 144/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:39:13,004 - corrector.core.drift - INFO - Phase correlation: shift=(25.94109334471011, -42.80748592080863) conf=0.8853802463655159
+2025-11-18 17:39:13,083 - corrector.core.run - INFO - Drift detected: (dx=-322, dy=-531) with conf=0.8854
+2025-11-18 17:39:13,578 - corrector.core.run - INFO - Step 145/200: Moving to target x=-24000, y=-48650
+2025-11-18 17:39:17,825 - corrector.core.drift - INFO - Phase correlation: shift=(25.140282632206777, -39.87085849365917) conf=0.8950958371599387
+2025-11-18 17:39:17,905 - corrector.core.run - INFO - Drift detected: (dx=-312, dy=-494) with conf=0.8951
+2025-11-18 17:39:18,400 - corrector.core.run - INFO - Step 146/200: Moving to target x=-24000, y=-48750
+2025-11-18 17:39:22,537 - corrector.core.drift - INFO - Phase correlation: shift=(24.9277488360176, -37.127746585667126) conf=0.9057915817628174
+2025-11-18 17:39:22,617 - corrector.core.run - INFO - Drift detected: (dx=-309, dy=-460) with conf=0.9058
+2025-11-18 17:39:23,141 - corrector.core.run - INFO - Step 147/200: Moving to target x=-24000, y=-48850
+2025-11-18 17:39:27,352 - corrector.core.drift - INFO - Phase correlation: shift=(24.118014542233027, -34.05081176702805) conf=0.9211915162948575
+2025-11-18 17:39:27,399 - corrector.core.run - INFO - Drift detected: (dx=-299, dy=-422) with conf=0.9212
+2025-11-18 17:39:27,926 - corrector.core.run - INFO - Step 148/200: Moving to target x=-24000, y=-48950
+2025-11-18 17:39:32,160 - corrector.core.drift - INFO - Phase correlation: shift=(23.781545129195024, -31.072709043115594) conf=0.8981144808114819
+2025-11-18 17:39:32,224 - corrector.core.run - INFO - Drift detected: (dx=-295, dy=-385) with conf=0.8981
+2025-11-18 17:39:32,862 - corrector.core.run - INFO - Step 149/200: Moving to target x=-24000, y=-49050
+2025-11-18 17:39:38,372 - corrector.core.drift - INFO - Phase correlation: shift=(22.900176541921837, -27.89903176075626) conf=0.9248779836453915
+2025-11-18 17:39:38,468 - corrector.core.run - INFO - Drift detected: (dx=-284, dy=-346) with conf=0.9249
+2025-11-18 17:39:38,995 - corrector.core.run - INFO - Step 150/200: Moving to target x=-24000, y=-49150
+2025-11-18 17:39:43,290 - corrector.core.drift - INFO - Phase correlation: shift=(22.00168194536559, -24.653133012558612) conf=0.9047377042736063
+2025-11-18 17:39:43,370 - corrector.core.run - INFO - Drift detected: (dx=-273, dy=-306) with conf=0.9047
+2025-11-18 17:39:43,913 - corrector.core.run - INFO - Step 151/200: Moving to target x=-24000, y=-49050
+2025-11-18 17:39:49,487 - corrector.core.drift - INFO - Phase correlation: shift=(22.240810177750063, -25.07361723985838) conf=0.9191913120709162
+2025-11-18 17:39:49,567 - corrector.core.run - INFO - Drift detected: (dx=-276, dy=-311) with conf=0.9192
+2025-11-18 17:39:50,094 - corrector.core.run - INFO - Step 152/200: Moving to target x=-24000, y=-48950
+2025-11-18 17:39:54,260 - corrector.core.drift - INFO - Phase correlation: shift=(22.97001615905856, -26.105962647577712) conf=0.9280472241230111
+2025-11-18 17:39:54,355 - corrector.core.run - INFO - Drift detected: (dx=-285, dy=-324) with conf=0.9280
+2025-11-18 17:39:54,883 - corrector.core.run - INFO - Step 153/200: Moving to target x=-24000, y=-48850
+2025-11-18 17:39:59,164 - corrector.core.drift - INFO - Phase correlation: shift=(23.252381250271014, -27.263589864971436) conf=0.902491213172188
+2025-11-18 17:39:59,227 - corrector.core.run - INFO - Drift detected: (dx=-288, dy=-338) with conf=0.9025
+2025-11-18 17:39:59,786 - corrector.core.run - INFO - Step 154/200: Moving to target x=-24000, y=-48750
+2025-11-18 17:40:05,332 - corrector.core.drift - INFO - Phase correlation: shift=(24.011870707533603, -28.872444312382243) conf=0.9185378097565154
+2025-11-18 17:40:05,428 - corrector.core.run - INFO - Drift detected: (dx=-298, dy=-358) with conf=0.9185
+2025-11-18 17:40:05,971 - corrector.core.run - INFO - Step 155/200: Moving to target x=-24000, y=-48650
+2025-11-18 17:40:10,195 - corrector.core.drift - INFO - Phase correlation: shift=(24.82951502936885, -30.251473249607045) conf=0.9069883867759059
+2025-11-18 17:40:10,227 - corrector.core.run - INFO - Drift detected: (dx=-308, dy=-375) with conf=0.9070
+2025-11-18 17:40:10,769 - corrector.core.run - INFO - Step 156/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:40:16,432 - corrector.core.drift - INFO - Phase correlation: shift=(25.130471735650985, -32.08802500741007) conf=0.9191548178513695
+2025-11-18 17:40:16,480 - corrector.core.run - INFO - Drift detected: (dx=-312, dy=-398) with conf=0.9192
+2025-11-18 17:40:17,087 - corrector.core.run - INFO - Step 157/200: Moving to target x=-24000, y=-48450
+2025-11-18 17:40:22,692 - corrector.core.drift - INFO - Phase correlation: shift=(26.036286130063104, -34.137463665334735) conf=0.925844769380052
+2025-11-18 17:40:22,724 - corrector.core.run - INFO - Drift detected: (dx=-323, dy=-423) with conf=0.9258
+2025-11-18 17:40:23,282 - corrector.core.run - INFO - Step 158/200: Moving to target x=-24000, y=-48350
+2025-11-18 17:40:27,409 - corrector.core.drift - INFO - Phase correlation: shift=(26.803302853510104, -36.19057955317061) conf=0.9016631276338494
+2025-11-18 17:40:27,473 - corrector.core.run - INFO - Drift detected: (dx=-332, dy=-449) with conf=0.9017
+2025-11-18 17:40:28,095 - corrector.core.run - INFO - Step 159/200: Moving to target x=-24000, y=-48250
+2025-11-18 17:40:33,682 - corrector.core.drift - INFO - Phase correlation: shift=(27.293748094891498, -39.007834598496174) conf=0.8811321203606436
+2025-11-18 17:40:33,746 - corrector.core.run - INFO - Drift detected: (dx=-339, dy=-484) with conf=0.8811
+2025-11-18 17:40:34,285 - corrector.core.run - INFO - Step 160/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:40:38,499 - corrector.core.drift - INFO - Phase correlation: shift=(28.14428035735807, -41.21107501257637) conf=0.8989098844089424
+2025-11-18 17:40:38,579 - corrector.core.run - INFO - Drift detected: (dx=-349, dy=-511) with conf=0.8989
+2025-11-18 17:40:39,106 - corrector.core.run - INFO - Step 161/200: Moving to target x=-24000, y=-48100
+2025-11-18 17:40:43,224 - corrector.core.drift - INFO - Phase correlation: shift=(28.95226420147958, -43.18884592831159) conf=0.8892295247509278
+2025-11-18 17:40:43,287 - corrector.core.run - INFO - Drift detected: (dx=-359, dy=-536) with conf=0.8892
+2025-11-18 17:40:43,750 - corrector.core.run - INFO - Step 162/200: Moving to target x=-24000, y=-48050
+2025-11-18 17:40:47,896 - corrector.core.drift - INFO - Phase correlation: shift=(29.189412311940373, -44.71650770817797) conf=0.8741940960092669
+2025-11-18 17:40:47,975 - corrector.core.run - INFO - Drift detected: (dx=-362, dy=-555) with conf=0.8742
+2025-11-18 17:40:48,499 - corrector.core.run - INFO - Step 163/200: Moving to target x=-24000, y=-48000
+2025-11-18 17:40:52,820 - corrector.core.drift - INFO - Phase correlation: shift=(29.85918219334667, -45.98100054146312) conf=0.8928328008220304
+2025-11-18 17:40:52,916 - corrector.core.run - INFO - Drift detected: (dx=-370, dy=-570) with conf=0.8928
+2025-11-18 17:40:53,427 - corrector.core.run - INFO - Step 164/200: Moving to target x=-24000, y=-47950
+2025-11-18 17:40:58,993 - corrector.core.drift - INFO - Phase correlation: shift=(30.122064381461087, -47.323034488810606) conf=0.8716562526843279
+2025-11-18 17:40:59,056 - corrector.core.run - INFO - Drift detected: (dx=-374, dy=-587) with conf=0.8717
+2025-11-18 17:40:59,564 - corrector.core.run - INFO - Step 165/200: Moving to target x=-24000, y=-47900
+2025-11-18 17:41:03,247 - corrector.core.drift - INFO - Phase correlation: shift=(30.315943405142207, -48.86609035362801) conf=0.8678996518395846
+2025-11-18 17:41:03,295 - corrector.core.run - INFO - Drift detected: (dx=-376, dy=-606) with conf=0.8679
+2025-11-18 17:41:03,798 - corrector.core.run - INFO - Step 166/200: Moving to target x=-24000, y=-47850
+2025-11-18 17:41:08,635 - corrector.core.drift - INFO - Phase correlation: shift=(30.944006117954473, -50.09981542502152) conf=0.8809608312048327
+2025-11-18 17:41:08,700 - corrector.core.run - INFO - Drift detected: (dx=-384, dy=-621) with conf=0.8810
+2025-11-18 17:41:09,211 - corrector.core.run - INFO - Step 167/200: Moving to target x=-24000, y=-47800
+2025-11-18 17:41:13,296 - corrector.core.drift - INFO - Phase correlation: shift=(31.146021257259804, -51.365595843325025) conf=0.8452533107131928
+2025-11-18 17:41:13,376 - corrector.core.run - INFO - Drift detected: (dx=-386, dy=-637) with conf=0.8453
+2025-11-18 17:41:13,886 - corrector.core.run - INFO - Step 168/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:41:18,137 - corrector.core.drift - INFO - Phase correlation: shift=(31.92065181508383, -52.98218432404883) conf=0.8819650516651323
+2025-11-18 17:41:18,200 - corrector.core.run - INFO - Drift detected: (dx=-396, dy=-657) with conf=0.8820
+2025-11-18 17:41:18,739 - corrector.core.run - INFO - Step 169/200: Moving to target x=-24000, y=-47700
+2025-11-18 17:41:24,229 - corrector.core.drift - INFO - Phase correlation: shift=(32.227359762734864, -54.36852458042722) conf=0.834427435936493
+2025-11-18 17:41:24,293 - corrector.core.run - INFO - Drift detected: (dx=-400, dy=-674) with conf=0.8344
+2025-11-18 17:41:24,833 - corrector.core.run - INFO - Step 170/200: Moving to target x=-24000, y=-47650
+2025-11-18 17:41:29,128 - corrector.core.drift - INFO - Phase correlation: shift=(33.01783035119627, -56.01339168119904) conf=0.8771538824632152
+2025-11-18 17:41:29,208 - corrector.core.run - INFO - Drift detected: (dx=-409, dy=-695) with conf=0.8772
+2025-11-18 17:41:29,688 - corrector.core.run - INFO - Step 171/200: Moving to target x=-24000, y=-47700
+2025-11-18 17:41:33,915 - corrector.core.drift - INFO - Phase correlation: shift=(32.981092501890885, -55.72622123228365) conf=0.8670544057075976
+2025-11-18 17:41:33,994 - corrector.core.run - INFO - Drift detected: (dx=-409, dy=-691) with conf=0.8671
+2025-11-18 17:41:34,520 - corrector.core.run - INFO - Step 172/200: Moving to target x=-24000, y=-47750
+2025-11-18 17:41:40,043 - corrector.core.drift - INFO - Phase correlation: shift=(32.9889265885497, -55.14195554724154) conf=0.8825829462651192
+2025-11-18 17:41:40,123 - corrector.core.run - INFO - Drift detected: (dx=-409, dy=-684) with conf=0.8826
+2025-11-18 17:41:40,648 - corrector.core.run - INFO - Step 173/200: Moving to target x=-24000, y=-47800
+2025-11-18 17:41:44,846 - corrector.core.drift - INFO - Phase correlation: shift=(32.941897772431844, -54.406358193149345) conf=0.8445114926286852
+2025-11-18 17:41:44,942 - corrector.core.run - INFO - Drift detected: (dx=-409, dy=-675) with conf=0.8445
+2025-11-18 17:41:45,483 - corrector.core.run - INFO - Step 174/200: Moving to target x=-24000, y=-47850
+2025-11-18 17:41:49,778 - corrector.core.drift - INFO - Phase correlation: shift=(32.90489396907128, -54.04938470726711) conf=0.8780219476164818
+2025-11-18 17:41:49,858 - corrector.core.run - INFO - Drift detected: (dx=-408, dy=-670) with conf=0.8780
+2025-11-18 17:41:50,367 - corrector.core.run - INFO - Step 175/200: Moving to target x=-24000, y=-47900
+2025-11-18 17:41:56,049 - corrector.core.drift - INFO - Phase correlation: shift=(32.84570016970338, -53.28088088035224) conf=0.870939688425889
+2025-11-18 17:41:56,129 - corrector.core.run - INFO - Drift detected: (dx=-407, dy=-661) with conf=0.8709
+2025-11-18 17:41:56,639 - corrector.core.run - INFO - Step 176/200: Moving to target x=-24000, y=-47950
+2025-11-18 17:42:02,277 - corrector.core.drift - INFO - Phase correlation: shift=(32.923820945721104, -52.83181505140328) conf=0.8738641608369413
+2025-11-18 17:42:02,341 - corrector.core.run - INFO - Drift detected: (dx=-408, dy=-655) with conf=0.8739
+2025-11-18 17:42:02,866 - corrector.core.run - INFO - Step 177/200: Moving to target x=-24000, y=-48000
+2025-11-18 17:42:06,965 - corrector.core.drift - INFO - Phase correlation: shift=(32.82876573364763, -51.977173235784164) conf=0.8757461388301929
+2025-11-18 17:42:07,013 - corrector.core.run - INFO - Drift detected: (dx=-407, dy=-645) with conf=0.8757
+2025-11-18 17:42:07,524 - corrector.core.run - INFO - Step 178/200: Moving to target x=-24000, y=-48050
+2025-11-18 17:42:11,803 - corrector.core.drift - INFO - Phase correlation: shift=(32.2455163676849, -51.15612564480125) conf=0.8666303703942866
+2025-11-18 17:42:11,882 - corrector.core.run - INFO - Drift detected: (dx=-400, dy=-634) with conf=0.8666
+2025-11-18 17:42:12,377 - corrector.core.run - INFO - Step 179/200: Moving to target x=-24000, y=-48100
+2025-11-18 17:42:16,450 - corrector.core.drift - INFO - Phase correlation: shift=(32.1224854103765, -50.22678100170623) conf=0.8725622052751391
+2025-11-18 17:42:16,546 - corrector.core.run - INFO - Drift detected: (dx=-398, dy=-623) with conf=0.8726
+2025-11-18 17:42:17,071 - corrector.core.run - INFO - Step 180/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:42:21,334 - corrector.core.drift - INFO - Phase correlation: shift=(32.034168277683875, -49.291565269116745) conf=0.8683198432467435
+2025-11-18 17:42:21,430 - corrector.core.run - INFO - Drift detected: (dx=-397, dy=-611) with conf=0.8683
+2025-11-18 17:42:21,956 - corrector.core.run - INFO - Step 181/200: Moving to target x=-24000, y=-48200
+2025-11-18 17:42:27,606 - corrector.core.drift - INFO - Phase correlation: shift=(31.90944829536079, -48.27424827041767) conf=0.8840073871818735
+2025-11-18 17:42:27,653 - corrector.core.run - INFO - Drift detected: (dx=-396, dy=-599) with conf=0.8840
+2025-11-18 17:42:28,083 - corrector.core.run - INFO - Step 182/200: Moving to target x=-24000, y=-48250
+2025-11-18 17:42:32,395 - corrector.core.drift - INFO - Phase correlation: shift=(31.85527049157224, -47.253673370409444) conf=0.8734624161886495
+2025-11-18 17:42:32,459 - corrector.core.run - INFO - Drift detected: (dx=-395, dy=-586) with conf=0.8735
+2025-11-18 17:42:32,969 - corrector.core.run - INFO - Step 183/200: Moving to target x=-24000, y=-48300
+2025-11-18 17:42:37,152 - corrector.core.drift - INFO - Phase correlation: shift=(31.766970703947777, -46.22269518940578) conf=0.8679223260336039
+2025-11-18 17:42:37,216 - corrector.core.run - INFO - Drift detected: (dx=-394, dy=-573) with conf=0.8679
+2025-11-18 17:42:37,728 - corrector.core.run - INFO - Step 184/200: Moving to target x=-24000, y=-48350
+2025-11-18 17:42:41,811 - corrector.core.drift - INFO - Phase correlation: shift=(31.196928856389377, -45.02442107639865) conf=0.8748271429854259
+2025-11-18 17:42:41,860 - corrector.core.run - INFO - Drift detected: (dx=-387, dy=-558) with conf=0.8748
+2025-11-18 17:42:42,368 - corrector.core.run - INFO - Step 185/200: Moving to target x=-24000, y=-48400
+2025-11-18 17:42:46,646 - corrector.core.drift - INFO - Phase correlation: shift=(31.147553008794944, -43.91985100308278) conf=0.896585203390684
+2025-11-18 17:42:46,694 - corrector.core.run - INFO - Drift detected: (dx=-386, dy=-545) with conf=0.8966
+2025-11-18 17:42:47,221 - corrector.core.run - INFO - Step 186/200: Moving to target x=-24000, y=-48450
+2025-11-18 17:42:51,369 - corrector.core.drift - INFO - Phase correlation: shift=(31.1275460454641, -42.8732380244229) conf=0.894124550713512
+2025-11-18 17:42:51,450 - corrector.core.run - INFO - Drift detected: (dx=-386, dy=-532) with conf=0.8941
+2025-11-18 17:42:51,945 - corrector.core.run - INFO - Step 187/200: Moving to target x=-24000, y=-48500
+2025-11-18 17:42:56,240 - corrector.core.drift - INFO - Phase correlation: shift=(31.050901534794548, -41.73767952692282) conf=0.8924082412530413
+2025-11-18 17:42:56,304 - corrector.core.run - INFO - Drift detected: (dx=-385, dy=-518) with conf=0.8924
+2025-11-18 17:42:56,828 - corrector.core.run - INFO - Step 188/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:43:01,060 - corrector.core.drift - INFO - Phase correlation: shift=(30.93466973941713, -40.28198888627861) conf=0.8901598794690169
+2025-11-18 17:43:01,140 - corrector.core.run - INFO - Drift detected: (dx=-384, dy=-500) with conf=0.8902
+2025-11-18 17:43:01,665 - corrector.core.run - INFO - Step 189/200: Moving to target x=-24000, y=-48600
+2025-11-18 17:43:07,219 - corrector.core.drift - INFO - Phase correlation: shift=(30.2742347170863, -39.02497065472858) conf=0.8832846078504557
+2025-11-18 17:43:07,299 - corrector.core.run - INFO - Drift detected: (dx=-375, dy=-484) with conf=0.8833
+2025-11-18 17:43:07,810 - corrector.core.run - INFO - Step 190/200: Moving to target x=-24000, y=-48650
+2025-11-18 17:43:11,958 - corrector.core.drift - INFO - Phase correlation: shift=(30.721126036028068, -37.87438613938076) conf=0.8725439292505369
+2025-11-18 17:43:12,038 - corrector.core.run - INFO - Drift detected: (dx=-381, dy=-470) with conf=0.8725
+2025-11-18 17:43:12,561 - corrector.core.run - INFO - Step 191/200: Moving to target x=-24000, y=-48600
+2025-11-18 17:43:16,806 - corrector.core.drift - INFO - Phase correlation: shift=(30.837256842564102, -38.21691774186064) conf=0.9031641907229403
+2025-11-18 17:43:16,886 - corrector.core.run - INFO - Drift detected: (dx=-382, dy=-474) with conf=0.9032
+2025-11-18 17:43:17,397 - corrector.core.run - INFO - Step 192/200: Moving to target x=-24000, y=-48550
+2025-11-18 17:43:21,533 - corrector.core.drift - INFO - Phase correlation: shift=(31.053922189043647, -38.87764722751609) conf=0.9009784149444144
+2025-11-18 17:43:21,581 - corrector.core.run - INFO - Drift detected: (dx=-385, dy=-482) with conf=0.9010
+2025-11-18 17:43:22,108 - corrector.core.run - INFO - Step 193/200: Moving to target x=-24000, y=-48500
+2025-11-18 17:43:26,275 - corrector.core.drift - INFO - Phase correlation: shift=(31.24997854652213, -39.31025344091762) conf=0.8642518960047361
+2025-11-18 17:43:26,355 - corrector.core.run - INFO - Drift detected: (dx=-388, dy=-488) with conf=0.8643
+2025-11-18 17:43:26,865 - corrector.core.run - INFO - Step 194/200: Moving to target x=-24000, y=-48450
+2025-11-18 17:43:31,014 - corrector.core.drift - INFO - Phase correlation: shift=(31.97409067572528, -40.079264391943696) conf=0.901198991625572
+2025-11-18 17:43:31,109 - corrector.core.run - INFO - Drift detected: (dx=-397, dy=-497) with conf=0.9012
+2025-11-18 17:43:31,603 - corrector.core.run - INFO - Step 195/200: Moving to target x=-24000, y=-48400
+2025-11-18 17:43:35,814 - corrector.core.drift - INFO - Phase correlation: shift=(32.13609607234366, -40.987664062342674) conf=0.8991784538685456
+2025-11-18 17:43:35,894 - corrector.core.run - INFO - Drift detected: (dx=-399, dy=-508) with conf=0.8992
+2025-11-18 17:43:36,388 - corrector.core.run - INFO - Step 196/200: Moving to target x=-24000, y=-48350
+2025-11-18 17:43:40,493 - corrector.core.drift - INFO - Phase correlation: shift=(32.81811163347413, -41.812559876506214) conf=0.8852365252073169
+2025-11-18 17:43:40,556 - corrector.core.run - INFO - Drift detected: (dx=-407, dy=-519) with conf=0.8852
+2025-11-18 17:43:41,065 - corrector.core.run - INFO - Step 197/200: Moving to target x=-24000, y=-48300
+2025-11-18 17:43:45,311 - corrector.core.drift - INFO - Phase correlation: shift=(33.046901563856295, -42.670496341329795) conf=0.8759963552201024
+2025-11-18 17:43:45,375 - corrector.core.run - INFO - Drift detected: (dx=-410, dy=-529) with conf=0.8760
+2025-11-18 17:43:45,886 - corrector.core.run - INFO - Step 198/200: Moving to target x=-24000, y=-48250
+2025-11-18 17:43:50,032 - corrector.core.drift - INFO - Phase correlation: shift=(33.693608947354846, -43.312779316062574) conf=0.85686208168424
+2025-11-18 17:43:50,112 - corrector.core.run - INFO - Drift detected: (dx=-418, dy=-537) with conf=0.8569
+2025-11-18 17:43:50,575 - corrector.core.run - INFO - Step 199/200: Moving to target x=-24000, y=-48200
+2025-11-18 17:43:54,838 - corrector.core.drift - INFO - Phase correlation: shift=(34.013433516202326, -44.5761515613346) conf=0.859352106552407
+2025-11-18 17:43:54,886 - corrector.core.run - INFO - Drift detected: (dx=-422, dy=-553) with conf=0.8594
+2025-11-18 17:43:55,396 - corrector.core.run - INFO - Step 200/200: Moving to target x=-24000, y=-48150
+2025-11-18 17:43:59,674 - corrector.core.drift - INFO - Phase correlation: shift=(34.16674935834294, -45.22402328067437) conf=0.8770238019641289
+2025-11-18 17:43:59,753 - corrector.core.run - INFO - Drift detected: (dx=-424, dy=-561) with conf=0.8770
+2025-11-18 17:44:00,248 - corrector.core.run - INFO - Trajectory 'major_minor_y' finished. Returning to base position.
+2025-11-18 17:44:04,447 - corrector.core.drift - INFO - Phase correlation: shift=(34.20634100705206, -45.26350643313509) conf=0.8620516987769798
+2025-11-18 17:44:04,495 - corrector.core.run - INFO - Drift detected: (dx=-424, dy=-561) with conf=0.8621
+2025-11-18 17:44:04,782 - corrector.core.run - INFO - Progress for iteration 1 saved to hysteresis_dataset_20251118_170631.jsonl
+2025-11-18 17:44:04,846 - corrector.core.run - INFO - Data collection finished. Final dataset saved to hysteresis_dataset_20251118_170631.jsonl
+2025-11-18 17:44:05,182 - corrector.core.run - INFO - All tasks executed, exiting.
+2025-11-18 17:44:05,246 - flexsem.state.manager - INFO - Disconnecting from 192.168.1.1:3000
+2025-11-18 17:44:05,294 - flexsem.state.manager - INFO - Connection aborted on listening socket.
+2025-11-18 17:44:05,294 - flexsem.state.manager - INFO - Disconnected from 192.168.1.1:3000
