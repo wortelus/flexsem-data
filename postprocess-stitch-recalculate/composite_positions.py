@@ -2,7 +2,7 @@
 Template Matching: Find tile positions in a grayscale composite image.
 
 Usage:
-    python find_tile_positions.py <composite.png> <tiles_dir> [--crop-bottom 60] [--threshold 0.8]
+    python composite_positions.py <composite.png> <tiles_dir> [--crop-bottom 60] [--threshold 0.8]
 
 - composite.png: The stitched composite (PNG with alpha)
 - tiles_dir: Directory with individual tile images
@@ -20,6 +20,18 @@ import os
 import sys
 import argparse
 import json
+import re
+
+
+TIMESTAMP_IN_FILENAME_RE = re.compile(r"_(\d+(?:\.\d+)?)\.[^.]+$")
+
+
+def tile_sort_key(filename):
+    """Sort tiles by the Unix timestamp suffix in names like ..._1772582293.805.bmp."""
+    match = TIMESTAMP_IN_FILENAME_RE.search(filename)
+    if match:
+        return (0, float(match.group(1)), filename)
+    return (1, filename)
 
 
 def load_composite_gray(path):
@@ -135,7 +147,7 @@ def main():
     tile_files = sorted([
         f for f in os.listdir(args.tiles_dir)
         if os.path.splitext(f)[1].lower() in tile_extensions
-    ])
+    ], key=tile_sort_key)
 
     if not tile_files:
         print(f"No tile images found in {args.tiles_dir}")
