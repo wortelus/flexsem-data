@@ -1,0 +1,1202 @@
+{
+  "source_experiment": "data_original\\run70-data-feast-overnight-sub2\\hysteresis_dataset_reconstructed.jsonl",
+  "source_positions": "data_original\\run70-data-feast-overnight-sub2\\positions.json",
+  "source_format": "json-array",
+  "min_confidence": 0.8,
+  "confidence_field": "position_confidence",
+  "min_segment_length": 1,
+  "input_records": 1900,
+  "position_entries": 1900,
+  "written_records": 1814,
+  "discarded_records": [
+    {
+      "source_index": 48,
+      "step": 4427,
+      "img_path": "temp/00001_random_walk_2026-02-27_4427_1772154496.5891232.bmp",
+      "filename": "00001_random_walk_2026-02-27_4427_1772154496.5891232.bmp",
+      "position_confidence": 0.7794,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 62,
+      "step": 4441,
+      "img_path": "temp/00001_random_walk_2026-02-27_4441_1772154584.4281886.bmp",
+      "filename": "00001_random_walk_2026-02-27_4441_1772154584.4281886.bmp",
+      "position_confidence": 0.5932,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 135,
+      "step": 4514,
+      "img_path": "temp/00001_random_walk_2026-02-27_4514_1772155045.7564583.bmp",
+      "filename": "00001_random_walk_2026-02-27_4514_1772155045.7564583.bmp",
+      "position_confidence": 0.6469,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 223,
+      "step": 4602,
+      "img_path": "temp/00001_random_walk_2026-02-27_4602_1772155604.3599324.bmp",
+      "filename": "00001_random_walk_2026-02-27_4602_1772155604.3599324.bmp",
+      "position_confidence": 0.6821,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 233,
+      "step": 4612,
+      "img_path": "temp/00001_random_walk_2026-02-27_4612_1772155668.713992.bmp",
+      "filename": "00001_random_walk_2026-02-27_4612_1772155668.713992.bmp",
+      "position_confidence": 0.5716,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 255,
+      "step": 4634,
+      "img_path": "temp/00001_random_walk_2026-02-27_4634_1772155809.8490486.bmp",
+      "filename": "00001_random_walk_2026-02-27_4634_1772155809.8490486.bmp",
+      "position_confidence": 0.5767,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 282,
+      "step": 4661,
+      "img_path": "temp/00001_random_walk_2026-02-27_4661_1772155982.4755147.bmp",
+      "filename": "00001_random_walk_2026-02-27_4661_1772155982.4755147.bmp",
+      "position_confidence": 0.5551,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 296,
+      "step": 4675,
+      "img_path": "temp/00001_random_walk_2026-02-27_4675_1772156071.9277172.bmp",
+      "filename": "00001_random_walk_2026-02-27_4675_1772156071.9277172.bmp",
+      "position_confidence": 0.6201,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 306,
+      "step": 4685,
+      "img_path": "temp/00001_random_walk_2026-02-27_4685_1772156136.2504373.bmp",
+      "filename": "00001_random_walk_2026-02-27_4685_1772156136.2504373.bmp",
+      "position_confidence": 0.4931,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 314,
+      "step": 4693,
+      "img_path": "temp/00001_random_walk_2026-02-27_4693_1772156186.488273.bmp",
+      "filename": "00001_random_walk_2026-02-27_4693_1772156186.488273.bmp",
+      "position_confidence": 0.544,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 336,
+      "step": 4715,
+      "img_path": "temp/00001_random_walk_2026-02-27_4715_1772156324.6063898.bmp",
+      "filename": "00001_random_walk_2026-02-27_4715_1772156324.6063898.bmp",
+      "position_confidence": 0.7665,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 342,
+      "step": 4721,
+      "img_path": "temp/00001_random_walk_2026-02-27_4721_1772156362.294069.bmp",
+      "filename": "00001_random_walk_2026-02-27_4721_1772156362.294069.bmp",
+      "position_confidence": 0.5469,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 349,
+      "step": 4728,
+      "img_path": "temp/00001_random_walk_2026-02-27_4728_1772156406.2559762.bmp",
+      "filename": "00001_random_walk_2026-02-27_4728_1772156406.2559762.bmp",
+      "position_confidence": 0.5448,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 353,
+      "step": 4732,
+      "img_path": "temp/00001_random_walk_2026-02-27_4732_1772156431.3650212.bmp",
+      "filename": "00001_random_walk_2026-02-27_4732_1772156431.3650212.bmp",
+      "position_confidence": 0.5047,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 392,
+      "step": 4771,
+      "img_path": "temp/00001_random_walk_2026-02-27_4771_1772156679.3109322.bmp",
+      "filename": "00001_random_walk_2026-02-27_4771_1772156679.3109322.bmp",
+      "position_confidence": 0.5119,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 416,
+      "step": 4795,
+      "img_path": "temp/00001_random_walk_2026-02-27_4795_1772156829.9366715.bmp",
+      "filename": "00001_random_walk_2026-02-27_4795_1772156829.9366715.bmp",
+      "position_confidence": 0.5212,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 447,
+      "step": 4826,
+      "img_path": "temp/00001_random_walk_2026-02-27_4826_1772157027.6524773.bmp",
+      "filename": "00001_random_walk_2026-02-27_4826_1772157027.6524773.bmp",
+      "position_confidence": 0.7072,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 448,
+      "step": 4827,
+      "img_path": "temp/00001_random_walk_2026-02-27_4827_1772157033.915253.bmp",
+      "filename": "00001_random_walk_2026-02-27_4827_1772157033.915253.bmp",
+      "position_confidence": 0.7984,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 453,
+      "step": 4832,
+      "img_path": "temp/00001_random_walk_2026-02-27_4832_1772157065.3290958.bmp",
+      "filename": "00001_random_walk_2026-02-27_4832_1772157065.3290958.bmp",
+      "position_confidence": 0.5177,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 469,
+      "step": 4848,
+      "img_path": "temp/00001_random_walk_2026-02-27_4848_1772157167.3396137.bmp",
+      "filename": "00001_random_walk_2026-02-27_4848_1772157167.3396137.bmp",
+      "position_confidence": 0.7028,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 471,
+      "step": 4850,
+      "img_path": "temp/00001_random_walk_2026-02-27_4850_1772157179.9166706.bmp",
+      "filename": "00001_random_walk_2026-02-27_4850_1772157179.9166706.bmp",
+      "position_confidence": 0.5146,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 527,
+      "step": 4906,
+      "img_path": "temp/00001_random_walk_2026-02-27_4906_1772157534.567605.bmp",
+      "filename": "00001_random_walk_2026-02-27_4906_1772157534.567605.bmp",
+      "position_confidence": 0.5244,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 536,
+      "step": 4915,
+      "img_path": "temp/00001_random_walk_2026-02-27_4915_1772157591.10413.bmp",
+      "filename": "00001_random_walk_2026-02-27_4915_1772157591.10413.bmp",
+      "position_confidence": 0.5393,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 567,
+      "step": 4946,
+      "img_path": "temp/00001_random_walk_2026-02-27_4946_1772157787.1918416.bmp",
+      "filename": "00001_random_walk_2026-02-27_4946_1772157787.1918416.bmp",
+      "position_confidence": 0.5762,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 590,
+      "step": 4969,
+      "img_path": "temp/00001_random_walk_2026-02-27_4969_1772157933.1291218.bmp",
+      "filename": "00001_random_walk_2026-02-27_4969_1772157933.1291218.bmp",
+      "position_confidence": 0.5442,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 603,
+      "step": 4982,
+      "img_path": "temp/00001_random_walk_2026-02-27_4982_1772158017.7973096.bmp",
+      "filename": "00001_random_walk_2026-02-27_4982_1772158017.7973096.bmp",
+      "position_confidence": 0.512,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 613,
+      "step": 4992,
+      "img_path": "temp/00001_random_walk_2026-02-27_4992_1772158080.5600314.bmp",
+      "filename": "00001_random_walk_2026-02-27_4992_1772158080.5600314.bmp",
+      "position_confidence": 0.7519,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 631,
+      "step": 5010,
+      "img_path": "temp/00001_random_walk_2026-02-27_5010_1772158193.660715.bmp",
+      "filename": "00001_random_walk_2026-02-27_5010_1772158193.660715.bmp",
+      "position_confidence": 0.514,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 632,
+      "step": 5011,
+      "img_path": "temp/00001_random_walk_2026-02-27_5011_1772158199.943875.bmp",
+      "filename": "00001_random_walk_2026-02-27_5011_1772158199.943875.bmp",
+      "position_confidence": 0.6221,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 636,
+      "step": 5015,
+      "img_path": "temp/00001_random_walk_2026-02-27_5015_1772158225.0414793.bmp",
+      "filename": "00001_random_walk_2026-02-27_5015_1772158225.0414793.bmp",
+      "position_confidence": 0.4561,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 656,
+      "step": 5035,
+      "img_path": "temp/00001_random_walk_2026-02-27_5035_1772158350.58901.bmp",
+      "filename": "00001_random_walk_2026-02-27_5035_1772158350.58901.bmp",
+      "position_confidence": 0.6689,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 706,
+      "step": 5085,
+      "img_path": "temp/00001_random_walk_2026-02-27_5085_1772158670.525528.bmp",
+      "filename": "00001_random_walk_2026-02-27_5085_1772158670.525528.bmp",
+      "position_confidence": 0.5342,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 731,
+      "step": 5110,
+      "img_path": "temp/00001_random_walk_2026-02-27_5110_1772158827.5395038.bmp",
+      "filename": "00001_random_walk_2026-02-27_5110_1772158827.5395038.bmp",
+      "position_confidence": 0.5617,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 812,
+      "step": 5191,
+      "img_path": "temp/00001_random_walk_2026-02-27_5191_1772159343.5685408.bmp",
+      "filename": "00001_random_walk_2026-02-27_5191_1772159343.5685408.bmp",
+      "position_confidence": 0.7515,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 815,
+      "step": 5194,
+      "img_path": "temp/00001_random_walk_2026-02-27_5194_1772159362.4206438.bmp",
+      "filename": "00001_random_walk_2026-02-27_5194_1772159362.4206438.bmp",
+      "position_confidence": 0.7457,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 824,
+      "step": 5203,
+      "img_path": "temp/00001_random_walk_2026-02-27_5203_1772159418.8921866.bmp",
+      "filename": "00001_random_walk_2026-02-27_5203_1772159418.8921866.bmp",
+      "position_confidence": 0.7193,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 889,
+      "step": 5268,
+      "img_path": "temp/00001_random_walk_2026-02-27_5268_1772159828.4469476.bmp",
+      "filename": "00001_random_walk_2026-02-27_5268_1772159828.4469476.bmp",
+      "position_confidence": 0.5465,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 927,
+      "step": 5306,
+      "img_path": "temp/00001_random_walk_2026-02-27_5306_1772160066.91369.bmp",
+      "filename": "00001_random_walk_2026-02-27_5306_1772160066.91369.bmp",
+      "position_confidence": 0.6222,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 953,
+      "step": 5332,
+      "img_path": "temp/00001_random_walk_2026-02-27_5332_1772160231.7521925.bmp",
+      "filename": "00001_random_walk_2026-02-27_5332_1772160231.7521925.bmp",
+      "position_confidence": 0.5187,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 968,
+      "step": 5347,
+      "img_path": "temp/00001_random_walk_2026-02-27_5347_1772160327.3950062.bmp",
+      "filename": "00001_random_walk_2026-02-27_5347_1772160327.3950062.bmp",
+      "position_confidence": 0.5886,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 999,
+      "step": 5378,
+      "img_path": "temp/00001_random_walk_2026-02-27_5378_1772160523.576614.bmp",
+      "filename": "00001_random_walk_2026-02-27_5378_1772160523.576614.bmp",
+      "position_confidence": 0.4949,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1034,
+      "step": 5413,
+      "img_path": "temp/00001_random_walk_2026-02-27_5413_1772160743.273386.bmp",
+      "filename": "00001_random_walk_2026-02-27_5413_1772160743.273386.bmp",
+      "position_confidence": 0.461,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1050,
+      "step": 5429,
+      "img_path": "temp/00001_random_walk_2026-02-27_5429_1772160843.6963055.bmp",
+      "filename": "00001_random_walk_2026-02-27_5429_1772160843.6963055.bmp",
+      "position_confidence": 0.7347,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1065,
+      "step": 5444,
+      "img_path": "temp/00001_random_walk_2026-02-27_5444_1772160938.0162897.bmp",
+      "filename": "00001_random_walk_2026-02-27_5444_1772160938.0162897.bmp",
+      "position_confidence": 0.6054,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1092,
+      "step": 5471,
+      "img_path": "temp/00001_random_walk_2026-02-27_5471_1772161110.614658.bmp",
+      "filename": "00001_random_walk_2026-02-27_5471_1772161110.614658.bmp",
+      "position_confidence": 0.5447,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1186,
+      "step": 5565,
+      "img_path": "temp/00001_random_walk_2026-02-27_5565_1772161707.044088.bmp",
+      "filename": "00001_random_walk_2026-02-27_5565_1772161707.044088.bmp",
+      "position_confidence": 0.5341,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1204,
+      "step": 5583,
+      "img_path": "temp/00001_random_walk_2026-02-27_5583_1772161820.117339.bmp",
+      "filename": "00001_random_walk_2026-02-27_5583_1772161820.117339.bmp",
+      "position_confidence": 0.5695,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1245,
+      "step": 5624,
+      "img_path": "temp/00001_random_walk_2026-02-27_5624_1772162077.4145746.bmp",
+      "filename": "00001_random_walk_2026-02-27_5624_1772162077.4145746.bmp",
+      "position_confidence": 0.7455,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1246,
+      "step": 5625,
+      "img_path": "temp/00001_random_walk_2026-02-27_5625_1772162083.6982133.bmp",
+      "filename": "00001_random_walk_2026-02-27_5625_1772162083.6982133.bmp",
+      "position_confidence": 0.7584,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1250,
+      "step": 5629,
+      "img_path": "temp/00001_random_walk_2026-02-27_5629_1772162110.2993422.bmp",
+      "filename": "00001_random_walk_2026-02-27_5629_1772162110.2993422.bmp",
+      "position_confidence": 0.7776,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1264,
+      "step": 5643,
+      "img_path": "temp/00001_random_walk_2026-02-27_5643_1772162198.3414383.bmp",
+      "filename": "00001_random_walk_2026-02-27_5643_1772162198.3414383.bmp",
+      "position_confidence": 0.4618,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1280,
+      "step": 5659,
+      "img_path": "temp/00001_random_walk_2026-02-27_5659_1772162298.831033.bmp",
+      "filename": "00001_random_walk_2026-02-27_5659_1772162298.831033.bmp",
+      "position_confidence": 0.5571,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1295,
+      "step": 5674,
+      "img_path": "temp/00001_random_walk_2026-02-27_5674_1772162394.4608371.bmp",
+      "filename": "00001_random_walk_2026-02-27_5674_1772162394.4608371.bmp",
+      "position_confidence": 0.5606,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1321,
+      "step": 5700,
+      "img_path": "temp/00001_random_walk_2026-02-27_5700_1772162559.0924182.bmp",
+      "filename": "00001_random_walk_2026-02-27_5700_1772162559.0924182.bmp",
+      "position_confidence": 0.649,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1337,
+      "step": 5716,
+      "img_path": "temp/00001_random_walk_2026-02-27_5716_1772162659.55861.bmp",
+      "filename": "00001_random_walk_2026-02-27_5716_1772162659.55861.bmp",
+      "position_confidence": 0.5401,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1343,
+      "step": 5722,
+      "img_path": "temp/00001_random_walk_2026-02-27_5722_1772162697.2714522.bmp",
+      "filename": "00001_random_walk_2026-02-27_5722_1772162697.2714522.bmp",
+      "position_confidence": 0.5424,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1347,
+      "step": 5726,
+      "img_path": "temp/00001_random_walk_2026-02-27_5726_1772162722.3396175.bmp",
+      "filename": "00001_random_walk_2026-02-27_5726_1772162722.3396175.bmp",
+      "position_confidence": 0.603,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1364,
+      "step": 5743,
+      "img_path": "temp/00001_random_walk_2026-02-27_5743_1772162829.0817719.bmp",
+      "filename": "00001_random_walk_2026-02-27_5743_1772162829.0817719.bmp",
+      "position_confidence": 0.7905,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1381,
+      "step": 5760,
+      "img_path": "temp/00001_random_walk_2026-02-27_5760_1772162937.2851639.bmp",
+      "filename": "00001_random_walk_2026-02-27_5760_1772162937.2851639.bmp",
+      "position_confidence": 0.7225,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1391,
+      "step": 5770,
+      "img_path": "temp/00001_random_walk_2026-02-27_5770_1772163001.5678275.bmp",
+      "filename": "00001_random_walk_2026-02-27_5770_1772163001.5678275.bmp",
+      "position_confidence": 0.7067,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1396,
+      "step": 5775,
+      "img_path": "temp/00001_random_walk_2026-02-27_5775_1772163032.9900353.bmp",
+      "filename": "00001_random_walk_2026-02-27_5775_1772163032.9900353.bmp",
+      "position_confidence": 0.7165,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1420,
+      "step": 5799,
+      "img_path": "temp/00001_random_walk_2026-02-27_5799_1772163183.7268393.bmp",
+      "filename": "00001_random_walk_2026-02-27_5799_1772163183.7268393.bmp",
+      "position_confidence": 0.7799,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1468,
+      "step": 5847,
+      "img_path": "temp/00001_random_walk_2026-02-27_5847_1772163494.2930262.bmp",
+      "filename": "00001_random_walk_2026-02-27_5847_1772163494.2930262.bmp",
+      "position_confidence": 0.5949,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1480,
+      "step": 5859,
+      "img_path": "temp/00001_random_walk_2026-02-27_5859_1772163578.7724886.bmp",
+      "filename": "00001_random_walk_2026-02-27_5859_1772163578.7724886.bmp",
+      "position_confidence": 0.7746,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1498,
+      "step": 5877,
+      "img_path": "temp/00001_random_walk_2026-02-27_5877_1772163693.300785.bmp",
+      "filename": "00001_random_walk_2026-02-27_5877_1772163693.300785.bmp",
+      "position_confidence": 0.7597,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1504,
+      "step": 5883,
+      "img_path": "temp/00001_random_walk_2026-02-27_5883_1772163730.928325.bmp",
+      "filename": "00001_random_walk_2026-02-27_5883_1772163730.928325.bmp",
+      "position_confidence": 0.5105,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1507,
+      "step": 5886,
+      "img_path": "temp/00001_random_walk_2026-02-27_5886_1772163749.7874608.bmp",
+      "filename": "00001_random_walk_2026-02-27_5886_1772163749.7874608.bmp",
+      "position_confidence": 0.5081,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1539,
+      "step": 5918,
+      "img_path": "temp/00001_random_walk_2026-02-27_5918_1772163965.3623266.bmp",
+      "filename": "00001_random_walk_2026-02-27_5918_1772163965.3623266.bmp",
+      "position_confidence": 0.6367,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1548,
+      "step": 5927,
+      "img_path": "temp/00001_random_walk_2026-02-27_5927_1772164024.914385.bmp",
+      "filename": "00001_random_walk_2026-02-27_5927_1772164024.914385.bmp",
+      "position_confidence": 0.5489,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1553,
+      "step": 5932,
+      "img_path": "temp/00001_random_walk_2026-02-27_5932_1772164057.818343.bmp",
+      "filename": "00001_random_walk_2026-02-27_5932_1772164057.818343.bmp",
+      "position_confidence": 0.6427,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1555,
+      "step": 5934,
+      "img_path": "temp/00001_random_walk_2026-02-27_5934_1772164071.9129562.bmp",
+      "filename": "00001_random_walk_2026-02-27_5934_1772164071.9129562.bmp",
+      "position_confidence": 0.7309,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1560,
+      "step": 5939,
+      "img_path": "temp/00001_random_walk_2026-02-27_5939_1772164107.819914.bmp",
+      "filename": "00001_random_walk_2026-02-27_5939_1772164107.819914.bmp",
+      "position_confidence": 0.6231,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1561,
+      "step": 5940,
+      "img_path": "temp/00001_random_walk_2026-02-27_5940_1772164117.205121.bmp",
+      "filename": "00001_random_walk_2026-02-27_5940_1772164117.205121.bmp",
+      "position_confidence": 0.7796,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1620,
+      "step": 5999,
+      "img_path": "temp/00001_random_walk_2026-02-27_5999_1772164504.6549313.bmp",
+      "filename": "00001_random_walk_2026-02-27_5999_1772164504.6549313.bmp",
+      "position_confidence": 0.5401,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1635,
+      "step": 6014,
+      "img_path": "temp/00001_random_walk_2026-02-27_6014_1772164598.8359013.bmp",
+      "filename": "00001_random_walk_2026-02-27_6014_1772164598.8359013.bmp",
+      "position_confidence": 0.5355,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1657,
+      "step": 6036,
+      "img_path": "temp/00001_random_walk_2026-02-27_6036_1772164738.5305197.bmp",
+      "filename": "00001_random_walk_2026-02-27_6036_1772164738.5305197.bmp",
+      "position_confidence": 0.5763,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1736,
+      "step": 6115,
+      "img_path": "temp/00001_random_walk_2026-02-27_6115_1772165260.8529866.bmp",
+      "filename": "00001_random_walk_2026-02-27_6115_1772165260.8529866.bmp",
+      "position_confidence": 0.6513,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1746,
+      "step": 6125,
+      "img_path": "temp/00001_random_walk_2026-02-27_6125_1772165323.6473613.bmp",
+      "filename": "00001_random_walk_2026-02-27_6125_1772165323.6473613.bmp",
+      "position_confidence": 0.6833,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1761,
+      "step": 6140,
+      "img_path": "temp/00001_random_walk_2026-02-27_6140_1772165428.4401956.bmp",
+      "filename": "00001_random_walk_2026-02-27_6140_1772165428.4401956.bmp",
+      "position_confidence": 0.5334,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1804,
+      "step": 6183,
+      "img_path": "temp/00001_random_walk_2026-02-27_6183_1772165712.101233.bmp",
+      "filename": "00001_random_walk_2026-02-27_6183_1772165712.101233.bmp",
+      "position_confidence": 0.5052,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1810,
+      "step": 6189,
+      "img_path": "temp/00001_random_walk_2026-02-27_6189_1772165755.8600483.bmp",
+      "filename": "00001_random_walk_2026-02-27_6189_1772165755.8600483.bmp",
+      "position_confidence": 0.7239,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1848,
+      "step": 6227,
+      "img_path": "temp/00001_random_walk_2026-02-27_6227_1772166005.4551504.bmp",
+      "filename": "00001_random_walk_2026-02-27_6227_1772166005.4551504.bmp",
+      "position_confidence": 0.5257,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1868,
+      "step": 6247,
+      "img_path": "temp/00001_random_walk_2026-02-27_6247_1772166132.5868433.bmp",
+      "filename": "00001_random_walk_2026-02-27_6247_1772166132.5868433.bmp",
+      "position_confidence": 0.5308,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1877,
+      "step": 6256,
+      "img_path": "temp/00001_random_walk_2026-02-27_6256_1772166190.6327863.bmp",
+      "filename": "00001_random_walk_2026-02-27_6256_1772166190.6327863.bmp",
+      "position_confidence": 0.6364,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1886,
+      "step": 6265,
+      "img_path": "temp/00001_random_walk_2026-02-27_6265_1772166250.6093855.bmp",
+      "filename": "00001_random_walk_2026-02-27_6265_1772166250.6093855.bmp",
+      "position_confidence": 0.7772,
+      "reason": "below-threshold"
+    },
+    {
+      "source_index": 1888,
+      "step": 6267,
+      "img_path": "temp/00001_random_walk_2026-02-27_6267_1772166263.2031014.bmp",
+      "filename": "00001_random_walk_2026-02-27_6267_1772166263.2031014.bmp",
+      "position_confidence": 0.7528,
+      "reason": "below-threshold"
+    }
+  ],
+  "omitted_short_segments": [],
+  "segments": [
+    {
+      "file": "hysteresis_dataset_reconstructed_part001_steps4379-4426.jsonl",
+      "records": 48,
+      "first_step": 4379,
+      "last_step": 4426
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part002_steps4428-4440.jsonl",
+      "records": 13,
+      "first_step": 4428,
+      "last_step": 4440
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part003_steps4442-4513.jsonl",
+      "records": 72,
+      "first_step": 4442,
+      "last_step": 4513
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part004_steps4515-4601.jsonl",
+      "records": 87,
+      "first_step": 4515,
+      "last_step": 4601
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part005_steps4603-4611.jsonl",
+      "records": 9,
+      "first_step": 4603,
+      "last_step": 4611
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part006_steps4613-4633.jsonl",
+      "records": 21,
+      "first_step": 4613,
+      "last_step": 4633
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part007_steps4635-4660.jsonl",
+      "records": 26,
+      "first_step": 4635,
+      "last_step": 4660
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part008_steps4662-4674.jsonl",
+      "records": 13,
+      "first_step": 4662,
+      "last_step": 4674
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part009_steps4676-4684.jsonl",
+      "records": 9,
+      "first_step": 4676,
+      "last_step": 4684
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part010_steps4686-4692.jsonl",
+      "records": 7,
+      "first_step": 4686,
+      "last_step": 4692
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part011_steps4694-4714.jsonl",
+      "records": 21,
+      "first_step": 4694,
+      "last_step": 4714
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part012_steps4716-4720.jsonl",
+      "records": 5,
+      "first_step": 4716,
+      "last_step": 4720
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part013_steps4722-4727.jsonl",
+      "records": 6,
+      "first_step": 4722,
+      "last_step": 4727
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part014_steps4729-4731.jsonl",
+      "records": 3,
+      "first_step": 4729,
+      "last_step": 4731
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part015_steps4733-4770.jsonl",
+      "records": 38,
+      "first_step": 4733,
+      "last_step": 4770
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part016_steps4772-4794.jsonl",
+      "records": 23,
+      "first_step": 4772,
+      "last_step": 4794
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part017_steps4796-4825.jsonl",
+      "records": 30,
+      "first_step": 4796,
+      "last_step": 4825
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part018_steps4828-4831.jsonl",
+      "records": 4,
+      "first_step": 4828,
+      "last_step": 4831
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part019_steps4833-4847.jsonl",
+      "records": 15,
+      "first_step": 4833,
+      "last_step": 4847
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part020_steps4849-4849.jsonl",
+      "records": 1,
+      "first_step": 4849,
+      "last_step": 4849
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part021_steps4851-4905.jsonl",
+      "records": 55,
+      "first_step": 4851,
+      "last_step": 4905
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part022_steps4907-4914.jsonl",
+      "records": 8,
+      "first_step": 4907,
+      "last_step": 4914
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part023_steps4916-4945.jsonl",
+      "records": 30,
+      "first_step": 4916,
+      "last_step": 4945
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part024_steps4947-4968.jsonl",
+      "records": 22,
+      "first_step": 4947,
+      "last_step": 4968
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part025_steps4970-4981.jsonl",
+      "records": 12,
+      "first_step": 4970,
+      "last_step": 4981
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part026_steps4983-4991.jsonl",
+      "records": 9,
+      "first_step": 4983,
+      "last_step": 4991
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part027_steps4993-5009.jsonl",
+      "records": 17,
+      "first_step": 4993,
+      "last_step": 5009
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part028_steps5012-5014.jsonl",
+      "records": 3,
+      "first_step": 5012,
+      "last_step": 5014
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part029_steps5016-5034.jsonl",
+      "records": 19,
+      "first_step": 5016,
+      "last_step": 5034
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part030_steps5036-5084.jsonl",
+      "records": 49,
+      "first_step": 5036,
+      "last_step": 5084
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part031_steps5086-5109.jsonl",
+      "records": 24,
+      "first_step": 5086,
+      "last_step": 5109
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part032_steps5111-5190.jsonl",
+      "records": 80,
+      "first_step": 5111,
+      "last_step": 5190
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part033_steps5192-5193.jsonl",
+      "records": 2,
+      "first_step": 5192,
+      "last_step": 5193
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part034_steps5195-5202.jsonl",
+      "records": 8,
+      "first_step": 5195,
+      "last_step": 5202
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part035_steps5204-5267.jsonl",
+      "records": 64,
+      "first_step": 5204,
+      "last_step": 5267
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part036_steps5269-5305.jsonl",
+      "records": 37,
+      "first_step": 5269,
+      "last_step": 5305
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part037_steps5307-5331.jsonl",
+      "records": 25,
+      "first_step": 5307,
+      "last_step": 5331
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part038_steps5333-5346.jsonl",
+      "records": 14,
+      "first_step": 5333,
+      "last_step": 5346
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part039_steps5348-5377.jsonl",
+      "records": 30,
+      "first_step": 5348,
+      "last_step": 5377
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part040_steps5379-5412.jsonl",
+      "records": 34,
+      "first_step": 5379,
+      "last_step": 5412
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part041_steps5414-5428.jsonl",
+      "records": 15,
+      "first_step": 5414,
+      "last_step": 5428
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part042_steps5430-5443.jsonl",
+      "records": 14,
+      "first_step": 5430,
+      "last_step": 5443
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part043_steps5445-5470.jsonl",
+      "records": 26,
+      "first_step": 5445,
+      "last_step": 5470
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part044_steps5472-5564.jsonl",
+      "records": 93,
+      "first_step": 5472,
+      "last_step": 5564
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part045_steps5566-5582.jsonl",
+      "records": 17,
+      "first_step": 5566,
+      "last_step": 5582
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part046_steps5584-5623.jsonl",
+      "records": 40,
+      "first_step": 5584,
+      "last_step": 5623
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part047_steps5626-5628.jsonl",
+      "records": 3,
+      "first_step": 5626,
+      "last_step": 5628
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part048_steps5630-5642.jsonl",
+      "records": 13,
+      "first_step": 5630,
+      "last_step": 5642
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part049_steps5644-5658.jsonl",
+      "records": 15,
+      "first_step": 5644,
+      "last_step": 5658
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part050_steps5660-5673.jsonl",
+      "records": 14,
+      "first_step": 5660,
+      "last_step": 5673
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part051_steps5675-5699.jsonl",
+      "records": 25,
+      "first_step": 5675,
+      "last_step": 5699
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part052_steps5701-5715.jsonl",
+      "records": 15,
+      "first_step": 5701,
+      "last_step": 5715
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part053_steps5717-5721.jsonl",
+      "records": 5,
+      "first_step": 5717,
+      "last_step": 5721
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part054_steps5723-5725.jsonl",
+      "records": 3,
+      "first_step": 5723,
+      "last_step": 5725
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part055_steps5727-5742.jsonl",
+      "records": 16,
+      "first_step": 5727,
+      "last_step": 5742
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part056_steps5744-5759.jsonl",
+      "records": 16,
+      "first_step": 5744,
+      "last_step": 5759
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part057_steps5761-5769.jsonl",
+      "records": 9,
+      "first_step": 5761,
+      "last_step": 5769
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part058_steps5771-5774.jsonl",
+      "records": 4,
+      "first_step": 5771,
+      "last_step": 5774
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part059_steps5776-5798.jsonl",
+      "records": 23,
+      "first_step": 5776,
+      "last_step": 5798
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part060_steps5800-5846.jsonl",
+      "records": 47,
+      "first_step": 5800,
+      "last_step": 5846
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part061_steps5848-5858.jsonl",
+      "records": 11,
+      "first_step": 5848,
+      "last_step": 5858
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part062_steps5860-5876.jsonl",
+      "records": 17,
+      "first_step": 5860,
+      "last_step": 5876
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part063_steps5878-5882.jsonl",
+      "records": 5,
+      "first_step": 5878,
+      "last_step": 5882
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part064_steps5884-5885.jsonl",
+      "records": 2,
+      "first_step": 5884,
+      "last_step": 5885
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part065_steps5887-5917.jsonl",
+      "records": 31,
+      "first_step": 5887,
+      "last_step": 5917
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part066_steps5919-5926.jsonl",
+      "records": 8,
+      "first_step": 5919,
+      "last_step": 5926
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part067_steps5928-5931.jsonl",
+      "records": 4,
+      "first_step": 5928,
+      "last_step": 5931
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part068_steps5933-5933.jsonl",
+      "records": 1,
+      "first_step": 5933,
+      "last_step": 5933
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part069_steps5935-5938.jsonl",
+      "records": 4,
+      "first_step": 5935,
+      "last_step": 5938
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part070_steps5941-5998.jsonl",
+      "records": 58,
+      "first_step": 5941,
+      "last_step": 5998
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part071_steps6000-6013.jsonl",
+      "records": 14,
+      "first_step": 6000,
+      "last_step": 6013
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part072_steps6015-6035.jsonl",
+      "records": 21,
+      "first_step": 6015,
+      "last_step": 6035
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part073_steps6037-6114.jsonl",
+      "records": 78,
+      "first_step": 6037,
+      "last_step": 6114
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part074_steps6116-6124.jsonl",
+      "records": 9,
+      "first_step": 6116,
+      "last_step": 6124
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part075_steps6126-6139.jsonl",
+      "records": 14,
+      "first_step": 6126,
+      "last_step": 6139
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part076_steps6141-6182.jsonl",
+      "records": 42,
+      "first_step": 6141,
+      "last_step": 6182
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part077_steps6184-6188.jsonl",
+      "records": 5,
+      "first_step": 6184,
+      "last_step": 6188
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part078_steps6190-6226.jsonl",
+      "records": 37,
+      "first_step": 6190,
+      "last_step": 6226
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part079_steps6228-6246.jsonl",
+      "records": 19,
+      "first_step": 6228,
+      "last_step": 6246
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part080_steps6248-6255.jsonl",
+      "records": 8,
+      "first_step": 6248,
+      "last_step": 6255
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part081_steps6257-6264.jsonl",
+      "records": 8,
+      "first_step": 6257,
+      "last_step": 6264
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part082_steps6266-6266.jsonl",
+      "records": 1,
+      "first_step": 6266,
+      "last_step": 6266
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_part083_steps6268-6278.jsonl",
+      "records": 11,
+      "first_step": 6268,
+      "last_step": 6278
+    }
+  ]
+}
