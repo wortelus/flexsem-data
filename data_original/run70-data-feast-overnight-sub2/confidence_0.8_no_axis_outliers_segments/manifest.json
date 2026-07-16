@@ -1,0 +1,1273 @@
+{
+  "source_manifest": "data_original\\run70-data-feast-overnight-sub2\\confidence_0.8_segments\\manifest.json",
+  "source_segments_dir": "data_original\\run70-data-feast-overnight-sub2\\confidence_0.8_segments",
+  "outlier_source_csv": "plots\\run70_filtered_axis_outliers_iqr.csv",
+  "removed_steps": [
+    5876
+  ],
+  "input_segments": 83,
+  "input_records": 1814,
+  "removed_records": [
+    {
+      "sub": 2,
+      "step": 5876,
+      "source_segment": "hysteresis_dataset_reconstructed_part062_steps5860-5876.jsonl",
+      "source_segment_index": 62,
+      "source_record_index": 16,
+      "img_path": "temp/00001_random_walk_2026-02-27_5876_1772163686.9967577.bmp"
+    }
+  ],
+  "written_segments": 83,
+  "written_records": 1813,
+  "segments": [
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part001_steps4379-4426.jsonl",
+      "records": 48,
+      "first_step": 4379,
+      "last_step": 4426,
+      "source_segment": "hysteresis_dataset_reconstructed_part001_steps4379-4426.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part002_steps4428-4440.jsonl",
+      "records": 13,
+      "first_step": 4428,
+      "last_step": 4440,
+      "source_segment": "hysteresis_dataset_reconstructed_part002_steps4428-4440.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part003_steps4442-4513.jsonl",
+      "records": 72,
+      "first_step": 4442,
+      "last_step": 4513,
+      "source_segment": "hysteresis_dataset_reconstructed_part003_steps4442-4513.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part004_steps4515-4601.jsonl",
+      "records": 87,
+      "first_step": 4515,
+      "last_step": 4601,
+      "source_segment": "hysteresis_dataset_reconstructed_part004_steps4515-4601.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part005_steps4603-4611.jsonl",
+      "records": 9,
+      "first_step": 4603,
+      "last_step": 4611,
+      "source_segment": "hysteresis_dataset_reconstructed_part005_steps4603-4611.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part006_steps4613-4633.jsonl",
+      "records": 21,
+      "first_step": 4613,
+      "last_step": 4633,
+      "source_segment": "hysteresis_dataset_reconstructed_part006_steps4613-4633.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part007_steps4635-4660.jsonl",
+      "records": 26,
+      "first_step": 4635,
+      "last_step": 4660,
+      "source_segment": "hysteresis_dataset_reconstructed_part007_steps4635-4660.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part008_steps4662-4674.jsonl",
+      "records": 13,
+      "first_step": 4662,
+      "last_step": 4674,
+      "source_segment": "hysteresis_dataset_reconstructed_part008_steps4662-4674.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part009_steps4676-4684.jsonl",
+      "records": 9,
+      "first_step": 4676,
+      "last_step": 4684,
+      "source_segment": "hysteresis_dataset_reconstructed_part009_steps4676-4684.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part010_steps4686-4692.jsonl",
+      "records": 7,
+      "first_step": 4686,
+      "last_step": 4692,
+      "source_segment": "hysteresis_dataset_reconstructed_part010_steps4686-4692.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part011_steps4694-4714.jsonl",
+      "records": 21,
+      "first_step": 4694,
+      "last_step": 4714,
+      "source_segment": "hysteresis_dataset_reconstructed_part011_steps4694-4714.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part012_steps4716-4720.jsonl",
+      "records": 5,
+      "first_step": 4716,
+      "last_step": 4720,
+      "source_segment": "hysteresis_dataset_reconstructed_part012_steps4716-4720.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part013_steps4722-4727.jsonl",
+      "records": 6,
+      "first_step": 4722,
+      "last_step": 4727,
+      "source_segment": "hysteresis_dataset_reconstructed_part013_steps4722-4727.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part014_steps4729-4731.jsonl",
+      "records": 3,
+      "first_step": 4729,
+      "last_step": 4731,
+      "source_segment": "hysteresis_dataset_reconstructed_part014_steps4729-4731.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part015_steps4733-4770.jsonl",
+      "records": 38,
+      "first_step": 4733,
+      "last_step": 4770,
+      "source_segment": "hysteresis_dataset_reconstructed_part015_steps4733-4770.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part016_steps4772-4794.jsonl",
+      "records": 23,
+      "first_step": 4772,
+      "last_step": 4794,
+      "source_segment": "hysteresis_dataset_reconstructed_part016_steps4772-4794.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part017_steps4796-4825.jsonl",
+      "records": 30,
+      "first_step": 4796,
+      "last_step": 4825,
+      "source_segment": "hysteresis_dataset_reconstructed_part017_steps4796-4825.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part018_steps4828-4831.jsonl",
+      "records": 4,
+      "first_step": 4828,
+      "last_step": 4831,
+      "source_segment": "hysteresis_dataset_reconstructed_part018_steps4828-4831.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part019_steps4833-4847.jsonl",
+      "records": 15,
+      "first_step": 4833,
+      "last_step": 4847,
+      "source_segment": "hysteresis_dataset_reconstructed_part019_steps4833-4847.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part020_steps4849-4849.jsonl",
+      "records": 1,
+      "first_step": 4849,
+      "last_step": 4849,
+      "source_segment": "hysteresis_dataset_reconstructed_part020_steps4849-4849.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part021_steps4851-4905.jsonl",
+      "records": 55,
+      "first_step": 4851,
+      "last_step": 4905,
+      "source_segment": "hysteresis_dataset_reconstructed_part021_steps4851-4905.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part022_steps4907-4914.jsonl",
+      "records": 8,
+      "first_step": 4907,
+      "last_step": 4914,
+      "source_segment": "hysteresis_dataset_reconstructed_part022_steps4907-4914.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part023_steps4916-4945.jsonl",
+      "records": 30,
+      "first_step": 4916,
+      "last_step": 4945,
+      "source_segment": "hysteresis_dataset_reconstructed_part023_steps4916-4945.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part024_steps4947-4968.jsonl",
+      "records": 22,
+      "first_step": 4947,
+      "last_step": 4968,
+      "source_segment": "hysteresis_dataset_reconstructed_part024_steps4947-4968.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part025_steps4970-4981.jsonl",
+      "records": 12,
+      "first_step": 4970,
+      "last_step": 4981,
+      "source_segment": "hysteresis_dataset_reconstructed_part025_steps4970-4981.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part026_steps4983-4991.jsonl",
+      "records": 9,
+      "first_step": 4983,
+      "last_step": 4991,
+      "source_segment": "hysteresis_dataset_reconstructed_part026_steps4983-4991.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part027_steps4993-5009.jsonl",
+      "records": 17,
+      "first_step": 4993,
+      "last_step": 5009,
+      "source_segment": "hysteresis_dataset_reconstructed_part027_steps4993-5009.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part028_steps5012-5014.jsonl",
+      "records": 3,
+      "first_step": 5012,
+      "last_step": 5014,
+      "source_segment": "hysteresis_dataset_reconstructed_part028_steps5012-5014.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part029_steps5016-5034.jsonl",
+      "records": 19,
+      "first_step": 5016,
+      "last_step": 5034,
+      "source_segment": "hysteresis_dataset_reconstructed_part029_steps5016-5034.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part030_steps5036-5084.jsonl",
+      "records": 49,
+      "first_step": 5036,
+      "last_step": 5084,
+      "source_segment": "hysteresis_dataset_reconstructed_part030_steps5036-5084.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part031_steps5086-5109.jsonl",
+      "records": 24,
+      "first_step": 5086,
+      "last_step": 5109,
+      "source_segment": "hysteresis_dataset_reconstructed_part031_steps5086-5109.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part032_steps5111-5190.jsonl",
+      "records": 80,
+      "first_step": 5111,
+      "last_step": 5190,
+      "source_segment": "hysteresis_dataset_reconstructed_part032_steps5111-5190.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part033_steps5192-5193.jsonl",
+      "records": 2,
+      "first_step": 5192,
+      "last_step": 5193,
+      "source_segment": "hysteresis_dataset_reconstructed_part033_steps5192-5193.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part034_steps5195-5202.jsonl",
+      "records": 8,
+      "first_step": 5195,
+      "last_step": 5202,
+      "source_segment": "hysteresis_dataset_reconstructed_part034_steps5195-5202.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part035_steps5204-5267.jsonl",
+      "records": 64,
+      "first_step": 5204,
+      "last_step": 5267,
+      "source_segment": "hysteresis_dataset_reconstructed_part035_steps5204-5267.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part036_steps5269-5305.jsonl",
+      "records": 37,
+      "first_step": 5269,
+      "last_step": 5305,
+      "source_segment": "hysteresis_dataset_reconstructed_part036_steps5269-5305.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part037_steps5307-5331.jsonl",
+      "records": 25,
+      "first_step": 5307,
+      "last_step": 5331,
+      "source_segment": "hysteresis_dataset_reconstructed_part037_steps5307-5331.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part038_steps5333-5346.jsonl",
+      "records": 14,
+      "first_step": 5333,
+      "last_step": 5346,
+      "source_segment": "hysteresis_dataset_reconstructed_part038_steps5333-5346.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part039_steps5348-5377.jsonl",
+      "records": 30,
+      "first_step": 5348,
+      "last_step": 5377,
+      "source_segment": "hysteresis_dataset_reconstructed_part039_steps5348-5377.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part040_steps5379-5412.jsonl",
+      "records": 34,
+      "first_step": 5379,
+      "last_step": 5412,
+      "source_segment": "hysteresis_dataset_reconstructed_part040_steps5379-5412.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part041_steps5414-5428.jsonl",
+      "records": 15,
+      "first_step": 5414,
+      "last_step": 5428,
+      "source_segment": "hysteresis_dataset_reconstructed_part041_steps5414-5428.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part042_steps5430-5443.jsonl",
+      "records": 14,
+      "first_step": 5430,
+      "last_step": 5443,
+      "source_segment": "hysteresis_dataset_reconstructed_part042_steps5430-5443.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part043_steps5445-5470.jsonl",
+      "records": 26,
+      "first_step": 5445,
+      "last_step": 5470,
+      "source_segment": "hysteresis_dataset_reconstructed_part043_steps5445-5470.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part044_steps5472-5564.jsonl",
+      "records": 93,
+      "first_step": 5472,
+      "last_step": 5564,
+      "source_segment": "hysteresis_dataset_reconstructed_part044_steps5472-5564.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part045_steps5566-5582.jsonl",
+      "records": 17,
+      "first_step": 5566,
+      "last_step": 5582,
+      "source_segment": "hysteresis_dataset_reconstructed_part045_steps5566-5582.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part046_steps5584-5623.jsonl",
+      "records": 40,
+      "first_step": 5584,
+      "last_step": 5623,
+      "source_segment": "hysteresis_dataset_reconstructed_part046_steps5584-5623.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part047_steps5626-5628.jsonl",
+      "records": 3,
+      "first_step": 5626,
+      "last_step": 5628,
+      "source_segment": "hysteresis_dataset_reconstructed_part047_steps5626-5628.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part048_steps5630-5642.jsonl",
+      "records": 13,
+      "first_step": 5630,
+      "last_step": 5642,
+      "source_segment": "hysteresis_dataset_reconstructed_part048_steps5630-5642.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part049_steps5644-5658.jsonl",
+      "records": 15,
+      "first_step": 5644,
+      "last_step": 5658,
+      "source_segment": "hysteresis_dataset_reconstructed_part049_steps5644-5658.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part050_steps5660-5673.jsonl",
+      "records": 14,
+      "first_step": 5660,
+      "last_step": 5673,
+      "source_segment": "hysteresis_dataset_reconstructed_part050_steps5660-5673.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part051_steps5675-5699.jsonl",
+      "records": 25,
+      "first_step": 5675,
+      "last_step": 5699,
+      "source_segment": "hysteresis_dataset_reconstructed_part051_steps5675-5699.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part052_steps5701-5715.jsonl",
+      "records": 15,
+      "first_step": 5701,
+      "last_step": 5715,
+      "source_segment": "hysteresis_dataset_reconstructed_part052_steps5701-5715.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part053_steps5717-5721.jsonl",
+      "records": 5,
+      "first_step": 5717,
+      "last_step": 5721,
+      "source_segment": "hysteresis_dataset_reconstructed_part053_steps5717-5721.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part054_steps5723-5725.jsonl",
+      "records": 3,
+      "first_step": 5723,
+      "last_step": 5725,
+      "source_segment": "hysteresis_dataset_reconstructed_part054_steps5723-5725.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part055_steps5727-5742.jsonl",
+      "records": 16,
+      "first_step": 5727,
+      "last_step": 5742,
+      "source_segment": "hysteresis_dataset_reconstructed_part055_steps5727-5742.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part056_steps5744-5759.jsonl",
+      "records": 16,
+      "first_step": 5744,
+      "last_step": 5759,
+      "source_segment": "hysteresis_dataset_reconstructed_part056_steps5744-5759.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part057_steps5761-5769.jsonl",
+      "records": 9,
+      "first_step": 5761,
+      "last_step": 5769,
+      "source_segment": "hysteresis_dataset_reconstructed_part057_steps5761-5769.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part058_steps5771-5774.jsonl",
+      "records": 4,
+      "first_step": 5771,
+      "last_step": 5774,
+      "source_segment": "hysteresis_dataset_reconstructed_part058_steps5771-5774.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part059_steps5776-5798.jsonl",
+      "records": 23,
+      "first_step": 5776,
+      "last_step": 5798,
+      "source_segment": "hysteresis_dataset_reconstructed_part059_steps5776-5798.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part060_steps5800-5846.jsonl",
+      "records": 47,
+      "first_step": 5800,
+      "last_step": 5846,
+      "source_segment": "hysteresis_dataset_reconstructed_part060_steps5800-5846.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part061_steps5848-5858.jsonl",
+      "records": 11,
+      "first_step": 5848,
+      "last_step": 5858,
+      "source_segment": "hysteresis_dataset_reconstructed_part061_steps5848-5858.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part062_steps5860-5875.jsonl",
+      "records": 16,
+      "first_step": 5860,
+      "last_step": 5875,
+      "source_segment": "hysteresis_dataset_reconstructed_part062_steps5860-5876.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part063_steps5878-5882.jsonl",
+      "records": 5,
+      "first_step": 5878,
+      "last_step": 5882,
+      "source_segment": "hysteresis_dataset_reconstructed_part063_steps5878-5882.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part064_steps5884-5885.jsonl",
+      "records": 2,
+      "first_step": 5884,
+      "last_step": 5885,
+      "source_segment": "hysteresis_dataset_reconstructed_part064_steps5884-5885.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part065_steps5887-5917.jsonl",
+      "records": 31,
+      "first_step": 5887,
+      "last_step": 5917,
+      "source_segment": "hysteresis_dataset_reconstructed_part065_steps5887-5917.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part066_steps5919-5926.jsonl",
+      "records": 8,
+      "first_step": 5919,
+      "last_step": 5926,
+      "source_segment": "hysteresis_dataset_reconstructed_part066_steps5919-5926.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part067_steps5928-5931.jsonl",
+      "records": 4,
+      "first_step": 5928,
+      "last_step": 5931,
+      "source_segment": "hysteresis_dataset_reconstructed_part067_steps5928-5931.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part068_steps5933-5933.jsonl",
+      "records": 1,
+      "first_step": 5933,
+      "last_step": 5933,
+      "source_segment": "hysteresis_dataset_reconstructed_part068_steps5933-5933.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part069_steps5935-5938.jsonl",
+      "records": 4,
+      "first_step": 5935,
+      "last_step": 5938,
+      "source_segment": "hysteresis_dataset_reconstructed_part069_steps5935-5938.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part070_steps5941-5998.jsonl",
+      "records": 58,
+      "first_step": 5941,
+      "last_step": 5998,
+      "source_segment": "hysteresis_dataset_reconstructed_part070_steps5941-5998.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part071_steps6000-6013.jsonl",
+      "records": 14,
+      "first_step": 6000,
+      "last_step": 6013,
+      "source_segment": "hysteresis_dataset_reconstructed_part071_steps6000-6013.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part072_steps6015-6035.jsonl",
+      "records": 21,
+      "first_step": 6015,
+      "last_step": 6035,
+      "source_segment": "hysteresis_dataset_reconstructed_part072_steps6015-6035.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part073_steps6037-6114.jsonl",
+      "records": 78,
+      "first_step": 6037,
+      "last_step": 6114,
+      "source_segment": "hysteresis_dataset_reconstructed_part073_steps6037-6114.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part074_steps6116-6124.jsonl",
+      "records": 9,
+      "first_step": 6116,
+      "last_step": 6124,
+      "source_segment": "hysteresis_dataset_reconstructed_part074_steps6116-6124.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part075_steps6126-6139.jsonl",
+      "records": 14,
+      "first_step": 6126,
+      "last_step": 6139,
+      "source_segment": "hysteresis_dataset_reconstructed_part075_steps6126-6139.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part076_steps6141-6182.jsonl",
+      "records": 42,
+      "first_step": 6141,
+      "last_step": 6182,
+      "source_segment": "hysteresis_dataset_reconstructed_part076_steps6141-6182.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part077_steps6184-6188.jsonl",
+      "records": 5,
+      "first_step": 6184,
+      "last_step": 6188,
+      "source_segment": "hysteresis_dataset_reconstructed_part077_steps6184-6188.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part078_steps6190-6226.jsonl",
+      "records": 37,
+      "first_step": 6190,
+      "last_step": 6226,
+      "source_segment": "hysteresis_dataset_reconstructed_part078_steps6190-6226.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part079_steps6228-6246.jsonl",
+      "records": 19,
+      "first_step": 6228,
+      "last_step": 6246,
+      "source_segment": "hysteresis_dataset_reconstructed_part079_steps6228-6246.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part080_steps6248-6255.jsonl",
+      "records": 8,
+      "first_step": 6248,
+      "last_step": 6255,
+      "source_segment": "hysteresis_dataset_reconstructed_part080_steps6248-6255.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part081_steps6257-6264.jsonl",
+      "records": 8,
+      "first_step": 6257,
+      "last_step": 6264,
+      "source_segment": "hysteresis_dataset_reconstructed_part081_steps6257-6264.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part082_steps6266-6266.jsonl",
+      "records": 1,
+      "first_step": 6266,
+      "last_step": 6266,
+      "source_segment": "hysteresis_dataset_reconstructed_part082_steps6266-6266.jsonl"
+    },
+    {
+      "file": "hysteresis_dataset_reconstructed_no_axis_outliers_part083_steps6268-6278.jsonl",
+      "records": 11,
+      "first_step": 6268,
+      "last_step": 6278,
+      "source_segment": "hysteresis_dataset_reconstructed_part083_steps6268-6278.jsonl"
+    }
+  ],
+  "source_segments": [
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part001_steps4379-4426.jsonl",
+      "source_records": 48,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part001_steps4379-4426.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part002_steps4428-4440.jsonl",
+      "source_records": 13,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part002_steps4428-4440.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part003_steps4442-4513.jsonl",
+      "source_records": 72,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part003_steps4442-4513.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part004_steps4515-4601.jsonl",
+      "source_records": 87,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part004_steps4515-4601.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part005_steps4603-4611.jsonl",
+      "source_records": 9,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part005_steps4603-4611.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part006_steps4613-4633.jsonl",
+      "source_records": 21,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part006_steps4613-4633.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part007_steps4635-4660.jsonl",
+      "source_records": 26,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part007_steps4635-4660.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part008_steps4662-4674.jsonl",
+      "source_records": 13,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part008_steps4662-4674.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part009_steps4676-4684.jsonl",
+      "source_records": 9,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part009_steps4676-4684.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part010_steps4686-4692.jsonl",
+      "source_records": 7,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part010_steps4686-4692.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part011_steps4694-4714.jsonl",
+      "source_records": 21,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part011_steps4694-4714.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part012_steps4716-4720.jsonl",
+      "source_records": 5,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part012_steps4716-4720.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part013_steps4722-4727.jsonl",
+      "source_records": 6,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part013_steps4722-4727.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part014_steps4729-4731.jsonl",
+      "source_records": 3,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part014_steps4729-4731.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part015_steps4733-4770.jsonl",
+      "source_records": 38,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part015_steps4733-4770.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part016_steps4772-4794.jsonl",
+      "source_records": 23,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part016_steps4772-4794.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part017_steps4796-4825.jsonl",
+      "source_records": 30,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part017_steps4796-4825.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part018_steps4828-4831.jsonl",
+      "source_records": 4,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part018_steps4828-4831.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part019_steps4833-4847.jsonl",
+      "source_records": 15,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part019_steps4833-4847.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part020_steps4849-4849.jsonl",
+      "source_records": 1,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part020_steps4849-4849.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part021_steps4851-4905.jsonl",
+      "source_records": 55,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part021_steps4851-4905.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part022_steps4907-4914.jsonl",
+      "source_records": 8,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part022_steps4907-4914.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part023_steps4916-4945.jsonl",
+      "source_records": 30,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part023_steps4916-4945.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part024_steps4947-4968.jsonl",
+      "source_records": 22,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part024_steps4947-4968.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part025_steps4970-4981.jsonl",
+      "source_records": 12,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part025_steps4970-4981.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part026_steps4983-4991.jsonl",
+      "source_records": 9,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part026_steps4983-4991.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part027_steps4993-5009.jsonl",
+      "source_records": 17,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part027_steps4993-5009.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part028_steps5012-5014.jsonl",
+      "source_records": 3,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part028_steps5012-5014.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part029_steps5016-5034.jsonl",
+      "source_records": 19,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part029_steps5016-5034.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part030_steps5036-5084.jsonl",
+      "source_records": 49,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part030_steps5036-5084.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part031_steps5086-5109.jsonl",
+      "source_records": 24,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part031_steps5086-5109.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part032_steps5111-5190.jsonl",
+      "source_records": 80,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part032_steps5111-5190.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part033_steps5192-5193.jsonl",
+      "source_records": 2,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part033_steps5192-5193.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part034_steps5195-5202.jsonl",
+      "source_records": 8,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part034_steps5195-5202.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part035_steps5204-5267.jsonl",
+      "source_records": 64,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part035_steps5204-5267.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part036_steps5269-5305.jsonl",
+      "source_records": 37,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part036_steps5269-5305.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part037_steps5307-5331.jsonl",
+      "source_records": 25,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part037_steps5307-5331.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part038_steps5333-5346.jsonl",
+      "source_records": 14,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part038_steps5333-5346.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part039_steps5348-5377.jsonl",
+      "source_records": 30,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part039_steps5348-5377.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part040_steps5379-5412.jsonl",
+      "source_records": 34,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part040_steps5379-5412.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part041_steps5414-5428.jsonl",
+      "source_records": 15,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part041_steps5414-5428.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part042_steps5430-5443.jsonl",
+      "source_records": 14,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part042_steps5430-5443.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part043_steps5445-5470.jsonl",
+      "source_records": 26,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part043_steps5445-5470.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part044_steps5472-5564.jsonl",
+      "source_records": 93,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part044_steps5472-5564.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part045_steps5566-5582.jsonl",
+      "source_records": 17,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part045_steps5566-5582.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part046_steps5584-5623.jsonl",
+      "source_records": 40,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part046_steps5584-5623.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part047_steps5626-5628.jsonl",
+      "source_records": 3,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part047_steps5626-5628.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part048_steps5630-5642.jsonl",
+      "source_records": 13,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part048_steps5630-5642.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part049_steps5644-5658.jsonl",
+      "source_records": 15,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part049_steps5644-5658.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part050_steps5660-5673.jsonl",
+      "source_records": 14,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part050_steps5660-5673.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part051_steps5675-5699.jsonl",
+      "source_records": 25,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part051_steps5675-5699.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part052_steps5701-5715.jsonl",
+      "source_records": 15,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part052_steps5701-5715.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part053_steps5717-5721.jsonl",
+      "source_records": 5,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part053_steps5717-5721.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part054_steps5723-5725.jsonl",
+      "source_records": 3,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part054_steps5723-5725.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part055_steps5727-5742.jsonl",
+      "source_records": 16,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part055_steps5727-5742.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part056_steps5744-5759.jsonl",
+      "source_records": 16,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part056_steps5744-5759.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part057_steps5761-5769.jsonl",
+      "source_records": 9,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part057_steps5761-5769.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part058_steps5771-5774.jsonl",
+      "source_records": 4,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part058_steps5771-5774.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part059_steps5776-5798.jsonl",
+      "source_records": 23,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part059_steps5776-5798.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part060_steps5800-5846.jsonl",
+      "source_records": 47,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part060_steps5800-5846.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part061_steps5848-5858.jsonl",
+      "source_records": 11,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part061_steps5848-5858.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part062_steps5860-5876.jsonl",
+      "source_records": 17,
+      "removed_steps": [
+        5876
+      ],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part062_steps5860-5875.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part063_steps5878-5882.jsonl",
+      "source_records": 5,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part063_steps5878-5882.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part064_steps5884-5885.jsonl",
+      "source_records": 2,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part064_steps5884-5885.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part065_steps5887-5917.jsonl",
+      "source_records": 31,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part065_steps5887-5917.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part066_steps5919-5926.jsonl",
+      "source_records": 8,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part066_steps5919-5926.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part067_steps5928-5931.jsonl",
+      "source_records": 4,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part067_steps5928-5931.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part068_steps5933-5933.jsonl",
+      "source_records": 1,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part068_steps5933-5933.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part069_steps5935-5938.jsonl",
+      "source_records": 4,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part069_steps5935-5938.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part070_steps5941-5998.jsonl",
+      "source_records": 58,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part070_steps5941-5998.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part071_steps6000-6013.jsonl",
+      "source_records": 14,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part071_steps6000-6013.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part072_steps6015-6035.jsonl",
+      "source_records": 21,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part072_steps6015-6035.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part073_steps6037-6114.jsonl",
+      "source_records": 78,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part073_steps6037-6114.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part074_steps6116-6124.jsonl",
+      "source_records": 9,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part074_steps6116-6124.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part075_steps6126-6139.jsonl",
+      "source_records": 14,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part075_steps6126-6139.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part076_steps6141-6182.jsonl",
+      "source_records": 42,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part076_steps6141-6182.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part077_steps6184-6188.jsonl",
+      "source_records": 5,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part077_steps6184-6188.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part078_steps6190-6226.jsonl",
+      "source_records": 37,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part078_steps6190-6226.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part079_steps6228-6246.jsonl",
+      "source_records": 19,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part079_steps6228-6246.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part080_steps6248-6255.jsonl",
+      "source_records": 8,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part080_steps6248-6255.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part081_steps6257-6264.jsonl",
+      "source_records": 8,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part081_steps6257-6264.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part082_steps6266-6266.jsonl",
+      "source_records": 1,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part082_steps6266-6266.jsonl"
+      ]
+    },
+    {
+      "source_file": "hysteresis_dataset_reconstructed_part083_steps6268-6278.jsonl",
+      "source_records": 11,
+      "removed_steps": [],
+      "written_files": [
+        "hysteresis_dataset_reconstructed_no_axis_outliers_part083_steps6268-6278.jsonl"
+      ]
+    }
+  ]
+}
