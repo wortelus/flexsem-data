@@ -7,7 +7,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-FILES_ROOT = "../data_original"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+FILES_ROOT = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "data_original"))
 
 FILES = [
     f"{FILES_ROOT}/run33-complex/hysteresis_dataset_20251104_174024.jsonl",
@@ -16,75 +17,45 @@ FILES = [
     f"{FILES_ROOT}/run36-sawtooth-decreasing/hysteresis_dataset_20251118_170631.jsonl",
     f"{FILES_ROOT}/run37-sawtooth-complex-x/hysteresis_dataset_20251128_154751.jsonl",
     f"{FILES_ROOT}/run55-random-walk-20um/hysteresis_dataset_20260210_125219_updated.jsonl",
-    f"{FILES_ROOT}/run70-data-feast-overnight-sub0/hysteresis_dataset_reconstructed.jsonl",
-    f"{FILES_ROOT}/run70-data-feast-overnight-sub1/hysteresis_dataset_reconstructed.jsonl",
-    f"{FILES_ROOT}/run70-data-feast-overnight-sub2/hysteresis_dataset_reconstructed.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part001_steps0000-0055.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part002_steps0057-0093.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part003_steps0095-0177.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part004_steps0179-0183.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part005_steps0185-0202.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part006_steps0204-0327.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part007_steps0329-0342.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part008_steps0344-0354.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part009_steps0356-0372.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part010_steps0374-0375.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part011_steps0377-0432.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part012_steps0434-0457.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part013_steps0459-0620.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part014_steps0622-0682.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part015_steps0684-0755.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part016_steps0757-0797.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part017_steps0799-0823.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part018_steps0825-0906.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part019_steps0908-0921.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part020_steps0923-1057.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part021_steps1059-1076.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part022_steps1078-1112.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part023_steps1114-1230.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part024_steps1232-1234.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part025_steps1236-1278.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part026_steps1280-1314.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part027_steps1316-1318.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part028_steps1320-1334.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part029_steps1336-1414.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part030_steps1416-1431.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part031_steps1433-1441.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part032_steps1443-1452.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part033_steps1454-1454.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part034_steps1456-1461.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part035_steps1463-1504.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part036_steps1506-1541.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part037_steps1543-1687.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part038_steps1689-1714.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part039_steps1716-1775.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part040_steps1777-1780.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part041_steps1782-1870.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part042_steps1872-1904.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part043_steps1906-1983.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part044_steps1985-2108.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part045_steps2110-2152.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part046_steps2154-2162.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part047_steps2164-2353.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part048_steps2355-2392.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part049_steps2394-2404.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part050_steps2406-2491.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part051_steps2493-2531.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part052_steps2533-2566.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part053_steps2568-2607.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part054_steps2609-2621.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part055_steps2623-2631.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part056_steps2633-2671.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part057_steps2673-2688.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part058_steps2690-2762.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part059_steps2764-2820.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part060_steps2822-2904.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part061_steps2906-2974.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part062_steps2976-2996.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part063_steps2998-3031.jsonl",
-    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments/hysteresis_dataset_20260302_234218_clean_updated_part064_steps3033-3035.jsonl",
+    f"{FILES_ROOT}/run70-data-feast-overnight-sub0/confidence_0.8_no_axis_outliers_segments",
+    f"{FILES_ROOT}/run70-data-feast-overnight-sub1/confidence_0.8_no_axis_outliers_segments",
+    f"{FILES_ROOT}/run70-data-feast-overnight-sub2/confidence_0.8_no_axis_outliers_segments",
+    f"{FILES_ROOT}/run71-data-feast-overnight/confidence_0.7_segments",
     f"{FILES_ROOT}/run72-data-feast-overnight/hysteresis_dataset_20260303_203815_updated.jsonl",
 ]
+
+
+def expand_input_paths(paths):
+    expanded = []
+    for raw_path in paths:
+        path = os.path.normpath(raw_path)
+        if os.path.isdir(path):
+            manifest_path = os.path.join(path, "manifest.json")
+            if os.path.exists(manifest_path):
+                try:
+                    with open(manifest_path, "r", encoding="utf-8-sig") as f:
+                        manifest = json.load(f)
+                    segment_files = [
+                        os.path.join(path, segment["file"])
+                        for segment in manifest.get("segments", [])
+                        if "file" in segment
+                    ]
+                except (OSError, json.JSONDecodeError, TypeError) as exc:
+                    print(f"WARNING: Nepodařilo se načíst manifest {manifest_path}: {exc}")
+                    segment_files = []
+            else:
+                segment_files = sorted(glob.glob(os.path.join(path, "*.jsonl")))
+
+            existing = [file_path for file_path in segment_files if os.path.exists(file_path)]
+            missing = [file_path for file_path in segment_files if not os.path.exists(file_path)]
+            if missing:
+                print(f"WARNING: {path} má v manifestu {len(missing)} chybějících segmentů.")
+            if not existing:
+                print(f"WARNING: Adresář {path} neobsahuje žádné JSONL segmenty.")
+            expanded.extend(existing)
+        else:
+            expanded.append(path)
+    return expanded
 
 def load_data(filepath):
     """Nacte JSONL i JSON array soubor do Pandas DataFrame."""
@@ -216,7 +187,7 @@ def main():
     # Zkusíme najít soubory s _MATH_FIX i bez něj
     search_path = "test_only/*.jsonl"
 
-    files = FILES if FILES else glob.glob(search_path)
+    files = expand_input_paths(FILES) if FILES else glob.glob(search_path)
     if not files:
         print(f"Žádné soubory nalezeny v {search_path}")
         return
@@ -224,6 +195,10 @@ def main():
     print(f"Nalezeno {len(files)} souborů.")
 
     for filepath in files:
+        if not os.path.exists(filepath):
+            print(f"Skipping missing file {filepath}")
+            continue
+
         filename = os.path.basename(filepath)
         df = load_data(filepath)
 
