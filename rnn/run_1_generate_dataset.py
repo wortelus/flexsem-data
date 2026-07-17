@@ -1,6 +1,5 @@
 import glob
-from os import makedirs
-from os.path import join, exists, isdir, isfile
+from os.path import join, isdir, isfile
 from pathlib import Path
 
 import joblib
@@ -10,7 +9,7 @@ import torch
 from torch.utils.data import TensorDataset
 
 from rnn.utils.const import SEQUENCE_LENGTH, SEED, EXPERIMENT_DIR, SCALER_PATH, DATASET_DIR, \
-    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE
+    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE, REPO_ROOT, ensure_output_dirs
 
 if INPUT_SIZE == 2:
     from rnn.preprocessing.single import create_windows, scale_data, fit_scalers
@@ -132,6 +131,7 @@ def load_and_split_per_file(all_files):
     train_X_chunks, train_y_chunks = [], []
     val_X_chunks, val_y_chunks = [], []
     test_X_chunks, test_y_chunks = [], []
+    test_meta = []
 
     print("Zpracovávám soubory a dělím separátně...")
 
@@ -189,6 +189,13 @@ def load_and_split_per_file(all_files):
             if len(x_te) > 0:
                 test_X_chunks.append(x_te)
                 test_y_chunks.append(y_te)
+                for window_idx in range(test_start, n_samples):
+                    test_meta.append({
+                        "source_file": file_path,
+                        "window_idx_in_file": window_idx,
+                        "raw_start_idx": window_idx,
+                        "raw_end_idx": window_idx + SEQUENCE_LENGTH - 1,
+                    })
 
         except (ValueError, OSError) as e:
             print(f"Skipping file {file_path}: {e}")
@@ -213,7 +220,7 @@ def load_and_split_per_file(all_files):
     X_test = concat_chunks(test_X_chunks)
     y_test = concat_y(test_y_chunks)
 
-    return (X_train, y_train), (X_val, y_val), (X_test, y_test)
+    return (X_train, y_train), (X_val, y_val), (X_test, y_test), test_meta
 
 
 def plot_windows(X, y, num_windows=5):
@@ -236,17 +243,108 @@ def plot_windows(X, y, num_windows=5):
         plt.show()
 
 
+def inverse_transform_values(data, scaler):
+    original_shape = data.shape
+    flat = data.reshape(-1, 1)
+    inverse_flat = scaler.inverse_transform(flat)
+    return inverse_flat.reshape(original_shape)
+
+
+def print_plotted_window_debug(X_scaled, y_scaled, X_unscaled, y_unscaled, test_meta, plot_index, scaler):
+    if plot_index >= len(X_scaled):
+        print(f"Cannot debug Window {plot_index + 1}: only {len(X_scaled)} plotted test windows available.")
+        return
+
+    meta = test_meta[plot_index] if plot_index < len(test_meta) else None
+    X_inv = inverse_transform_values(X_scaled[plot_index], scaler)
+    y_inv = inverse_transform_values(y_scaled[plot_index], scaler)
+
+    print("\n" + "=" * 80)
+    print(f"DEBUG PLOTTED WINDOW {plot_index + 1}")
+    print("=" * 80)
+    print(f"WINDOW_COORD_MODE/TARGET_MODE are defined in const.py.")
+    if meta:
+        print(f"Source file: {meta['source_file']}")
+        print(f"Window index in file: {meta['window_idx_in_file']}")
+        print(f"Raw rows: {meta['raw_start_idx']}..{meta['raw_end_idx']}")
+
+        try:
+            df = load_dataset_file(meta["source_file"])
+            df = df.sort_values(by='timestamp').reset_index(drop=True)
+            raw_start = meta["raw_start_idx"]
+            raw_end = meta["raw_end_idx"]
+            cols = [
+                "experiment_name",
+                "iteration",
+                "step",
+                "timestamp",
+                "x_target_abs",
+                "y_target_abs",
+                "x_actual_abs",
+                "y_actual_abs",
+                "confidence",
+            ]
+            cols = [col for col in cols if col in df.columns]
+            print("\nRaw trajectory rows:")
+            print(df.loc[raw_start:raw_end, cols].to_string(index=True))
+
+            targets = df[["x_target_abs", "y_target_abs"]].to_numpy(dtype=float)
+            actuals = df[["x_actual_abs", "y_actual_abs"]].to_numpy(dtype=float)
+            target_idx = raw_end
+
+            if target_idx > 0:
+                command_delta = targets[target_idx] - targets[target_idx - 1]
+                actual_delta = actuals[target_idx] - actuals[target_idx - 1]
+                residual_delta = actual_delta - command_delta
+                print("\nLast-step label computation:")
+                print(f"  previous raw row: {target_idx - 1}")
+                print(f"  target raw row:   {target_idx}")
+                print(f"  command_delta = ({command_delta[0]:.1f}, {command_delta[1]:.1f}) nm")
+                print(f"  actual_delta  = ({actual_delta[0]:.1f}, {actual_delta[1]:.1f}) nm")
+                print(f"  residual_delta = actual_delta - command_delta = ({residual_delta[0]:.1f}, {residual_delta[1]:.1f}) nm")
+        except (ValueError, OSError, KeyError) as exc:
+            print(f"Could not print raw trajectory for debug window: {exc}")
+
+    print("\nUnscaled X window values reconstructed from scaler (nm):")
+    if INPUT_SIZE == 4:
+        print("t  target_dx target_dy  prev_actual_dx prev_actual_dy")
+        for t, row in enumerate(X_inv):
+            print(f"{t:2d} {row[0]:10.1f} {row[1]:10.1f} {row[2]:15.1f} {row[3]:15.1f}")
+    else:
+        print("t  dx         dy")
+        for t, row in enumerate(X_inv):
+            print(f"{t:2d} {row[0]:10.1f} {row[1]:10.1f}")
+
+    print("\nScaled X window values used by plot:")
+    if INPUT_SIZE == 4:
+        print("t  X_tx      X_ty      X_ax      X_ay")
+        for t, row in enumerate(X_scaled[plot_index]):
+            print(f"{t:2d} {row[0]:9.6f} {row[1]:9.6f} {row[2]:9.6f} {row[3]:9.6f}")
+    else:
+        print("t  X_x       X_y")
+        for t, row in enumerate(X_scaled[plot_index]):
+            print(f"{t:2d} {row[0]:9.6f} {row[1]:9.6f}")
+
+    print("\nLabel:")
+    print(f"  unscaled y from scaler: ({y_inv[0]:.1f}, {y_inv[1]:.1f}) nm")
+    print(f"  unscaled y before scaler: ({y_unscaled[plot_index, 0]:.1f}, {y_unscaled[plot_index, 1]:.1f}) nm")
+    print(f"  scaled y used by plot: ({y_scaled[plot_index, 0]:.6f}, {y_scaled[plot_index, 1]:.6f})")
+    print("=" * 80 + "\n")
+
+
 def main():
+    ensure_output_dirs()
+
     # determinism
     torch.manual_seed(SEED)
     np.random.seed(SEED)
 
-    all_files = resolve_experiment_files(join("../", EXPERIMENT_DIR), EXPERIMENTS)
+    all_files = resolve_experiment_files(str(REPO_ROOT / EXPERIMENT_DIR), EXPERIMENTS)
     print(f"Found {len(all_files)} dataset files in {EXPERIMENT_DIR}.")
     for file_path in all_files:
         print(f"  {file_path}")
 
-    (X_train_u, y_train_u), (X_val_u, y_val_u), (X_test_u, y_test_u) = load_and_split_per_file(all_files)
+    (X_train_u, y_train_u), (X_val_u, y_val_u), (X_test_u, y_test_u), test_meta = load_and_split_per_file(all_files)
 
     print(f"Train samples: {len(X_train_u)}")
     print(f"Val samples:   {len(X_val_u)}")
@@ -290,8 +388,6 @@ def main():
     print("Datasets created.")
 
     # 6. Uložení
-    if not exists(DATASET_DIR):
-        makedirs(DATASET_DIR)
     torch.save(train_dataset, f"{DATASET_DIR}train{DATASET_POSTFIX}")
     torch.save(val_dataset, f"{DATASET_DIR}val{DATASET_POSTFIX}")
     torch.save(test_dataset, f"{DATASET_DIR}test{DATASET_POSTFIX}")
@@ -301,6 +397,19 @@ def main():
     perm_test = np.random.permutation(len(X_test))
     X_test = X_test[perm_test]
     y_test = y_test[perm_test]
+    X_test_u = X_test_u[perm_test]
+    y_test_u = y_test_u[perm_test]
+    test_meta = [test_meta[i] for i in perm_test]
+
+    print_plotted_window_debug(
+        X_test,
+        y_test,
+        X_test_u,
+        y_test_u,
+        test_meta,
+        plot_index=5,
+        scaler=scaler,
+    )
 
     plot_windows(X_test, y_test, num_windows=10)
 

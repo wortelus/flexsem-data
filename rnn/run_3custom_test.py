@@ -22,6 +22,27 @@ def inverse_transform_helper(data, scaler):
     return data_inv_flat.reshape(original_shape)
 
 
+def to_actual_delta_metrics_space(y_pred_nm, y_true_nm, X_input_nm):
+    if WINDOW_COORD_MODE == "delta":
+        command_delta_nm = X_input_nm[:, -1, 0:2]
+
+        if INVERSE_MODEL:
+            return y_pred_nm, y_true_nm, command_delta_nm, "command_delta"
+
+        if TARGET_MODE == "residual_delta":
+            return (
+                y_pred_nm + command_delta_nm,
+                y_true_nm + command_delta_nm,
+                command_delta_nm,
+                "actual_delta_from_residual_delta",
+            )
+
+        return y_pred_nm, y_true_nm, command_delta_nm, "actual_delta"
+
+    y_pred_naive_nm = X_input_nm[:, -1, 0:2]
+    return y_pred_nm, y_true_nm, y_pred_naive_nm, "relative_position"
+
+
 def load_model(model_path, device):
     model = MODEL(
         input_size=INPUT_SIZE,
@@ -85,22 +106,27 @@ def evaluate_dataset(model, scaler, dataset_path, device):
     y_true_nm = inverse_transform_helper(y_true_scaled, scaler)
     X_input_nm = inverse_transform_helper(X_input_scaled, scaler)
 
-    y_pred_naive_nm = X_input_nm[:, -1, 0:2]
+    y_pred_eval_nm, y_true_eval_nm, y_pred_naive_nm, metric_target = to_actual_delta_metrics_space(
+        y_pred_nm,
+        y_true_nm,
+        X_input_nm,
+    )
 
-    mse = mean_squared_error(y_true_nm, y_pred_nm)
+    mse = mean_squared_error(y_true_eval_nm, y_pred_eval_nm)
     rmse = np.sqrt(mse)
-    mae = mean_absolute_error(y_true_nm, y_pred_nm)
-    r2 = r2_score(y_true_nm, y_pred_nm)
-    nrmse = rmse / (y_true_nm.max() - y_true_nm.min())
-    rmse_x = np.sqrt(mean_squared_error(y_true_nm[:, 0], y_pred_nm[:, 0]))
-    rmse_y = np.sqrt(mean_squared_error(y_true_nm[:, 1], y_pred_nm[:, 1]))
+    mae = mean_absolute_error(y_true_eval_nm, y_pred_eval_nm)
+    r2 = r2_score(y_true_eval_nm, y_pred_eval_nm)
+    nrmse = rmse / (y_true_eval_nm.max() - y_true_eval_nm.min())
+    rmse_x = np.sqrt(mean_squared_error(y_true_eval_nm[:, 0], y_pred_eval_nm[:, 0]))
+    rmse_y = np.sqrt(mean_squared_error(y_true_eval_nm[:, 1], y_pred_eval_nm[:, 1]))
 
-    baseline_rmse = np.sqrt(mean_squared_error(y_true_nm, y_pred_naive_nm))
-    baseline_mae = mean_absolute_error(y_true_nm, y_pred_naive_nm)
-    baseline_r2 = r2_score(y_true_nm, y_pred_naive_nm)
+    baseline_rmse = np.sqrt(mean_squared_error(y_true_eval_nm, y_pred_naive_nm))
+    baseline_mae = mean_absolute_error(y_true_eval_nm, y_pred_naive_nm)
+    baseline_r2 = r2_score(y_true_eval_nm, y_pred_naive_nm)
 
     return {
         "samples": len(dataset),
+        "metric_target": metric_target,
         "rmse_nm": rmse,
         "mae_nm": mae,
         "r2": r2,
@@ -114,6 +140,8 @@ def evaluate_dataset(model, scaler, dataset_path, device):
 
 
 def main():
+    ensure_output_dirs()
+
     torch.manual_seed(SEED)
     np.random.seed(SEED)
 
@@ -163,6 +191,7 @@ def main():
         print(f"Source: {source_file}")
         print(f"Dataset: {dataset_path}")
         print(f"Samples: {metrics['samples']}")
+        print(f"Metric target: {metrics['metric_target']}")
         print(f"Model RMSE: {metrics['rmse_nm']:.4f} nm")
         print(f"Model MAE:  {metrics['mae_nm']:.4f} nm")
         print(f"Model R2:   {metrics['r2']:.4f}")
@@ -179,6 +208,7 @@ def main():
         "source_file",
         "dataset_path",
         "samples",
+        "metric_target",
         "rmse_nm",
         "mae_nm",
         "r2",

@@ -4,6 +4,7 @@ Compatible with PyTorch 2.x and ONNX Runtime inference.
 """
 
 import numpy as np
+from pathlib import Path
 import torch
 import onnx
 import onnxruntime as ort
@@ -11,7 +12,7 @@ import onnxruntime as ort
 from rnn.utils.const import *
 
 MODEL_PATH = MODEL_SAVE_PATH + ".best"
-ONNX_PATH = "export/model.onnx"
+ONNX_PATH = str(EXPORT_DIR / "model.onnx")
 
 
 def load_model(model_path, device):
@@ -40,6 +41,8 @@ def load_model(model_path, device):
 
 
 def export_onnx(model, device):
+    Path(ONNX_PATH).parent.mkdir(parents=True, exist_ok=True)
+
     # Dummy input with batch size 1 (will be dynamic)
     dummy_input = torch.randn(1, SEQUENCE_LENGTH, INPUT_SIZE, device=device)
 
@@ -121,6 +124,8 @@ def benchmark_onnx():
 
 
 def main():
+    ensure_output_dirs()
+
     device = torch.device("cpu")
 
     print("Loading model...")

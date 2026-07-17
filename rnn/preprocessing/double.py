@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
-from rnn.utils.const import INVERSE_MODEL
+from rnn.utils.const import INVERSE_MODEL, TARGET_MODE, WINDOW_COORD_MODE
 
 
 def create_windows(df, window_size, min_confidence):
@@ -55,12 +55,31 @@ def create_windows(df, window_size, min_confidence):
                 target_Y_abs = true_actuals[i + window_size - 1]  # predict = actual position
 
             seq_abs = combined_data[i: i + window_size].copy()
-            ref_full = np.hstack([ref_X, ref_X])
-            seq_rel = seq_abs - ref_full
-            target_Y_rel = target_Y_abs - ref_X
+            if WINDOW_COORD_MODE == "relative":
+                ref_full = np.hstack([ref_X, ref_X])
+                seq_X = seq_abs - ref_full
+                target_Y = target_Y_abs - ref_X
+            elif WINDOW_COORD_MODE == "delta":
+                seq_X = np.zeros_like(seq_abs)
+                seq_X[1:] = np.diff(seq_abs, axis=0)
+                if window_size == 1:
+                    target_Y = np.zeros(2, dtype=target_Y_abs.dtype)
+                elif INVERSE_MODEL:
+                    target_Y = target_Y_abs - targets[i + window_size - 2]
+                else:
+                    actual_delta = target_Y_abs - true_actuals[i + window_size - 2]
+                    if TARGET_MODE == "actual_delta":
+                        target_Y = actual_delta
+                    elif TARGET_MODE == "residual_delta":
+                        command_delta = targets[i + window_size - 1] - targets[i + window_size - 2]
+                        target_Y = actual_delta - command_delta
+                    else:
+                        raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
+            else:
+                raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
 
-            all_rel_X_windows.append(seq_rel)
-            all_rel_Y_targets.append(target_Y_rel)
+            all_rel_X_windows.append(seq_X)
+            all_rel_Y_targets.append(target_Y)
 
     except Exception as e:
         print(f"Reading error in DataFrame processing: {e}")
@@ -68,7 +87,8 @@ def create_windows(df, window_size, min_confidence):
     if not all_rel_X_windows:
         raise ValueError("No valid data found after filtering out low-confidence windows.")
 
-    print(f"Created {len(all_rel_X_windows)} windows of size {window_size} after filtering out {n_low_conf} low-confidence windows.")
+    print(
+        f"Created {len(all_rel_X_windows)} windows of size {window_size} after filtering out {n_low_conf} low-confidence windows.")
 
     return np.array(all_rel_X_windows), np.array(all_rel_Y_targets)
 
@@ -87,7 +107,7 @@ def fit_scalers(X_data, Y_data):
     scaler_global = MinMaxScaler(feature_range=(-1, 1))
     scaler_global.fit(all_values)
 
-    print("Scalers fit completed on relative data (Input features: 4).")
+    print(f"Scalers fit completed on {WINDOW_COORD_MODE} data (Input features: 4).")
 
     return scaler_global
 

@@ -1,7 +1,6 @@
 import json
 import re
-from os import makedirs
-from os.path import exists, join
+from os.path import join
 from pathlib import Path
 
 import joblib
@@ -11,7 +10,7 @@ from torch.utils.data import TensorDataset
 
 from rnn.run_1_generate_dataset import load_dataset_file, report_dataset_sanity, resolve_experiment_files
 from rnn.utils.const import SEQUENCE_LENGTH, SEED, EXPERIMENT_DIR, SCALER_PATH, DATASET_DIR, \
-    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE
+    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE, REPO_ROOT, ensure_output_dirs
 
 if INPUT_SIZE == 2:
     from rnn.preprocessing.single import create_windows, scale_data, fit_scalers
@@ -26,22 +25,22 @@ else:
 
 # Train/val sources are split per file into train and validation only.
 TRAIN_VAL_EXPERIMENTS = [
+    "run72-data-feast-overnight/hysteresis_dataset_20260303_203815_updated.jsonl",
+]
+
+# Test sources are not mixed together. Every resolved JSONL file is saved as
+# its own test TensorDataset under TEST_DATASET_DIR.
+TEST_EXPERIMENTS = [
     "run33-complex/hysteresis_dataset_20251104_174024.jsonl",
     "run34-random678mag/hysteresis_dataset_20251114_102017.jsonl",
     "run35-random9-11-12/hysteresis_dataset_20251114_125908.jsonl",
     "run36-sawtooth-decreasing/hysteresis_dataset_20251118_170631.jsonl",
     "run37-sawtooth-complex-x/hysteresis_dataset_20251128_154751.jsonl",
     "run55-random-walk-20um/hysteresis_dataset_20260210_125219_updated.jsonl",
-]
-
-# Test sources are not mixed together. Every resolved JSONL file is saved as
-# its own test TensorDataset under TEST_DATASET_DIR.
-TEST_EXPERIMENTS = [
     "run70-data-feast-overnight-sub0/confidence_0.8_no_axis_outliers_segments",
     "run70-data-feast-overnight-sub1/confidence_0.8_no_axis_outliers_segments",
     "run70-data-feast-overnight-sub2/confidence_0.8_no_axis_outliers_segments",
     "run71-data-feast-overnight/confidence_0.7_segments",
-    "run72-data-feast-overnight/hysteresis_dataset_20260303_203815_updated.jsonl",
 ]
 
 TEST_DATASET_DIR = join(DATASET_DIR, "test_custom")
@@ -122,7 +121,7 @@ def load_train_val_split(all_files):
 def safe_dataset_name(file_path):
     rel = Path(file_path)
     try:
-        rel = rel.relative_to(EXPERIMENT_DIR)
+        rel = rel.resolve().relative_to((REPO_ROOT / EXPERIMENT_DIR).resolve())
     except ValueError:
         pass
 
@@ -153,7 +152,7 @@ def save_separate_test_datasets(test_files, scaler):
             dataset = to_tensor_dataset(X_test, y_test)
 
             dataset_name = safe_dataset_name(file_path)
-            dataset_path = f"{TEST_DATASET_DIR}{dataset_name}{DATASET_POSTFIX}"
+            dataset_path = join(TEST_DATASET_DIR, f"{dataset_name}{DATASET_POSTFIX}")
             torch.save(dataset, dataset_path)
 
             manifest.append({
@@ -175,10 +174,12 @@ def save_separate_test_datasets(test_files, scaler):
 
 
 def main():
+    ensure_output_dirs()
+
     torch.manual_seed(SEED)
     np.random.seed(SEED)
 
-    root_dir = join("../", EXPERIMENT_DIR)
+    root_dir = str(REPO_ROOT / EXPERIMENT_DIR)
 
     train_val_files = resolve_experiment_files(root_dir, TRAIN_VAL_EXPERIMENTS)
     test_files = resolve_experiment_files(root_dir, TEST_EXPERIMENTS)
@@ -215,9 +216,6 @@ def main():
 
     train_dataset = to_tensor_dataset(X_train, y_train)
     val_dataset = to_tensor_dataset(X_val, y_val)
-
-    if not exists(DATASET_DIR):
-        makedirs(DATASET_DIR)
 
     torch.save(train_dataset, f"{DATASET_DIR}train{DATASET_POSTFIX}")
     torch.save(val_dataset, f"{DATASET_DIR}val{DATASET_POSTFIX}")

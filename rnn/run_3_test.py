@@ -27,20 +27,39 @@ def inverse_transform_helper(data, scaler):
     return data_inv_flat.reshape(original_shape)
 
 
-def evaluate_naive_guess(X_data_nm, y_true_nm):
-    # X_data_nm shape: (N_samples, Window_Size, Features)
-    # Features INPUT_SIZE=4: [Target_X, Target_Y, Prev_Actual_X, Prev_Actual_Y]
+def to_actual_delta_metrics_space(y_pred_nm, y_true_nm, X_input_nm):
+    if WINDOW_COORD_MODE == "delta":
+        command_delta_nm = X_input_nm[:, -1, 0:2]
 
-    if INVERSE_MODEL:
+        if INVERSE_MODEL:
+            return y_pred_nm, y_true_nm, command_delta_nm, "command_delta"
+
+        if TARGET_MODE == "residual_delta":
+            return (
+                y_pred_nm + command_delta_nm,
+                y_true_nm + command_delta_nm,
+                command_delta_nm,
+                "actual_delta_from_residual_delta",
+            )
+
+        return y_pred_nm, y_true_nm, command_delta_nm, "actual_delta"
+
+    y_pred_naive_nm = X_input_nm[:, -1, 0:2]
+    return y_pred_nm, y_true_nm, y_pred_naive_nm, "relative_position"
+
+
+def evaluate_naive_guess(y_pred_naive_nm, y_true_nm):
+    if WINDOW_COORD_MODE == "delta":
+        print("\n--- Delta Baseline (assume actual delta follows command delta) ---")
+    elif INVERSE_MODEL:
         print("\n--- 'No Compensation' Baseline (send desired position as command directly) ---")
     else:
         print("\n--- 'Command' Baseline (assume system follows command perfectly) ---")
 
-    # Last time step's Target as prediction
-    # Indices 0 a 1 are Target X a Target Y
-    y_pred_naive_nm = X_data_nm[:, -1, 0:2]
-
-    print("That is, if we would assume the system perfectly follows the command input.")
+    if WINDOW_COORD_MODE == "delta":
+        print("That is, if we would assume the system perfectly follows the last command delta.")
+    else:
+        print("That is, if we would assume the system perfectly follows the command input.")
 
     rmse_naive = np.sqrt(mean_squared_error(y_true_nm, y_pred_naive_nm))
     nrmse = rmse_naive / (y_true_nm.max() - y_true_nm.min())
@@ -57,7 +76,10 @@ def evaluate_naive_guess(X_data_nm, y_true_nm):
     plt.suptitle(f"Baseline (Command = Output)", fontsize=14)
     # Plot only a slice to make it visible
     limit = 200
-    if INVERSE_MODEL:
+    if WINDOW_COORD_MODE == "delta":
+        plt.plot(y_true_nm[:limit, 0], label='True Actual Delta (X)', color='blue', alpha=0.8)
+        plt.plot(y_pred_naive_nm[:limit, 0], label='Command Delta (X)', color='green', alpha=0.8)
+    elif INVERSE_MODEL:
         plt.plot(y_true_nm[:limit, 0], label='True Command (X)', color='blue', alpha=0.8)
         plt.plot(y_pred_naive_nm[:limit, 0], label='Desired Pos (no compensation)', color='green', alpha=0.8)
     else:
@@ -66,11 +88,14 @@ def evaluate_naive_guess(X_data_nm, y_true_nm):
     plt.title('Baseline: Command vs Reality (First 200 samples)')
     plt.legend()
     plt.grid(True, alpha=0.3)
-    plt.savefig("temp/command_baseline.png")
+    PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+    plt.savefig(PLOTS_DIR / "command_baseline.png")
     print("Baseline plot saved.")
 
 
 def evaluate():
+    ensure_output_dirs()
+
     # 1. Setup
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -144,33 +169,37 @@ def evaluate():
     y_true_nm = inverse_transform_helper(y_true_scaled, scaler)
     X_input_nm = inverse_transform_helper(X_input_scaled, scaler)
 
+    y_pred_eval_nm, y_true_eval_nm, y_pred_naive_nm, metric_target = to_actual_delta_metrics_space(
+        y_pred_nm,
+        y_true_nm,
+        X_input_nm,
+    )
+    print(f"Metric target: {metric_target}")
+
     # 7. Evaluate Baseline
-    evaluate_naive_guess(X_input_nm, y_true_nm)
+    evaluate_naive_guess(y_pred_naive_nm, y_true_eval_nm)
 
     # 8. Model Metrics
     print("\n--- Model Metrics (Nanometers) ---")
-    rmse = np.sqrt(mean_squared_error(y_true_nm, y_pred_nm))
-    mae = mean_absolute_error(y_true_nm, y_pred_nm)
-    r2 = r2_score(y_true_nm, y_pred_nm)
-    nrmse = rmse / (y_true_nm.max() - y_true_nm.min())
+    rmse = np.sqrt(mean_squared_error(y_true_eval_nm, y_pred_eval_nm))
+    mae = mean_absolute_error(y_true_eval_nm, y_pred_eval_nm)
+    r2 = r2_score(y_true_eval_nm, y_pred_eval_nm)
+    nrmse = rmse / (y_true_eval_nm.max() - y_true_eval_nm.min())
 
     print(f"Overall R²:     {r2:.4f}")
     print(f"Overall RMSE:    {rmse:.4f} nm")
     print(f"Overall MAE:     {mae:.4f} nm")
     print(f"Overall NRMSE:   {nrmse:.4%}")
 
-    rmse_x = np.sqrt(mean_squared_error(y_true_nm[:, 0], y_pred_nm[:, 0]))
-    rmse_y = np.sqrt(mean_squared_error(y_true_nm[:, 1], y_pred_nm[:, 1]))
+    rmse_x = np.sqrt(mean_squared_error(y_true_eval_nm[:, 0], y_pred_eval_nm[:, 0]))
+    rmse_y = np.sqrt(mean_squared_error(y_true_eval_nm[:, 1], y_pred_eval_nm[:, 1]))
 
     print(f"X RMSE: {rmse_x:.4f} nm")
     print(f"Y RMSE: {rmse_y:.4f} nm")
 
     # 9. Plotting
-    if not os.path.exists("temp"):
-        os.makedirs("temp")
-
     # Error Histogram
-    errors_nm = y_true_nm - y_pred_nm
+    errors_nm = y_true_eval_nm - y_pred_eval_nm
     plt.figure(figsize=(15, 10))
 
     plt.subplot(3, 2, 1)
@@ -182,9 +211,9 @@ def evaluate():
 
     # Scatter
     plt.subplot(3, 2, 2)
-    plt.scatter(y_true_nm[:, 0], y_pred_nm[:, 0], s=7, alpha=0.5, label='X')
-    plt.scatter(y_true_nm[:, 1], y_pred_nm[:, 1], s=7, alpha=0.5, label='Y')
-    plt.plot([y_true_nm.min(), y_true_nm.max()], [y_true_nm.min(), y_true_nm.max()], 'r--')
+    plt.scatter(y_true_eval_nm[:, 0], y_pred_eval_nm[:, 0], s=7, alpha=0.5, label='X')
+    plt.scatter(y_true_eval_nm[:, 1], y_pred_eval_nm[:, 1], s=7, alpha=0.5, label='Y')
+    plt.plot([y_true_eval_nm.min(), y_true_eval_nm.max()], [y_true_eval_nm.min(), y_true_eval_nm.max()], 'r--')
     plt.title('True vs Predicted')
     plt.xlabel('True [nm]')
     plt.ylabel('Pred [nm]')
@@ -194,11 +223,12 @@ def evaluate():
     slice_idx = slice(0, 300)  # Zobrazit prvních 300 bodů
     # plt.plot(y_true_nm[slice_idx, 0], label='True X', color='black', linewidth=2)
     # plt.plot(y_pred_nm[slice_idx, 0], label='Pred X', color='red', linestyle='--')
-    plt.plot(np.abs(y_true_nm[slice_idx, 0] - y_pred_nm[slice_idx, 0]), label='Abs Error X', color='blue',
+    plt.plot(np.abs(y_true_eval_nm[slice_idx, 0] - y_pred_eval_nm[slice_idx, 0]), label='Abs Error X', color='blue',
              linestyle=':')
     # Můžeme přidat i Target pro kontext
     # plt.plot(X_input_nm[slice_idx, -1, 0], label='Command X', color='green', alpha=0.3)
-    plt.plot(np.abs(y_true_nm[slice_idx, 0] - X_input_nm[slice_idx, -1, 0]), label='Abs Command Error X',
+    baseline_label_x = 'Abs Command Delta Error X' if WINDOW_COORD_MODE == "delta" else 'Abs Command Error X'
+    plt.plot(np.abs(y_true_eval_nm[slice_idx, 0] - y_pred_naive_nm[slice_idx, 0]), label=baseline_label_x,
              color='orange', linestyle='-.')
     plt.title('Detail: First 300 samples (X Axis)')
     plt.legend()
@@ -209,9 +239,10 @@ def evaluate():
     plt.subplot(3, 1, 3)
     # plt.plot(y_true_nm[slice_idx, 1], label='True Y', color='black', linewidth=2)
     # plt.plot(y_pred_nm[slice_idx, 1], label='Pred Y', color='red', linestyle='--')
-    plt.plot(np.abs(y_true_nm[slice_idx, 1] - y_pred_nm[slice_idx, 1]), label='Abs Error Y', color='blue',
+    plt.plot(np.abs(y_true_eval_nm[slice_idx, 1] - y_pred_eval_nm[slice_idx, 1]), label='Abs Error Y', color='blue',
              linestyle=':')
-    plt.plot(np.abs(y_true_nm[slice_idx, 1] - X_input_nm[slice_idx, -1, 1]), label='Abs Command Error Y',
+    baseline_label_y = 'Abs Command Delta Error Y' if WINDOW_COORD_MODE == "delta" else 'Abs Command Error Y'
+    plt.plot(np.abs(y_true_eval_nm[slice_idx, 1] - y_pred_naive_nm[slice_idx, 1]), label=baseline_label_y,
              color='orange', linestyle='-.')
     # plt.plot(X_input_nm[slice_idx, -1, 1], label='Command Y', color='green', alpha=0.3)
     plt.title('Detail: First 300 samples (Y Axis)')
@@ -220,8 +251,10 @@ def evaluate():
     plt.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("temp/evaluation_metrics.png")
-    print("\nPlots saved to 'temp/evaluation_metrics.png'")
+    PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+    metrics_plot_path = PLOTS_DIR / "evaluation_metrics.png"
+    plt.savefig(metrics_plot_path)
+    print(f"\nPlots saved to '{metrics_plot_path}'")
 
 
 if __name__ == "__main__":

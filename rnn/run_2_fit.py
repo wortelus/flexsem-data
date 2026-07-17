@@ -1,6 +1,6 @@
-import os
 import random
 
+import joblib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -11,6 +11,8 @@ from rnn.utils.const import *
 
 def main():
     try:
+        ensure_output_dirs()
+
         # determinism
         torch.manual_seed(SEED)
         np.random.seed(SEED)
@@ -50,7 +52,8 @@ def main():
         print("Compiling model...")
         model = torch.compile(model)
 
-        criterion = CRITERION
+        scaler = joblib.load(SCALER_PATH) if LOSS_MODE == "relative_mse" else None
+        criterion = make_criterion(scaler).to(device)
         optimizer = OPTIMIZER(model.parameters(), lr=LEARNING_RATE)
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer,
@@ -142,9 +145,8 @@ def main():
         plt.legend()
         plt.grid(True, linestyle='--', alpha=0.6)
 
-        # Ensure 'temp' directory exists
-        os.makedirs('temp', exist_ok=True)
-        plot_filename = "temp/training_loss_plot.png"
+        PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+        plot_filename = str(PLOTS_DIR / "training_loss.png")
         plt.savefig(plot_filename)
         print(f"Training plot saved to: {plot_filename}")
 

@@ -1,7 +1,11 @@
+import json
+from pathlib import Path
+
 import torch
 
 from rnn.models.model_gru import HysteresisGRU
 from rnn.models.model_transformer import HysteresisTransformer
+from rnn.utils.loss import RelativeMSELoss
 
 # Seed for reproducibility (numpy, torch, etc.)
 SEED = 10
@@ -19,9 +23,25 @@ MODEL = HysteresisGRU
 
 INVERSE_MODEL = False
 
+# Window coordinate representation:
+# - "relative": positions are anchored to the first point in each window
+# - "delta": first row is zero, following rows are per-step deltas
+WINDOW_COORD_MODE = "delta"
+if WINDOW_COORD_MODE not in ("relative", "delta"):
+    raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
+
+# Prediction target:
+# - "actual_delta": predict actual motion, current behavior
+# - "residual_delta": predict actual_delta - command_delta, only for forward delta models
+TARGET_MODE = "actual_delta"
+if TARGET_MODE not in ("actual_delta", "residual_delta"):
+    raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
+if TARGET_MODE == "residual_delta" and (INVERSE_MODEL or WINDOW_COORD_MODE != "delta"):
+    raise ValueError("TARGET_MODE='residual_delta' is only supported for forward delta models")
+
 # LSTM/GRU parameters
 SEQUENCE_LENGTH = 16
-HIDDEN_SIZE = 32
+HIDDEN_SIZE = 64
 NUM_LAYERS = 1
 BIDIRECTIONAL = False
 INPUT_SIZE = 4  # fixed
@@ -31,39 +51,124 @@ OUTPUT_SIZE = 2  # fixed
 N_HEADS = 8
 
 # Loss function
-CRITERION = torch.nn.MSELoss()
+# - "mse": standard absolute-error MSE in the scaled target space
+# - "relative_mse": MSE weighted by target vector magnitude in nm
+LOSS_MODE = "mse"
+RELATIVE_LOSS_EPS = 10000.0
+
+
+def make_criterion(scaler=None):
+    if LOSS_MODE == "mse":
+        return torch.nn.MSELoss()
+    if LOSS_MODE == "relative_mse":
+        if scaler is None:
+            raise ValueError("relative_mse requires a fitted scaler")
+        return RelativeMSELoss(eps_nm=RELATIVE_LOSS_EPS, scaler=scaler)
+    raise ValueError(f"Unsupported LOSS_MODE: {LOSS_MODE}")
+
 
 # Training parameters
 OPTIMIZER = torch.optim.Adam
-EPOCHS = 1000
-BATCH_SIZE = 32
+EPOCHS = 2000
+BATCH_SIZE = 16
 
 # Scheduler parameters
 LEARNING_RATE = 0.0005
 SCHEDULER_PATIENCE = 50
 SCHEDULER_FACTOR = 0.5
-SCHEDULER_THRESHOLD = 1e-6
+SCHEDULER_THRESHOLD = 1e-4
 SCHEDULER_MIN_LR = 1e-7
 
-DROPOUT = 0.1
+DROPOUT = 0.0
 
 #
 # Directories and file paths
 #
 
+RNN_DIR = Path(__file__).resolve().parents[1]
+REPO_ROOT = RNN_DIR.parent
+
 # Raw data source
 EXPERIMENT_DIR = "data_original"
 
-# Split & processed dataset directory
-DATASET_DIR = 'temp/dataset/'
-DATASET_POSTFIX = f'_{"inverse" if INVERSE_MODEL else "forward"}_dataset.pt'
-
-# Model output paths
 _model = 'transformer' \
     if MODEL == HysteresisTransformer \
     else 'gru' if MODEL == HysteresisGRU \
     else 'lstm'
-_prefix = f"{"inverse " if INVERSE_MODEL else "forward"}_{_model}_h{HIDDEN_SIZE}_l{NUM_LAYERS}_b{int(BIDIRECTIONAL)}_seq{SEQUENCE_LENGTH}_nh{N_HEADS if _model == 'transformer' else 0}"
+_direction = "inverse" if INVERSE_MODEL else "forward"
+_heads = N_HEADS if _model == "transformer" else 0
 
-SCALER_PATH = 'temp/scaler_relative.gz'
-MODEL_SAVE_PATH = f'temp/{_prefix}_model.pt'
+
+def _path_token(value):
+    return str(value).replace("-", "m").replace(".", "p")
+
+
+_loss_tag = "mse" if LOSS_MODE == "mse" else f"relative_mse_eps{_path_token(int(RELATIVE_LOSS_EPS))}"
+
+RUN_NAME = (
+    f"{_direction}_{_model}"
+    f"_h{HIDDEN_SIZE}_l{NUM_LAYERS}_b{int(BIDIRECTIONAL)}"
+    f"_seq{SEQUENCE_LENGTH}_{WINDOW_COORD_MODE}_{TARGET_MODE}"
+    f"_nh{_heads}_{_loss_tag}"
+    f"_bs{BATCH_SIZE}_lr{_path_token(LEARNING_RATE)}"
+    f"_do{_path_token(DROPOUT)}_seed{SEED}"
+)
+
+OUTPUT_ROOT = RNN_DIR / "outputs"
+RUN_DIR = OUTPUT_ROOT / RUN_NAME
+DATASET_DIR_PATH = RUN_DIR / "dataset"
+MODEL_DIR = RUN_DIR / "models"
+SCALER_DIR = RUN_DIR / "scalers"
+PLOTS_DIR = RUN_DIR / "plots"
+EXPORT_DIR = RUN_DIR / "export"
+
+# Backwards-compatible alias for older scripts that still import TEMP_DIR.
+TEMP_DIR = RUN_DIR
+
+# Split & processed dataset paths. DATASET_DIR stays string-compatible with
+# existing f"{DATASET_DIR}train{DATASET_POSTFIX}" call sites.
+DATASET_DIR = str(DATASET_DIR_PATH) + "/"
+DATASET_POSTFIX = ".pt"
+
+SCALER_PATH = str(SCALER_DIR / "scaler.gz")
+MODEL_SAVE_PATH = str(MODEL_DIR / "model.pt")
+RUN_CONFIG_PATH = RUN_DIR / "config.json"
+
+RUN_CONFIG = {
+    "seed": SEED,
+    "train_split": TRAIN_SPLIT,
+    "min_confidence": MIN_CONFIDENCE,
+    "model": _model,
+    "inverse_model": INVERSE_MODEL,
+    "window_coord_mode": WINDOW_COORD_MODE,
+    "target_mode": TARGET_MODE,
+    "sequence_length": SEQUENCE_LENGTH,
+    "hidden_size": HIDDEN_SIZE,
+    "num_layers": NUM_LAYERS,
+    "bidirectional": BIDIRECTIONAL,
+    "input_size": INPUT_SIZE,
+    "output_size": OUTPUT_SIZE,
+    "n_heads": N_HEADS,
+    "loss_mode": LOSS_MODE,
+    "relative_loss_eps": RELATIVE_LOSS_EPS,
+    "optimizer": OPTIMIZER.__name__,
+    "epochs": EPOCHS,
+    "batch_size": BATCH_SIZE,
+    "learning_rate": LEARNING_RATE,
+    "scheduler_patience": SCHEDULER_PATIENCE,
+    "scheduler_factor": SCHEDULER_FACTOR,
+    "scheduler_threshold": SCHEDULER_THRESHOLD,
+    "scheduler_min_lr": SCHEDULER_MIN_LR,
+    "dropout": DROPOUT,
+    "experiment_dir": EXPERIMENT_DIR,
+}
+
+
+def ensure_output_dirs():
+    for directory in (DATASET_DIR_PATH, MODEL_DIR, SCALER_DIR, PLOTS_DIR, EXPORT_DIR):
+        directory.mkdir(parents=True, exist_ok=True)
+
+    RUN_CONFIG_PATH.write_text(
+        json.dumps(RUN_CONFIG, indent=2, sort_keys=True),
+        encoding="utf-8",
+    )

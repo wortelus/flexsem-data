@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-from rnn.utils.const import INVERSE_MODEL
+from rnn.utils.const import INVERSE_MODEL, TARGET_MODE, WINDOW_COORD_MODE
 
 
 def load_and_concat_files(file_paths):
@@ -50,17 +50,41 @@ def create_windows(df, window_size):
 
             # (window_size, 2)
             seq_X_abs = inputs[i: i + window_size]
-            seq_X_rel = seq_X_abs - ref_X
+            if WINDOW_COORD_MODE == "relative":
+                seq_X = seq_X_abs - ref_X
+            elif WINDOW_COORD_MODE == "delta":
+                seq_X = np.zeros_like(seq_X_abs)
+                seq_X[1:] = np.diff(seq_X_abs, axis=0)
+            else:
+                raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
 
             # Target Y
             # Last point in window
             # (2,)
-            target_Y_abs = outputs[i + window_size - 1]
-            target_Y_rel = target_Y_abs - ref_X
+            target_idx = i + window_size - 1
+            target_Y_abs = outputs[target_idx]
+            if WINDOW_COORD_MODE == "relative":
+                target_Y = target_Y_abs - ref_X
+            elif WINDOW_COORD_MODE == "delta":
+                if window_size == 1:
+                    target_Y = np.zeros(2, dtype=target_Y_abs.dtype)
+                elif INVERSE_MODEL:
+                    target_Y = target_Y_abs - outputs[target_idx - 1]
+                else:
+                    actual_delta = target_Y_abs - outputs[target_idx - 1]
+                    if TARGET_MODE == "actual_delta":
+                        target_Y = actual_delta
+                    elif TARGET_MODE == "residual_delta":
+                        command_delta = inputs[target_idx] - inputs[target_idx - 1]
+                        target_Y = actual_delta - command_delta
+                    else:
+                        raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
+            else:
+                raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
 
             # Save the window and target
-            all_rel_X_windows.append(seq_X_rel)
-            all_rel_Y_targets.append(target_Y_rel)
+            all_rel_X_windows.append(seq_X)
+            all_rel_Y_targets.append(target_Y)
 
     except Exception as e:
         print(f"Reading error in DataFrame processing: {e}")
@@ -83,7 +107,7 @@ def fit_scalers(X_data, Y_data):
     scaler_global = MinMaxScaler(feature_range=(-1, 1))
     scaler_global.fit(all_values)
 
-    print("Scaler fit completed on relative data (Input features: 2).")
+    print(f"Scaler fit completed on {WINDOW_COORD_MODE} data (Input features: 2).")
     return scaler_global
 
 
