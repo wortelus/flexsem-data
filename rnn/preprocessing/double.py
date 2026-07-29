@@ -43,87 +43,83 @@ def create_windows(df, window_size, min_confidence):
     all_rel_Y_targets = []
 
     n_low_conf = 0
-    try:
-        for segment in _iter_segments(df):
-            if len(segment) < window_size:
+    for segment in _iter_segments(df):
+        if len(segment) < window_size:
+            continue
+
+        # 1. Prepare raw data (N, 2). Previous values are segment-local;
+        # the first row uses itself, producing zero previous-delta.
+        if INVERSE_MODEL:
+            _fill_previous_from_current(segment, 'prev_x_target', 'x_target_abs')
+            _fill_previous_from_current(segment, 'prev_y_target', 'y_target_abs')
+
+            actuals = segment[['x_actual_abs', 'y_actual_abs']].values  # "desired positions"
+            targets = segment[['x_target_abs', 'y_target_abs']].values  # "commands needed"
+            prev_targets = segment[['prev_x_target', 'prev_y_target']].values
+
+            # Combined: [actual_x, actual_y, prev_target_x, prev_target_y]
+            combined_data = np.hstack([actuals, prev_targets])
+        else:
+            _fill_previous_from_current(segment, 'prev_x_actual', 'x_actual_abs')
+            _fill_previous_from_current(segment, 'prev_y_actual', 'y_actual_abs')
+            true_actuals = segment[['x_actual_abs', 'y_actual_abs']].values
+
+            targets = segment[['x_target_abs', 'y_target_abs']].values
+            prev_actuals = segment[['prev_x_actual', 'prev_y_actual']].values
+
+            combined_data = np.hstack([targets, prev_actuals])
+
+        # confidences as numpy array for fast indexing
+        confidences = segment['confidence'].astype(float).values
+
+        n_samples = len(combined_data)
+        for i in range(n_samples - window_size + 1):
+
+            window_conf = confidences[i: i + window_size]
+            if np.any(window_conf < min_confidence):
+                n_low_conf += 1
                 continue
 
-            # 1. Prepare raw data (N, 2). Previous values are segment-local;
-            # the first row uses itself, producing zero previous-delta.
             if INVERSE_MODEL:
-                _fill_previous_from_current(segment, 'prev_x_target', 'x_target_abs')
-                _fill_previous_from_current(segment, 'prev_y_target', 'y_target_abs')
-
-                actuals = segment[['x_actual_abs', 'y_actual_abs']].values  # "desired positions"
-                targets = segment[['x_target_abs', 'y_target_abs']].values  # "commands needed"
-                prev_targets = segment[['prev_x_target', 'prev_y_target']].values
-
-                # Combined: [actual_x, actual_y, prev_target_x, prev_target_y]
-                combined_data = np.hstack([actuals, prev_targets])
+                ref_X = actuals[i]  # reference = desired position
+                target_Y_abs = targets[i + window_size - 1]  # predict = command needed
             else:
-                _fill_previous_from_current(segment, 'prev_x_actual', 'x_actual_abs')
-                _fill_previous_from_current(segment, 'prev_y_actual', 'y_actual_abs')
-                true_actuals = segment[['x_actual_abs', 'y_actual_abs']].values
+                ref_X = targets[i]  # reference = command
+                target_Y_abs = true_actuals[i + window_size - 1]  # predict = actual position
 
-                targets = segment[['x_target_abs', 'y_target_abs']].values
-                prev_actuals = segment[['prev_x_actual', 'prev_y_actual']].values
-
-                combined_data = np.hstack([targets, prev_actuals])
-
-            # confidences as numpy array for fast indexing
-            confidences = segment['confidence'].astype(float).values
-
-            n_samples = len(combined_data)
-            for i in range(n_samples - window_size + 1):
-
-                window_conf = confidences[i: i + window_size]
-                if np.any(window_conf < min_confidence):
-                    n_low_conf += 1
-                    continue
-
-                if INVERSE_MODEL:
-                    ref_X = actuals[i]  # reference = desired position
-                    target_Y_abs = targets[i + window_size - 1]  # predict = command needed
-                else:
-                    ref_X = targets[i]  # reference = command
-                    target_Y_abs = true_actuals[i + window_size - 1]  # predict = actual position
-
-                seq_abs = combined_data[i: i + window_size].copy()
-                if WINDOW_COORD_MODE == "relative":
-                    ref_full = np.hstack([ref_X, ref_X])
-                    seq_X = seq_abs - ref_full
-                    target_Y = target_Y_abs - ref_X
-                elif WINDOW_COORD_MODE == "delta":
-                    seq_X = np.zeros_like(seq_abs)
-                    seq_X[1:] = np.diff(seq_abs, axis=0)
-                    if window_size == 1:
-                        target_Y = np.zeros(2, dtype=target_Y_abs.dtype)
-                    elif INVERSE_MODEL:
-                        command_delta = target_Y_abs - targets[i + window_size - 2]
-                        if TARGET_MODE == "actual_delta":
-                            target_Y = command_delta
-                        elif TARGET_MODE == "residual_delta":
-                            desired_delta = actuals[i + window_size - 1] - actuals[i + window_size - 2]
-                            target_Y = command_delta - desired_delta
-                        else:
-                            raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
+            seq_abs = combined_data[i: i + window_size].copy()
+            if WINDOW_COORD_MODE == "relative":
+                ref_full = np.hstack([ref_X, ref_X])
+                seq_X = seq_abs - ref_full
+                target_Y = target_Y_abs - ref_X
+            elif WINDOW_COORD_MODE == "delta":
+                seq_X = np.zeros_like(seq_abs)
+                seq_X[1:] = np.diff(seq_abs, axis=0)
+                if window_size == 1:
+                    target_Y = np.zeros(2, dtype=target_Y_abs.dtype)
+                elif INVERSE_MODEL:
+                    command_delta = target_Y_abs - targets[i + window_size - 2]
+                    if TARGET_MODE == "actual_delta":
+                        target_Y = command_delta
+                    elif TARGET_MODE == "residual_delta":
+                        desired_delta = actuals[i + window_size - 1] - actuals[i + window_size - 2]
+                        target_Y = command_delta - desired_delta
                     else:
-                        actual_delta = target_Y_abs - true_actuals[i + window_size - 2]
-                        if TARGET_MODE == "actual_delta":
-                            target_Y = actual_delta
-                        elif TARGET_MODE == "residual_delta":
-                            command_delta = targets[i + window_size - 1] - targets[i + window_size - 2]
-                            target_Y = actual_delta - command_delta
-                        else:
-                            raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
+                        raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
                 else:
-                    raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
+                    actual_delta = target_Y_abs - true_actuals[i + window_size - 2]
+                    if TARGET_MODE == "actual_delta":
+                        target_Y = actual_delta
+                    elif TARGET_MODE == "residual_delta":
+                        command_delta = targets[i + window_size - 1] - targets[i + window_size - 2]
+                        target_Y = actual_delta - command_delta
+                    else:
+                        raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
+            else:
+                raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
 
-                all_rel_X_windows.append(seq_X)
-                all_rel_Y_targets.append(target_Y)
-
-    except Exception as e:
-        print(f"Reading error in DataFrame processing: {e}")
+            all_rel_X_windows.append(seq_X)
+            all_rel_Y_targets.append(target_Y)
 
     if not all_rel_X_windows:
         raise ValueError("No valid data found after filtering out low-confidence windows.")
