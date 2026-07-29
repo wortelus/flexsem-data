@@ -11,17 +11,25 @@ from rnn.utils.loss import RelativeMSELoss
 SEED = 10
 
 # Data splits
-TRAIN_SPLIT = 0.7
+TRAIN_SPLIT = 0.8
+VAL_SPLIT = 0.1
+TEST_SPLIT = 0.1
 
-# We set to 0.0 because WE DON'T WANT TO FILTER ANYTHING, RUN 55-72 ARE CHECKED / FILTERED ALREADY
-MIN_CONFIDENCE = 0.0
+_split_total = TRAIN_SPLIT + VAL_SPLIT + TEST_SPLIT
+if any(split < 0 for split in (TRAIN_SPLIT, VAL_SPLIT, TEST_SPLIT)):
+    raise ValueError("TRAIN_SPLIT, VAL_SPLIT and TEST_SPLIT must be non-negative")
+if abs(_split_total - 1.0) > 1e-9:
+    raise ValueError(
+        "TRAIN_SPLIT + VAL_SPLIT + TEST_SPLIT must equal 1.0, "
+        f"got {_split_total}"
+    )
 
 # Model selection
 # MODEL = HysteresisLSTM
 MODEL = HysteresisGRU
 # MODEL = HysteresisTransformer
 
-INVERSE_MODEL = False
+INVERSE_MODEL = True
 
 # Window coordinate representation:
 # - "relative": positions are anchored to the first point in each window
@@ -37,7 +45,7 @@ if WINDOW_COORD_MODE not in ("relative", "delta"):
 # - "residual_delta": predict the residual over the input delta, only for delta models
 #   - forward: actual_delta - command_delta
 #   - inverse: command_delta - desired_delta
-TARGET_MODE = "actual_delta"
+TARGET_MODE = "residual_delta"
 if TARGET_MODE not in ("actual_delta", "residual_delta"):
     raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
 if TARGET_MODE == "residual_delta" and WINDOW_COORD_MODE != "delta":
@@ -73,7 +81,7 @@ def make_criterion(scaler=None):
 
 # Training parameters
 OPTIMIZER = torch.optim.Adam
-EPOCHS = 2000
+EPOCHS = 750
 BATCH_SIZE = 16
 
 # Scheduler parameters
@@ -82,6 +90,10 @@ SCHEDULER_PATIENCE = 50
 SCHEDULER_FACTOR = 0.5
 SCHEDULER_THRESHOLD = 1e-4
 SCHEDULER_MIN_LR = 1e-7
+
+# Early stopping parameters
+EARLY_STOPPING_PATIENCE = 100
+EARLY_STOPPING_MIN_DELTA = 0.0
 
 DROPOUT = 0.0
 
@@ -141,7 +153,8 @@ RUN_CONFIG_PATH = RUN_DIR / "config.json"
 RUN_CONFIG = {
     "seed": SEED,
     "train_split": TRAIN_SPLIT,
-    "min_confidence": MIN_CONFIDENCE,
+    "val_split": VAL_SPLIT,
+    "test_split": TEST_SPLIT,
     "model": _model,
     "inverse_model": INVERSE_MODEL,
     "window_coord_mode": WINDOW_COORD_MODE,
@@ -163,6 +176,8 @@ RUN_CONFIG = {
     "scheduler_factor": SCHEDULER_FACTOR,
     "scheduler_threshold": SCHEDULER_THRESHOLD,
     "scheduler_min_lr": SCHEDULER_MIN_LR,
+    "early_stopping_patience": EARLY_STOPPING_PATIENCE,
+    "early_stopping_min_delta": EARLY_STOPPING_MIN_DELTA,
     "dropout": DROPOUT,
     "experiment_dir": EXPERIMENT_DIR,
 }

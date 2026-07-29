@@ -10,7 +10,7 @@ from torch.utils.data import TensorDataset
 
 from rnn.run_1_generate_dataset import load_dataset_file, report_dataset_sanity, resolve_experiment_files
 from rnn.utils.const import SEQUENCE_LENGTH, SEED, EXPERIMENT_DIR, SCALER_PATH, DATASET_DIR, \
-    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE, REPO_ROOT, ensure_output_dirs
+    DATASET_POSTFIX, TRAIN_SPLIT, VAL_SPLIT, INPUT_SIZE, REPO_ROOT, ensure_output_dirs
 
 if INPUT_SIZE == 2:
     from rnn.preprocessing.single import create_windows, scale_data, fit_scalers
@@ -55,7 +55,7 @@ def create_windows_for_file(file_path):
     if INPUT_SIZE == 2:
         return create_windows(df, SEQUENCE_LENGTH)
     if INPUT_SIZE == 4:
-        return create_windows(df, SEQUENCE_LENGTH, min_confidence=MIN_CONFIDENCE)
+        return create_windows(df, SEQUENCE_LENGTH)
 
     raise ValueError(f"Unsupported INPUT_SIZE: {INPUT_SIZE}")
 
@@ -80,6 +80,10 @@ def load_train_val_split(all_files):
 
     print("Zpracovavam train/val soubory a delim separatne...")
     gap = SEQUENCE_LENGTH
+    train_val_total = TRAIN_SPLIT + VAL_SPLIT
+    if train_val_total <= 0:
+        raise ValueError("TRAIN_SPLIT + VAL_SPLIT must be greater than 0 for custom train/val split")
+    train_fraction = TRAIN_SPLIT / train_val_total
 
     for file_path in all_files:
         try:
@@ -88,7 +92,7 @@ def load_train_val_split(all_files):
             if n_samples == 0:
                 continue
 
-            idx_train_end = int(n_samples * TRAIN_SPLIT)
+            idx_train_end = int(n_samples * train_fraction)
             val_start = idx_train_end + gap
 
             x_tr = x_w[:idx_train_end]
@@ -135,6 +139,12 @@ def to_tensor_dataset(X_data, y_data):
     X_tensor = torch.tensor(X_data, dtype=torch.float32)
     y_tensor = torch.tensor(y_data, dtype=torch.float32)
     return TensorDataset(X_tensor, y_tensor)
+
+
+def scale_data_or_empty(X_data, y_data, scaler):
+    if len(X_data) == 0:
+        return X_data, y_data
+    return scale_data(X_data, y_data, scaler)
 
 
 def save_separate_test_datasets(test_files, scaler):
@@ -212,7 +222,7 @@ def main():
     print("Scalers saved.")
 
     X_train, y_train = scale_data(X_train_u, y_train_u, scaler)
-    X_val, y_val = scale_data(X_val_u, y_val_u, scaler)
+    X_val, y_val = scale_data_or_empty(X_val_u, y_val_u, scaler)
 
     train_dataset = to_tensor_dataset(X_train, y_train)
     val_dataset = to_tensor_dataset(X_val, y_val)

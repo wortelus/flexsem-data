@@ -9,7 +9,7 @@ import torch
 from torch.utils.data import TensorDataset
 
 from rnn.utils.const import SEQUENCE_LENGTH, SEED, EXPERIMENT_DIR, SCALER_PATH, DATASET_DIR, \
-    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE, REPO_ROOT, ensure_output_dirs, \
+    DATASET_POSTFIX, TRAIN_SPLIT, VAL_SPLIT, TEST_SPLIT, INPUT_SIZE, REPO_ROOT, ensure_output_dirs, \
     INVERSE_MODEL, WINDOW_COORD_MODE, TARGET_MODE
 
 if INPUT_SIZE == 2:
@@ -89,16 +89,12 @@ def report_dataset_sanity(df, file_path):
         "x_actual_abs",
         "y_actual_abs",
     ]
-    optional_columns = ["confidence"]
-    numeric_columns = required_columns[1:] + optional_columns
+    numeric_columns = required_columns[1:]
 
     missing_required = [column for column in required_columns if column not in df.columns]
-    missing_optional = [column for column in optional_columns if column not in df.columns]
 
     if missing_required:
         print(f"  Sanity warning: missing required columns: {missing_required}")
-    if missing_optional:
-        print(f"  Sanity warning: missing optional columns: {missing_optional}")
 
     existing_required = [column for column in required_columns if column in df.columns]
     if existing_required:
@@ -148,7 +144,7 @@ def load_and_split_per_file(all_files):
             if INPUT_SIZE == 2:
                 x_w, y_w = create_windows(df, SEQUENCE_LENGTH)
             elif INPUT_SIZE == 4:
-                x_w, y_w = create_windows(df, SEQUENCE_LENGTH, min_confidence=MIN_CONFIDENCE)
+                x_w, y_w = create_windows(df, SEQUENCE_LENGTH)
             else:
                 continue
 
@@ -157,22 +153,31 @@ def load_and_split_per_file(all_files):
 
             # 2. Slicing
             idx_train_end = int(n_samples * TRAIN_SPLIT)
-            idx_val_end = int(n_samples * (TRAIN_SPLIT + (1 - TRAIN_SPLIT) / 2))
+            idx_val_end = int(n_samples * (TRAIN_SPLIT + VAL_SPLIT))
 
             # 3. Slicing with gaps to prevent data leakage
             # take the full training set
             x_tr = x_w[:idx_train_end]
             y_tr = y_w[:idx_train_end]
 
-            # Validation start a 'gap' later after idx_train_end
-            val_start = idx_train_end + gap
-            x_v = x_w[val_start:idx_val_end]
-            y_v = y_w[val_start:idx_val_end]
+            if VAL_SPLIT > 0:
+                # Validation start a 'gap' later after idx_train_end
+                val_start = idx_train_end + gap
+                x_v = x_w[val_start:idx_val_end]
+                y_v = y_w[val_start:idx_val_end]
+            else:
+                x_v = np.empty((0, SEQUENCE_LENGTH, INPUT_SIZE))
+                y_v = np.empty((0, 2))
 
-            # Test start a 'gap' later after idx_val_end
-            test_start = idx_val_end + gap
-            x_te = x_w[test_start:]
-            y_te = y_w[test_start:]
+            if TEST_SPLIT > 0:
+                # Test start a 'gap' later after idx_val_end
+                test_start = idx_val_end + gap
+                x_te = x_w[test_start:]
+                y_te = y_w[test_start:]
+            else:
+                test_start = n_samples
+                x_te = np.empty((0, SEQUENCE_LENGTH, INPUT_SIZE))
+                y_te = np.empty((0, 2))
 
             print(f"Processed file {file_path}: ")
             print(f"  Train samples: {len(x_tr)}")
@@ -251,6 +256,12 @@ def inverse_transform_values(data, scaler):
     return inverse_flat.reshape(original_shape)
 
 
+def scale_data_or_empty(X_data, y_data, scaler):
+    if len(X_data) == 0:
+        return X_data, y_data
+    return scale_data(X_data, y_data, scaler)
+
+
 def print_plotted_window_debug(X_scaled, y_scaled, X_unscaled, y_unscaled, test_meta, plot_index, scaler):
     if plot_index >= len(X_scaled):
         print(f"Cannot debug Window {plot_index + 1}: only {len(X_scaled)} plotted test windows available.")
@@ -283,7 +294,6 @@ def print_plotted_window_debug(X_scaled, y_scaled, X_unscaled, y_unscaled, test_
                 "y_target_abs",
                 "x_actual_abs",
                 "y_actual_abs",
-                "confidence",
             ]
             cols = [col for col in cols if col in df.columns]
             print("\nRaw trajectory rows:")
@@ -319,7 +329,10 @@ def print_plotted_window_debug(X_scaled, y_scaled, X_unscaled, y_unscaled, test_
 
     print("\nUnscaled X window values reconstructed from scaler (nm):")
     if INPUT_SIZE == 4:
-        print("t  target_dx target_dy  prev_actual_dx prev_actual_dy")
+        if INVERSE_MODEL:
+            print("t  desired_dx desired_dy  prev_command_dx prev_command_dy")
+        else:
+            print("t  command_dx command_dy  prev_actual_dx prev_actual_dy")
         for t, row in enumerate(X_inv):
             print(f"{t:2d} {row[0]:10.1f} {row[1]:10.1f} {row[2]:15.1f} {row[3]:15.1f}")
     else:
@@ -329,7 +342,10 @@ def print_plotted_window_debug(X_scaled, y_scaled, X_unscaled, y_unscaled, test_
 
     print("\nScaled X window values used by plot:")
     if INPUT_SIZE == 4:
-        print("t  X_tx      X_ty      X_ax      X_ay")
+        if INVERSE_MODEL:
+            print("t  X_des_x   X_des_y   X_prev_cmd_x X_prev_cmd_y")
+        else:
+            print("t  X_cmd_x   X_cmd_y   X_prev_act_x X_prev_act_y")
         for t, row in enumerate(X_scaled[plot_index]):
             print(f"{t:2d} {row[0]:9.6f} {row[1]:9.6f} {row[2]:9.6f} {row[3]:9.6f}")
     else:
@@ -381,8 +397,8 @@ def main():
 
     # Aplikace scalerů
     X_train, y_train = scale_data(X_train_u, y_train_u, scaler)
-    X_val, y_val = scale_data(X_val_u, y_val_u, scaler)
-    X_test, y_test = scale_data(X_test_u, y_test_u, scaler)
+    X_val, y_val = scale_data_or_empty(X_val_u, y_val_u, scaler)
+    X_test, y_test = scale_data_or_empty(X_test_u, y_test_u, scaler)
 
     # 5. Tvorba TensorDataset
     X_train_tensor = torch.tensor(X_train, dtype=torch.float32)

@@ -34,7 +34,7 @@ def _fill_previous_from_current(df, previous_column, current_column):
     df[previous_column] = df[previous_column].fillna(df[current_column])
 
 
-def create_windows(df, window_size, min_confidence):
+def create_windows(df, window_size):
     if len(df) < window_size:
         raise ValueError(
             "DataFrame length is less than window size. Cannot create sequences.")
@@ -42,7 +42,6 @@ def create_windows(df, window_size, min_confidence):
     all_rel_X_windows = []
     all_rel_Y_targets = []
 
-    n_low_conf = 0
     for segment in _iter_segments(df):
         if len(segment) < window_size:
             continue
@@ -69,17 +68,8 @@ def create_windows(df, window_size, min_confidence):
 
             combined_data = np.hstack([targets, prev_actuals])
 
-        # confidences as numpy array for fast indexing
-        confidences = segment['confidence'].astype(float).values
-
         n_samples = len(combined_data)
         for i in range(n_samples - window_size + 1):
-
-            window_conf = confidences[i: i + window_size]
-            if np.any(window_conf < min_confidence):
-                n_low_conf += 1
-                continue
-
             if INVERSE_MODEL:
                 ref_X = actuals[i]  # reference = desired position
                 target_Y_abs = targets[i + window_size - 1]  # predict = command needed
@@ -122,10 +112,9 @@ def create_windows(df, window_size, min_confidence):
             all_rel_Y_targets.append(target_Y)
 
     if not all_rel_X_windows:
-        raise ValueError("No valid data found after filtering out low-confidence windows.")
+        raise ValueError("No valid windows were created. Check the input files and window size.")
 
-    print(
-        f"Created {len(all_rel_X_windows)} windows of size {window_size} after filtering out {n_low_conf} low-confidence windows.")
+    print(f"Created {len(all_rel_X_windows)} windows of size {window_size}.")
 
     return np.array(all_rel_X_windows), np.array(all_rel_Y_targets)
 

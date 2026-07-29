@@ -67,6 +67,8 @@ def main():
         val_loss_history = []
 
         best_val_loss = np.inf  # our metric to save the best model
+        best_epoch = 0
+        epochs_without_improvement = 0
         for epoch in range(EPOCHS):
             # switch to train mode
             model.train()
@@ -117,11 +119,21 @@ def main():
                 print(f'Epoch [{epoch + 1}/{EPOCHS}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}')
 
                 # Save the best model
-                if avg_val_loss < best_val_loss:
+                if avg_val_loss < best_val_loss - EARLY_STOPPING_MIN_DELTA:
                     best_model_filename = f"{MODEL_SAVE_PATH}.best"
                     best_val_loss = avg_val_loss
+                    best_epoch = epoch + 1
+                    epochs_without_improvement = 0
                     torch.save(model.state_dict(), best_model_filename)
                     print(f"New best model (Val Loss: {avg_val_loss:.6f}) to '{best_model_filename}'")
+                else:
+                    epochs_without_improvement += 1
+                    if epochs_without_improvement >= EARLY_STOPPING_PATIENCE:
+                        print(
+                            f"Early stopping at epoch {epoch + 1}. "
+                            f"Best Val Loss: {best_val_loss:.6f} at epoch {best_epoch}."
+                        )
+                        break
             else:
                 # In case there's no validation set...
                 print(f'Epoch [{epoch + 1}/{EPOCHS}], Train Loss: {avg_train_loss:.6f}')
