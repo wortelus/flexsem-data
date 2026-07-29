@@ -9,7 +9,8 @@ import torch
 from torch.utils.data import TensorDataset
 
 from rnn.utils.const import SEQUENCE_LENGTH, SEED, EXPERIMENT_DIR, SCALER_PATH, DATASET_DIR, \
-    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE, REPO_ROOT, ensure_output_dirs
+    DATASET_POSTFIX, TRAIN_SPLIT, INPUT_SIZE, MIN_CONFIDENCE, REPO_ROOT, ensure_output_dirs, \
+    INVERSE_MODEL, WINDOW_COORD_MODE, TARGET_MODE
 
 if INPUT_SIZE == 2:
     from rnn.preprocessing.single import create_windows, scale_data, fit_scalers
@@ -295,13 +296,24 @@ def print_plotted_window_debug(X_scaled, y_scaled, X_unscaled, y_unscaled, test_
             if target_idx > 0:
                 command_delta = targets[target_idx] - targets[target_idx - 1]
                 actual_delta = actuals[target_idx] - actuals[target_idx - 1]
-                residual_delta = actual_delta - command_delta
                 print("\nLast-step label computation:")
                 print(f"  previous raw row: {target_idx - 1}")
                 print(f"  target raw row:   {target_idx}")
                 print(f"  command_delta = ({command_delta[0]:.1f}, {command_delta[1]:.1f}) nm")
                 print(f"  actual_delta  = ({actual_delta[0]:.1f}, {actual_delta[1]:.1f}) nm")
-                print(f"  residual_delta = actual_delta - command_delta = ({residual_delta[0]:.1f}, {residual_delta[1]:.1f}) nm")
+                if WINDOW_COORD_MODE == "delta" and TARGET_MODE == "residual_delta":
+                    if INVERSE_MODEL:
+                        residual_delta = command_delta - actual_delta
+                        print(
+                            "  residual_delta = command_delta - desired_delta "
+                            f"= ({residual_delta[0]:.1f}, {residual_delta[1]:.1f}) nm"
+                        )
+                    else:
+                        residual_delta = actual_delta - command_delta
+                        print(
+                            "  residual_delta = actual_delta - command_delta "
+                            f"= ({residual_delta[0]:.1f}, {residual_delta[1]:.1f}) nm"
+                        )
         except (ValueError, OSError, KeyError) as exc:
             print(f"Could not print raw trajectory for debug window: {exc}")
 

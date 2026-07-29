@@ -31,13 +31,17 @@ if WINDOW_COORD_MODE not in ("relative", "delta"):
     raise ValueError(f"Unsupported WINDOW_COORD_MODE: {WINDOW_COORD_MODE}")
 
 # Prediction target:
-# - "actual_delta": predict actual motion, current behavior
-# - "residual_delta": predict actual_delta - command_delta, only for forward delta models
+# - "actual_delta": predict the direct output delta
+#   - forward: actual_delta
+#   - inverse: command_delta
+# - "residual_delta": predict the residual over the input delta, only for delta models
+#   - forward: actual_delta - command_delta
+#   - inverse: command_delta - desired_delta
 TARGET_MODE = "actual_delta"
 if TARGET_MODE not in ("actual_delta", "residual_delta"):
     raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
-if TARGET_MODE == "residual_delta" and (INVERSE_MODEL or WINDOW_COORD_MODE != "delta"):
-    raise ValueError("TARGET_MODE='residual_delta' is only supported for forward delta models")
+if TARGET_MODE == "residual_delta" and WINDOW_COORD_MODE != "delta":
+    raise ValueError("TARGET_MODE='residual_delta' is only supported for delta models")
 
 # LSTM/GRU parameters
 SEQUENCE_LENGTH = 16

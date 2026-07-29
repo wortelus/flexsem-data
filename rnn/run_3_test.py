@@ -29,34 +29,45 @@ def inverse_transform_helper(data, scaler):
 
 def to_actual_delta_metrics_space(y_pred_nm, y_true_nm, X_input_nm):
     if WINDOW_COORD_MODE == "delta":
-        command_delta_nm = X_input_nm[:, -1, 0:2]
+        input_delta_nm = X_input_nm[:, -1, 0:2]
 
         if INVERSE_MODEL:
-            return y_pred_nm, y_true_nm, command_delta_nm, "command_delta"
+            if TARGET_MODE == "residual_delta":
+                return (
+                    y_pred_nm + input_delta_nm,
+                    y_true_nm + input_delta_nm,
+                    input_delta_nm,
+                    "command_delta_from_residual_delta",
+                )
+            return y_pred_nm, y_true_nm, input_delta_nm, "command_delta"
 
         if TARGET_MODE == "residual_delta":
             return (
-                y_pred_nm + command_delta_nm,
-                y_true_nm + command_delta_nm,
-                command_delta_nm,
+                y_pred_nm + input_delta_nm,
+                y_true_nm + input_delta_nm,
+                input_delta_nm,
                 "actual_delta_from_residual_delta",
             )
 
-        return y_pred_nm, y_true_nm, command_delta_nm, "actual_delta"
+        return y_pred_nm, y_true_nm, input_delta_nm, "actual_delta"
 
     y_pred_naive_nm = X_input_nm[:, -1, 0:2]
     return y_pred_nm, y_true_nm, y_pred_naive_nm, "relative_position"
 
 
 def evaluate_naive_guess(y_pred_naive_nm, y_true_nm):
-    if WINDOW_COORD_MODE == "delta":
+    if WINDOW_COORD_MODE == "delta" and INVERSE_MODEL:
+        print("\n--- Delta Baseline (send desired delta as command delta directly) ---")
+    elif WINDOW_COORD_MODE == "delta":
         print("\n--- Delta Baseline (assume actual delta follows command delta) ---")
     elif INVERSE_MODEL:
         print("\n--- 'No Compensation' Baseline (send desired position as command directly) ---")
     else:
         print("\n--- 'Command' Baseline (assume system follows command perfectly) ---")
 
-    if WINDOW_COORD_MODE == "delta":
+    if WINDOW_COORD_MODE == "delta" and INVERSE_MODEL:
+        print("That is, if we would send the desired input delta without compensation.")
+    elif WINDOW_COORD_MODE == "delta":
         print("That is, if we would assume the system perfectly follows the last command delta.")
     else:
         print("That is, if we would assume the system perfectly follows the command input.")
@@ -76,7 +87,10 @@ def evaluate_naive_guess(y_pred_naive_nm, y_true_nm):
     plt.suptitle(f"Baseline (Command = Output)", fontsize=14)
     # Plot only a slice to make it visible
     limit = 200
-    if WINDOW_COORD_MODE == "delta":
+    if WINDOW_COORD_MODE == "delta" and INVERSE_MODEL:
+        plt.plot(y_true_nm[:limit, 0], label='True Command Delta (X)', color='blue', alpha=0.8)
+        plt.plot(y_pred_naive_nm[:limit, 0], label='Desired Delta (X)', color='green', alpha=0.8)
+    elif WINDOW_COORD_MODE == "delta":
         plt.plot(y_true_nm[:limit, 0], label='True Actual Delta (X)', color='blue', alpha=0.8)
         plt.plot(y_pred_naive_nm[:limit, 0], label='Command Delta (X)', color='green', alpha=0.8)
     elif INVERSE_MODEL:
@@ -227,7 +241,12 @@ def evaluate():
              linestyle=':')
     # Můžeme přidat i Target pro kontext
     # plt.plot(X_input_nm[slice_idx, -1, 0], label='Command X', color='green', alpha=0.3)
-    baseline_label_x = 'Abs Command Delta Error X' if WINDOW_COORD_MODE == "delta" else 'Abs Command Error X'
+    if WINDOW_COORD_MODE == "delta" and INVERSE_MODEL:
+        baseline_label_x = 'Abs Desired Delta Error X'
+    elif WINDOW_COORD_MODE == "delta":
+        baseline_label_x = 'Abs Command Delta Error X'
+    else:
+        baseline_label_x = 'Abs Command Error X'
     plt.plot(np.abs(y_true_eval_nm[slice_idx, 0] - y_pred_naive_nm[slice_idx, 0]), label=baseline_label_x,
              color='orange', linestyle='-.')
     plt.title('Detail: First 300 samples (X Axis)')
@@ -241,7 +260,12 @@ def evaluate():
     # plt.plot(y_pred_nm[slice_idx, 1], label='Pred Y', color='red', linestyle='--')
     plt.plot(np.abs(y_true_eval_nm[slice_idx, 1] - y_pred_eval_nm[slice_idx, 1]), label='Abs Error Y', color='blue',
              linestyle=':')
-    baseline_label_y = 'Abs Command Delta Error Y' if WINDOW_COORD_MODE == "delta" else 'Abs Command Error Y'
+    if WINDOW_COORD_MODE == "delta" and INVERSE_MODEL:
+        baseline_label_y = 'Abs Desired Delta Error Y'
+    elif WINDOW_COORD_MODE == "delta":
+        baseline_label_y = 'Abs Command Delta Error Y'
+    else:
+        baseline_label_y = 'Abs Command Error Y'
     plt.plot(np.abs(y_true_eval_nm[slice_idx, 1] - y_pred_naive_nm[slice_idx, 1]), label=baseline_label_y,
              color='orange', linestyle='-.')
     # plt.plot(X_input_nm[slice_idx, -1, 1], label='Command Y', color='green', alpha=0.3)

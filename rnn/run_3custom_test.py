@@ -24,20 +24,27 @@ def inverse_transform_helper(data, scaler):
 
 def to_actual_delta_metrics_space(y_pred_nm, y_true_nm, X_input_nm):
     if WINDOW_COORD_MODE == "delta":
-        command_delta_nm = X_input_nm[:, -1, 0:2]
+        input_delta_nm = X_input_nm[:, -1, 0:2]
 
         if INVERSE_MODEL:
-            return y_pred_nm, y_true_nm, command_delta_nm, "command_delta"
+            if TARGET_MODE == "residual_delta":
+                return (
+                    y_pred_nm + input_delta_nm,
+                    y_true_nm + input_delta_nm,
+                    input_delta_nm,
+                    "command_delta_from_residual_delta",
+                )
+            return y_pred_nm, y_true_nm, input_delta_nm, "command_delta"
 
         if TARGET_MODE == "residual_delta":
             return (
-                y_pred_nm + command_delta_nm,
-                y_true_nm + command_delta_nm,
-                command_delta_nm,
+                y_pred_nm + input_delta_nm,
+                y_true_nm + input_delta_nm,
+                input_delta_nm,
                 "actual_delta_from_residual_delta",
             )
 
-        return y_pred_nm, y_true_nm, command_delta_nm, "actual_delta"
+        return y_pred_nm, y_true_nm, input_delta_nm, "actual_delta"
 
     y_pred_naive_nm = X_input_nm[:, -1, 0:2]
     return y_pred_nm, y_true_nm, y_pred_naive_nm, "relative_position"

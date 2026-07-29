@@ -69,7 +69,14 @@ def create_windows(df, window_size):
                 if window_size == 1:
                     target_Y = np.zeros(2, dtype=target_Y_abs.dtype)
                 elif INVERSE_MODEL:
-                    target_Y = target_Y_abs - outputs[target_idx - 1]
+                    command_delta = target_Y_abs - outputs[target_idx - 1]
+                    if TARGET_MODE == "actual_delta":
+                        target_Y = command_delta
+                    elif TARGET_MODE == "residual_delta":
+                        desired_delta = inputs[target_idx] - inputs[target_idx - 1]
+                        target_Y = command_delta - desired_delta
+                    else:
+                        raise ValueError(f"Unsupported TARGET_MODE: {TARGET_MODE}")
                 else:
                     actual_delta = target_Y_abs - outputs[target_idx - 1]
                     if TARGET_MODE == "actual_delta":
