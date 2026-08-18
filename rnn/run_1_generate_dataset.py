@@ -1,5 +1,5 @@
-import glob
-from os.path import join, isdir, isfile
+import hashlib
+import json
 from pathlib import Path
 
 import joblib
@@ -13,11 +13,21 @@ from rnn.utils.const import SEQUENCE_LENGTH, SEED, EXPERIMENT_DIR, SCALER_PATH, 
     INVERSE_MODEL, WINDOW_COORD_MODE, TARGET_MODE
 
 if INPUT_SIZE == 2:
-    from rnn.preprocessing.single import create_windows, scale_data, fit_scalers
+    from rnn.preprocessing.single import (
+        _iter_segments as iter_trajectory_segments,
+        create_windows,
+        fit_scalers,
+        scale_data,
+    )
 
     print(f"Using preprocessing for INPUT_SIZE = 2")
 elif INPUT_SIZE == 4:
-    from rnn.preprocessing.double import create_windows, scale_data, fit_scalers
+    from rnn.preprocessing.double import (
+        _iter_segments as iter_trajectory_segments,
+        create_windows,
+        fit_scalers,
+        scale_data,
+    )
 
     print(f"Using preprocessing for INPUT_SIZE = 4")
 
@@ -33,25 +43,64 @@ EXPERIMENTS = [
     "run70-data-feast-overnight-sub2/confidence_0.8_no_axis_outliers_segments",
     "run71-data-feast-overnight/confidence_0.7_segments",
     "run72-data-feast-overnight/hysteresis_dataset_20260303_203815_updated.jsonl",
+    "run84_random_walk",
 ]
 
 
-def resolve_experiment_files(root_dir, experiments=None):
+def resolve_experiment_sources(root_dir, experiments=None):
+    """Resolve configured sources without losing directory boundaries.
+
+    A directory containing multiple JSONL files is treated as one logical
+    dataset whose files are assigned whole to train/val/test. A direct JSONL
+    path, or a directory containing only one JSONL file, is split separately
+    by each continuous trajectory segment inside the file.
+    """
     if not experiments:
-        return sorted(glob.glob(join(root_dir, '*.jsonl')))
+        experiments = [str(path) for path in sorted(Path(root_dir).glob("*.jsonl"))]
 
-    files = []
+    sources = []
+    seen_files = set()
+
     for experiment in experiments:
-        path = join(root_dir, experiment)
+        path = Path(experiment)
+        if not path.is_absolute():
+            path = Path(root_dir) / path
 
-        if isdir(path):
-            files.extend(sorted(glob.glob(join(path, '*.jsonl'))))
-        elif isfile(path) and path.endswith('.jsonl'):
-            files.append(path)
+        if path.is_dir():
+            files = sorted(str(file_path) for file_path in path.glob("*.jsonl"))
+            if not files:
+                raise FileNotFoundError(
+                    f"Experiment directory contains no .jsonl files: {path}"
+                )
+            split_mode = "file_level" if len(files) > 1 else "segment_level"
+        elif path.is_file() and path.suffix.lower() == ".jsonl":
+            files = [str(path)]
+            split_mode = "segment_level"
         else:
             raise FileNotFoundError(f"Experiment path is not a .jsonl file or directory: {path}")
 
-    return files
+        for file_path in files:
+            resolved_file = str(Path(file_path).resolve())
+            if resolved_file in seen_files:
+                raise ValueError(f"Dataset file is configured more than once: {file_path}")
+            seen_files.add(resolved_file)
+
+        sources.append(
+            {
+                "experiment": str(experiment),
+                "path": str(path),
+                "split_mode": split_mode,
+                "files": files,
+            }
+        )
+
+    return sources
+
+
+def resolve_experiment_files(root_dir, experiments=None):
+    """Backward-compatible flattened resolver used by the custom generator."""
+    sources = resolve_experiment_sources(root_dir, experiments)
+    return [file_path for source in sources for file_path in source["files"]]
 
 
 def load_dataset_file(file_path):
@@ -123,93 +172,491 @@ def report_dataset_sanity(df, file_path):
             print("  Sanity note: timestamp is not sorted before sorting.")
 
 
-def load_and_split_per_file(all_files):
-    # Kontejnery pro všechny kusy dat
-    train_X_chunks, train_y_chunks = [], []
-    val_X_chunks, val_y_chunks = [], []
-    test_X_chunks, test_y_chunks = [], []
-    test_meta = []
+SPLIT_NAMES = ("train", "val", "test")
+SPLIT_FRACTIONS = {
+    "train": TRAIN_SPLIT,
+    "val": VAL_SPLIT,
+    "test": TEST_SPLIT,
+}
 
-    print("Zpracovávám soubory a dělím separátně...")
 
-    gap = SEQUENCE_LENGTH  # Velikost mezery k zamezení leakage na hranicích
+def split_window_indices(number_of_windows):
+    """Return the historical chronological split with leakage guard gaps."""
+    train_end = int(number_of_windows * TRAIN_SPLIT)
+    val_end = int(number_of_windows * (TRAIN_SPLIT + VAL_SPLIT))
+    gap = SEQUENCE_LENGTH
 
-    for file_path in all_files:
+    val_start = train_end + gap if VAL_SPLIT > 0 else val_end
+    test_start = val_end + gap if TEST_SPLIT > 0 else number_of_windows
+
+    return {
+        "train": np.arange(0, train_end, dtype=np.int64),
+        "val": np.arange(val_start, val_end, dtype=np.int64)
+        if VAL_SPLIT > 0
+        else np.empty(0, dtype=np.int64),
+        "test": np.arange(test_start, number_of_windows, dtype=np.int64)
+        if TEST_SPLIT > 0
+        else np.empty(0, dtype=np.int64),
+    }
+
+
+def assign_groups_to_splits(
+    group_chunks,
+    source_name,
+    initial_window_counts=None,
+    group_count_weight=0.1,
+    normalize_by_split_target=True,
+):
+    """Assign every prepared group wholly to one split.
+
+    Window count is the main balance target and group count is secondary. For
+    hybrid segment splitting, ``initial_window_counts`` contains windows that
+    were already assigned by chronological splits of long trajectories.
+    """
+    active_splits = [name for name in SPLIT_NAMES if SPLIT_FRACTIONS[name] > 0]
+    if not active_splits:
+        raise ValueError("At least one dataset split must have a positive fraction")
+
+    if initial_window_counts is None:
+        initial_window_counts = {split: 0 for split in SPLIT_NAMES}
+
+    total_windows = sum(initial_window_counts.values()) + sum(
+        len(chunk["x"]) for chunk in group_chunks
+    )
+    targets = {
+        split: total_windows * SPLIT_FRACTIONS[split]
+        for split in active_splits
+    }
+    group_targets = {
+        split: len(group_chunks) * SPLIT_FRACTIONS[split]
+        for split in active_splits
+    }
+    counts = {
+        split: int(initial_window_counts.get(split, 0))
+        for split in active_splits
+    }
+    group_counts = {split: 0 for split in active_splits}
+
+    source_digest = int.from_bytes(
+        hashlib.sha256(source_name.encode("utf-8")).digest()[:4],
+        byteorder="little",
+    )
+    rng = np.random.default_rng(np.random.SeedSequence([SEED, source_digest]))
+    random_tie_break = {
+        chunk["group_id"]: float(rng.random()) for chunk in group_chunks
+    }
+    split_priority = {
+        split: priority
+        for priority, split in enumerate(rng.permutation(active_splits))
+    }
+
+    ordered_chunks = sorted(
+        group_chunks,
+        key=lambda chunk: (
+            -len(chunk["x"]),
+            random_tie_break[chunk["group_id"]],
+        ),
+    )
+    assignments = {}
+
+    for chunk in ordered_chunks:
+        weight = len(chunk["x"])
+
+        def assignment_score(candidate_split):
+            candidate_counts = counts.copy()
+            candidate_counts[candidate_split] += weight
+            candidate_group_counts = group_counts.copy()
+            candidate_group_counts[candidate_split] += 1
+            if normalize_by_split_target:
+                window_error = sum(
+                    (
+                        (candidate_counts[split] - targets[split])
+                        / max(targets[split], 1.0)
+                    ) ** 2
+                    for split in active_splits
+                )
+                group_count_error = sum(
+                    (
+                        (candidate_group_counts[split] - group_targets[split])
+                        / max(group_targets[split], 1.0)
+                    ) ** 2
+                    for split in active_splits
+                )
+            else:
+                window_error = sum(
+                    (candidate_counts[split] - targets[split]) ** 2
+                    for split in active_splits
+                ) / max(total_windows, 1) ** 2
+                group_count_error = sum(
+                    (candidate_group_counts[split] - group_targets[split]) ** 2
+                    for split in active_splits
+                ) / max(len(group_chunks), 1) ** 2
+            # Window count is the primary balance target. The smaller group-count
+            # term avoids representing a split with one unusually long group when
+            # similarly accurate multi-file assignments are available.
+            return (
+                window_error + group_count_weight * group_count_error,
+                split_priority[candidate_split],
+            )
+
+        chosen_split = min(active_splits, key=assignment_score)
+        assignments[chunk["group_id"]] = chosen_split
+        counts[chosen_split] += weight
+        group_counts[chosen_split] += 1
+
+    return assignments
+
+
+def assign_files_to_splits(file_chunks, source_name):
+    """Backward-compatible whole-file assignment helper."""
+    groups = []
+    for chunk in file_chunks:
+        group = dict(chunk)
+        group["group_id"] = chunk["file_path"]
+        groups.append(group)
+    return assign_groups_to_splits(groups, source_name)
+
+
+def _manifest_file_path(file_path):
+    path = Path(file_path).resolve()
+    try:
+        return path.relative_to(REPO_ROOT.resolve()).as_posix()
+    except ValueError:
+        return str(path)
+
+
+def _segment_label(segment, segment_index):
+    parts = [f"segment_{segment_index:03d}"]
+    if "experiment_name" in segment.columns:
+        parts.append(str(segment.iloc[0]["experiment_name"]))
+    if "iteration" in segment.columns:
+        parts.append(f"iteration={segment.iloc[0]['iteration']}")
+    if "step" in segment.columns:
+        parts.append(
+            f"steps={segment.iloc[0]['step']}..{segment.iloc[-1]['step']}"
+        )
+    return " | ".join(parts)
+
+
+def _load_file_window_chunk(file_path):
+    df = load_dataset_file(file_path)
+    report_dataset_sanity(df, file_path)
+    df = df.sort_values(by="timestamp").reset_index(drop=True)
+    x_windows, y_windows = create_windows(df, SEQUENCE_LENGTH)
+    return {
+        "group_id": str(Path(file_path).resolve()),
+        "unit_type": "file",
+        "file_path": file_path,
+        "segment_index": None,
+        "segment_label": None,
+        "raw_start_idx": 0,
+        "raw_end_idx": len(df) - 1,
+        "raw_rows": len(df),
+        "x": x_windows,
+        "y": y_windows,
+    }
+
+
+def _load_segment_window_chunks(file_path):
+    df = load_dataset_file(file_path)
+    report_dataset_sanity(df, file_path)
+    df = df.sort_values(by="timestamp").reset_index(drop=True)
+
+    chunks = []
+    skipped = []
+    raw_offset = 0
+
+    for segment_index, segment in enumerate(iter_trajectory_segments(df), 1):
+        raw_start_idx = raw_offset
+        raw_end_idx = raw_offset + len(segment) - 1
+        raw_offset += len(segment)
+        segment_label = _segment_label(segment, segment_index)
+        group_id = f"{Path(file_path).resolve()}::segment:{segment_index}"
+
         try:
-            df = load_dataset_file(file_path)
-            report_dataset_sanity(df, file_path)
-            df = df.sort_values(by='timestamp').reset_index(drop=True)
+            x_windows, y_windows = create_windows(segment, SEQUENCE_LENGTH)
+        except (ValueError, KeyError) as exc:
+            skipped.append(
+                {
+                    "group_id": group_id,
+                    "unit_type": "segment",
+                    "file_path": file_path,
+                    "segment_index": segment_index,
+                    "segment_label": segment_label,
+                    "raw_start_idx": raw_start_idx,
+                    "raw_end_idx": raw_end_idx,
+                    "raw_rows": len(segment),
+                    "skip_reason": str(exc),
+                }
+            )
+            continue
 
-            # 1. Vytvoření oken pro CELÝ soubor
-            if INPUT_SIZE == 2:
-                x_w, y_w = create_windows(df, SEQUENCE_LENGTH)
-            elif INPUT_SIZE == 4:
-                x_w, y_w = create_windows(df, SEQUENCE_LENGTH)
-            else:
-                continue
+        chunks.append(
+            {
+                "group_id": group_id,
+                "unit_type": "segment",
+                "file_path": file_path,
+                "segment_index": segment_index,
+                "segment_label": segment_label,
+                "raw_start_idx": raw_start_idx,
+                "raw_end_idx": raw_end_idx,
+                "raw_rows": len(segment),
+                "x": x_windows,
+                "y": y_windows,
+            }
+        )
 
-            n_samples = len(x_w)
-            if n_samples == 0: continue
+    return chunks, skipped
 
-            # 2. Slicing
-            idx_train_end = int(n_samples * TRAIN_SPLIT)
-            idx_val_end = int(n_samples * (TRAIN_SPLIT + VAL_SPLIT))
 
-            # 3. Slicing with gaps to prevent data leakage
-            # take the full training set
-            x_tr = x_w[:idx_train_end]
-            y_tr = y_w[:idx_train_end]
+def _empty_split_indices():
+    return {
+        split: np.empty(0, dtype=np.int64)
+        for split in SPLIT_NAMES
+    }
 
-            if VAL_SPLIT > 0:
-                # Validation start a 'gap' later after idx_train_end
-                val_start = idx_train_end + gap
-                x_v = x_w[val_start:idx_val_end]
-                y_v = y_w[val_start:idx_val_end]
-            else:
-                x_v = np.empty((0, SEQUENCE_LENGTH, INPUT_SIZE))
-                y_v = np.empty((0, 2))
 
-            if TEST_SPLIT > 0:
-                # Test start a 'gap' later after idx_val_end
-                test_start = idx_val_end + gap
-                x_te = x_w[test_start:]
-                y_te = y_w[test_start:]
-            else:
-                test_start = n_samples
-                x_te = np.empty((0, SEQUENCE_LENGTH, INPUT_SIZE))
-                y_te = np.empty((0, 2))
+def _whole_group_split_indices(number_of_windows, assigned_split):
+    result = _empty_split_indices()
+    result[assigned_split] = np.arange(number_of_windows, dtype=np.int64)
+    return result
 
-            print(f"Processed file {file_path}: ")
-            print(f"  Train samples: {len(x_tr)}")
-            print(f"  Val samples:   {len(x_v)}")
-            print(f"  Test samples:  {len(x_te)}")
 
-            if len(x_tr) > 0:
-                train_X_chunks.append(x_tr)
-                train_y_chunks.append(y_tr)
+def _can_use_chronological_split(split_indices):
+    return all(
+        SPLIT_FRACTIONS[split] == 0 or len(split_indices[split]) > 0
+        for split in SPLIT_NAMES
+    )
 
-            if len(x_v) > 0:
-                val_X_chunks.append(x_v)
-                val_y_chunks.append(y_v)
 
-            if len(x_te) > 0:
-                test_X_chunks.append(x_te)
-                test_y_chunks.append(y_te)
-                for window_idx in range(test_start, n_samples):
-                    test_meta.append({
-                        "source_file": file_path,
-                        "window_idx_in_file": window_idx,
-                        "raw_start_idx": window_idx,
-                        "raw_end_idx": window_idx + SEQUENCE_LENGTH - 1,
-                    })
+def _skipped_manifest_row(source, unit, split_mode):
+    return {
+        "source": source["experiment"],
+        "source_file": _manifest_file_path(unit["file_path"]),
+        "unit_type": unit.get("unit_type", "file"),
+        "segment_index": unit.get("segment_index"),
+        "segment_label": unit.get("segment_label"),
+        "segment_raw_start_idx": unit.get("raw_start_idx"),
+        "segment_raw_end_idx": unit.get("raw_end_idx"),
+        "split_mode": split_mode,
+        "assigned_split": None,
+        "status": "skipped",
+        "skip_reason": unit["skip_reason"],
+        "raw_rows": unit.get("raw_rows", 0),
+        "generated_windows": 0,
+        "train_windows": 0,
+        "val_windows": 0,
+        "test_windows": 0,
+    }
 
-        except (ValueError, OSError) as e:
-            print(f"Skipping file {file_path}: {e}")
 
-    # 4. Concat all chunks together
-    def concat_chunks(chunks):
+def _planned_manifest_row(source, plan):
+    chunk = plan["chunk"]
+    split_counts = {
+        split: len(indices)
+        for split, indices in plan["split_indices"].items()
+    }
+    return {
+        "source": source["experiment"],
+        "source_file": _manifest_file_path(chunk["file_path"]),
+        "unit_type": chunk["unit_type"],
+        "segment_index": chunk.get("segment_index"),
+        "segment_label": chunk.get("segment_label"),
+        "segment_raw_start_idx": chunk.get("raw_start_idx"),
+        "segment_raw_end_idx": chunk.get("raw_end_idx"),
+        "split_mode": plan["split_mode"],
+        "assigned_split": plan["assigned_split"],
+        "status": "used",
+        "skip_reason": "",
+        "raw_rows": chunk["raw_rows"],
+        "generated_windows": len(chunk["x"]),
+        "train_windows": split_counts["train"],
+        "val_windows": split_counts["val"],
+        "test_windows": split_counts["test"],
+    }
+
+
+def prepare_source_split_plan(source):
+    """Create window chunks and their split indices for one configured source."""
+    plans = []
+    skipped_manifest = []
+
+    if source["split_mode"] == "file_level":
+        chunks = []
+        for file_path in source["files"]:
+            try:
+                chunks.append(_load_file_window_chunk(file_path))
+            except (ValueError, OSError, KeyError) as exc:
+                skipped_manifest.append(
+                    _skipped_manifest_row(
+                        source,
+                        {
+                            "file_path": file_path,
+                            "skip_reason": str(exc),
+                        },
+                        "file_level",
+                    )
+                )
+
+        if chunks:
+            assignments = assign_groups_to_splits(chunks, source["experiment"])
+            for chunk in chunks:
+                assigned_split = assignments[chunk["group_id"]]
+                plans.append(
+                    {
+                        "chunk": chunk,
+                        "split_mode": "file_level",
+                        "assigned_split": assigned_split,
+                        "split_indices": _whole_group_split_indices(
+                            len(chunk["x"]), assigned_split
+                        ),
+                    }
+                )
+        return plans, skipped_manifest
+
+    segment_chunks = []
+    for file_path in source["files"]:
+        try:
+            chunks, skipped_segments = _load_segment_window_chunks(file_path)
+            segment_chunks.extend(chunks)
+            skipped_manifest.extend(
+                _skipped_manifest_row(source, unit, "segment_level")
+                for unit in skipped_segments
+            )
+        except (ValueError, OSError, KeyError) as exc:
+            skipped_manifest.append(
+                _skipped_manifest_row(
+                    source,
+                    {
+                        "file_path": file_path,
+                        "skip_reason": str(exc),
+                    },
+                    "segment_level",
+                )
+            )
+
+    chronological_plans = []
+    short_chunks = []
+    initial_window_counts = {split: 0 for split in SPLIT_NAMES}
+
+    for chunk in segment_chunks:
+        split_indices = split_window_indices(len(chunk["x"]))
+        if _can_use_chronological_split(split_indices):
+            plan = {
+                "chunk": chunk,
+                "split_mode": "within_segment",
+                "assigned_split": "chronological",
+                "split_indices": split_indices,
+            }
+            chronological_plans.append(plan)
+            for split, indices in split_indices.items():
+                initial_window_counts[split] += len(indices)
+        else:
+            short_chunks.append(chunk)
+
+    plans.extend(chronological_plans)
+
+    if short_chunks:
+        assignments = assign_groups_to_splits(
+            short_chunks,
+            f"{source['experiment']}::short_segments",
+            initial_window_counts=initial_window_counts,
+            group_count_weight=0.0,
+            normalize_by_split_target=False,
+        )
+        for chunk in short_chunks:
+            assigned_split = assignments[chunk["group_id"]]
+            plans.append(
+                {
+                    "chunk": chunk,
+                    "split_mode": "whole_segment",
+                    "assigned_split": assigned_split,
+                    "split_indices": _whole_group_split_indices(
+                        len(chunk["x"]), assigned_split
+                    ),
+                }
+            )
+
+    plans.sort(
+        key=lambda plan: (
+            str(plan["chunk"]["file_path"]),
+            plan["chunk"].get("segment_index") or 0,
+        )
+    )
+    return plans, skipped_manifest
+
+
+def load_and_split_sources(sources):
+    x_chunks = {split: [] for split in SPLIT_NAMES}
+    y_chunks = {split: [] for split in SPLIT_NAMES}
+    test_meta = []
+    manifest_units = []
+
+    def append_windows(split, chunk, indices):
+        if len(indices) == 0:
+            return
+        x_chunks[split].append(chunk["x"][indices])
+        y_chunks[split].append(chunk["y"][indices])
+        if split == "test":
+            for window_idx in indices:
+                window_idx = int(window_idx)
+                raw_start_idx = chunk.get("raw_start_idx", 0) + window_idx
+                test_meta.append(
+                    {
+                        "source_file": chunk["file_path"],
+                        "segment_index": chunk.get("segment_index"),
+                        "segment_label": chunk.get("segment_label"),
+                        "window_idx_in_file": raw_start_idx,
+                        "raw_start_idx": raw_start_idx,
+                        "raw_end_idx": raw_start_idx + SEQUENCE_LENGTH - 1,
+                    }
+                )
+
+    print("Zpracovávám zdroje datasetu...")
+
+    for source in sources:
+        plans, skipped_manifest = prepare_source_split_plan(source)
+        manifest_units.extend(skipped_manifest)
+        for skipped in skipped_manifest:
+            print(
+                f"Skipping {skipped['source_file']}"
+                f" segment={skipped['segment_index']}: {skipped['skip_reason']}"
+            )
+
+        if not plans:
+            print(f"Source {source['experiment']}: no usable files")
+            continue
+
+        source_counts = {split: 0 for split in SPLIT_NAMES}
+        source_unit_counts = {split: 0 for split in SPLIT_NAMES}
+        mode_counts = {}
+
+        for plan in plans:
+            for split, indices in plan["split_indices"].items():
+                append_windows(split, plan["chunk"], indices)
+                source_counts[split] += len(indices)
+                if len(indices) > 0:
+                    source_unit_counts[split] += 1
+            mode_counts[plan["split_mode"]] = (
+                mode_counts.get(plan["split_mode"], 0) + 1
+            )
+            manifest_units.append(_planned_manifest_row(source, plan))
+
+        print(
+            f"Source {source['experiment']}: "
+            + ", ".join(
+                f"{mode}={count}" for mode, count in sorted(mode_counts.items())
+            )
+        )
+        for split in SPLIT_NAMES:
+            print(
+                f"  {split.capitalize():5} units: {source_unit_counts[split]:3d}, "
+                f"samples: {source_counts[split]:5d}"
+            )
+
+    def concat_x(chunks):
         if not chunks:
-            return np.empty((0, SEQUENCE_LENGTH, INPUT_SIZE))  # Ošetření prázdného
+            return np.empty((0, SEQUENCE_LENGTH, INPUT_SIZE))
         return np.concatenate(chunks, axis=0)
 
     def concat_y(chunks):
@@ -217,16 +664,32 @@ def load_and_split_per_file(all_files):
             return np.empty((0, 2))
         return np.concatenate(chunks, axis=0)
 
-    X_train = concat_chunks(train_X_chunks)
-    y_train = concat_y(train_y_chunks)
+    split_data = {
+        split: (concat_x(x_chunks[split]), concat_y(y_chunks[split]))
+        for split in SPLIT_NAMES
+    }
+    return (
+        split_data["train"],
+        split_data["val"],
+        split_data["test"],
+        test_meta,
+        manifest_units,
+    )
 
-    X_val = concat_chunks(val_X_chunks)
-    y_val = concat_y(val_y_chunks)
 
-    X_test = concat_chunks(test_X_chunks)
-    y_test = concat_y(test_y_chunks)
-
-    return (X_train, y_train), (X_val, y_val), (X_test, y_test), test_meta
+def load_and_split_per_file(all_files):
+    """Compatibility wrapper using the segment-aware split for each file."""
+    sources = [
+        {
+            "experiment": str(file_path),
+            "path": str(file_path),
+            "split_mode": "segment_level",
+            "files": [str(file_path)],
+        }
+        for file_path in all_files
+    ]
+    train, val, test, test_meta, _ = load_and_split_sources(sources)
+    return train, val, test, test_meta
 
 
 def plot_windows(X, y, num_windows=5):
@@ -367,12 +830,22 @@ def main():
     torch.manual_seed(SEED)
     np.random.seed(SEED)
 
-    all_files = resolve_experiment_files(str(REPO_ROOT / EXPERIMENT_DIR), EXPERIMENTS)
+    sources = resolve_experiment_sources(str(REPO_ROOT / EXPERIMENT_DIR), EXPERIMENTS)
+    all_files = [file_path for source in sources for file_path in source["files"]]
     print(f"Found {len(all_files)} dataset files in {EXPERIMENT_DIR}.")
-    for file_path in all_files:
-        print(f"  {file_path}")
+    for source in sources:
+        print(
+            f"  {source['experiment']}: {len(source['files'])} file(s), "
+            f"split_mode={source['split_mode']}"
+        )
 
-    (X_train_u, y_train_u), (X_val_u, y_val_u), (X_test_u, y_test_u), test_meta = load_and_split_per_file(all_files)
+    (
+        (X_train_u, y_train_u),
+        (X_val_u, y_val_u),
+        (X_test_u, y_test_u),
+        test_meta,
+        manifest_units,
+    ) = load_and_split_sources(sources)
 
     print(f"Train samples: {len(X_train_u)}")
     print(f"Val samples:   {len(X_val_u)}")
@@ -419,7 +892,35 @@ def main():
     torch.save(train_dataset, f"{DATASET_DIR}train{DATASET_POSTFIX}")
     torch.save(val_dataset, f"{DATASET_DIR}val{DATASET_POSTFIX}")
     torch.save(test_dataset, f"{DATASET_DIR}test{DATASET_POSTFIX}")
+    split_manifest = {
+        "version": 2,
+        "seed": SEED,
+        "split_fractions": SPLIT_FRACTIONS,
+        "directory_split": (
+            "Directories with multiple JSONL files are split by whole files, "
+            "balanced primarily by generated-window count and secondarily by "
+            "file count."
+        ),
+        "single_file_split": (
+            "Direct JSONL files and one-file directories are split per "
+            "continuous trajectory. Long trajectories use chronological "
+            "splits with sequence-length guard gaps; short trajectories are "
+            "assigned whole to one split."
+        ),
+        "total_windows": {
+            "train": len(train_dataset),
+            "val": len(val_dataset),
+            "test": len(test_dataset),
+        },
+        "split_units": manifest_units,
+    }
+    split_manifest_path = Path(DATASET_DIR) / "split_manifest.json"
+    split_manifest_path.write_text(
+        json.dumps(split_manifest, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
     print(f"Datasets saved to {DATASET_DIR} directory.")
+    print(f"Split manifest saved to {split_manifest_path}.")
 
     # shuffle before plotting
     perm_test = np.random.permutation(len(X_test))

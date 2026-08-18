@@ -104,6 +104,24 @@ PROGRESS_EVERY = 100
 # -----------------------------------------------------------------------------
 
 def load_jsonl(path: str) -> list[dict]:
+    # Some recorded datasets use the .jsonl suffix even though they contain one
+    # pretty-printed JSON array (run34 is one of them).  Detect that form first,
+    # while retaining support for actual one-object-per-line JSONL files.
+    with open(path, "r", encoding="utf-8") as stream:
+        first_character = ""
+        while character := stream.read(1):
+            if not character.isspace():
+                first_character = character
+                break
+        stream.seek(0)
+        if first_character == "[":
+            data = json.load(stream)
+            if not isinstance(data, list) or not all(
+                isinstance(record, dict) for record in data
+            ):
+                raise ValueError("JSON array must contain only record objects")
+            return data
+
     records: list[dict] = []
     with open(path, "r", encoding="utf-8") as stream:
         for line_number, line in enumerate(stream, 1):
