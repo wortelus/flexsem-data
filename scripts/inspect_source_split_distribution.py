@@ -64,8 +64,42 @@ SPLIT_COLORS = {
     "test": "#54A24B",
 }
 
-STEP_EDGES_NM = np.array([0.0, 100.0, 300.0, 1_000.0, 3_000.0, np.inf])
-STEP_LABELS = ("0–100", "100–300", "300–1000", "1–3 µm", "≥3 µm")
+# Intervals are left-closed/right-open, for example 3–5 µm means
+# 3_000 <= command magnitude < 5_000 nm.  Keep the edges contiguous so every
+# generated window belongs to exactly one bin and distribution totals remain
+# equal to the split sizes.
+STEP_EDGES_NM = np.array(
+    [
+        0.0,
+        100.0,
+        300.0,
+        1_000.0,
+        3_000.0,
+        5_000.0,
+        7_000.0,
+        10_000.0,
+        13_000.0,
+        16_000.0,
+        20_000.0,
+        25_000.0,
+        np.inf,
+    ]
+)
+STEP_LABELS = (
+    "0–100",
+    "100–300",
+    "300–1000",
+    "1–3 µm",
+    "3–5 µm",
+    "5–7 µm",
+    "8–10 µm",
+    "10–13 µm",
+    "13–16 µm",
+    "16–20 µm",
+    "20–25 µm",
+    "≥25 µm",
+)
+FINE_STEP_BIN_COUNT = 30
 
 
 def parse_args() -> argparse.Namespace:
@@ -368,7 +402,8 @@ def verify_saved_split_sizes(windows: pd.DataFrame) -> None:
 def plot_step_distribution_by_split(
     distribution: pd.DataFrame, output_path: Path
 ) -> None:
-    fig, ax = plt.subplots(figsize=(10, 5.5))
+    fig_width = max(12.0, 0.95 * len(STEP_LABELS))
+    fig, ax = plt.subplots(figsize=(fig_width, 5.5))
     x = np.arange(len(STEP_LABELS))
     width = 0.24
 
@@ -388,10 +423,104 @@ def plot_step_distribution_by_split(
     ax.set_title("Command-step distribution by dataset split")
     ax.set_xlabel("Ground-truth command magnitude")
     ax.set_ylabel("Share within split [%]")
-    ax.set_xticks(x, STEP_LABELS)
+    ax.set_xticks(x, STEP_LABELS, rotation=30, ha="right")
     ax.grid(axis="y", alpha=0.25)
     ax.legend()
     fig.tight_layout()
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
+
+
+def plot_step_distribution_by_split_fine(
+    windows: pd.DataFrame,
+    output_path: Path,
+    bin_count: int = FINE_STEP_BIN_COUNT,
+) -> None:
+    """Plot vertically aligned split histograms using shared equal-width bins."""
+    if bin_count <= 0:
+        raise ValueError("bin_count must be positive")
+
+    all_step_sizes_nm = windows["command_size_nm"].to_numpy(dtype=float)
+    if not np.all(np.isfinite(all_step_sizes_nm)):
+        raise ValueError("Command-step magnitudes contain NaN or infinite values")
+    if len(all_step_sizes_nm) == 0:
+        raise ValueError("Cannot plot an empty command-step distribution")
+
+    # Round the common upper bound up to a whole micrometre.  Every subplot
+    # consequently uses the exact same physical range and equal-width bins.
+    max_step_nm = float(np.max(all_step_sizes_nm))
+    upper_bound_nm = max(1_000.0, np.ceil(max_step_nm / 1_000.0) * 1_000.0)
+    bin_edges_nm = np.linspace(0.0, upper_bound_nm, bin_count + 1)
+    bin_width_nm = bin_edges_nm[1] - bin_edges_nm[0]
+    tick_labels_nm = [
+        f"{edge_nm:,.0f}".replace(",", " ") for edge_nm in bin_edges_nm
+    ]
+
+    fig, axes = plt.subplots(
+        len(SPLITS),
+        1,
+        figsize=(20, 14),
+        sharex=True,
+        sharey=True,
+    )
+    maximum_share = 0.0
+
+    for ax, split in zip(axes, SPLITS):
+        split_sizes_nm = windows.loc[
+            windows["split"] == split, "command_size_nm"
+        ].to_numpy(dtype=float)
+        counts, _ = np.histogram(split_sizes_nm, bins=bin_edges_nm)
+        shares = (
+            100.0 * counts / len(split_sizes_nm)
+            if len(split_sizes_nm)
+            else np.zeros(bin_count, dtype=float)
+        )
+        exact_zero_count = int(np.count_nonzero(np.abs(split_sizes_nm) < 0.5))
+        exact_zero_share = (
+            100.0 * exact_zero_count / len(split_sizes_nm)
+            if len(split_sizes_nm)
+            else 0.0
+        )
+        maximum_share = max(maximum_share, float(np.max(shares, initial=0.0)))
+
+        ax.bar(
+            bin_edges_nm[:-1],
+            shares,
+            width=np.diff(bin_edges_nm),
+            align="edge",
+            color=SPLIT_COLORS[split],
+            edgecolor="white",
+            linewidth=0.5,
+        )
+        ax.set_title(
+            f"{split} (n={len(split_sizes_nm)}; exact 0 nm: "
+            f"{exact_zero_count} = {exact_zero_share:.2f}%)",
+            loc="left",
+        )
+        ax.set_ylabel("Share [%]")
+        ax.set_xlabel("Ground-truth command magnitude [nm]")
+        ax.set_xticks(bin_edges_nm)
+        ax.set_xticklabels(
+            tick_labels_nm,
+            rotation=55,
+            ha="right",
+            fontsize=7,
+        )
+        # Matplotlib hides upper x tick labels for shared axes by default.
+        ax.tick_params(axis="x", which="both", labelbottom=True)
+        ax.grid(axis="y", alpha=0.25)
+
+    shared_y_max = max(1.0, maximum_share * 1.12)
+    axes[0].set_ylim(0.0, shared_y_max)
+    axes[-1].set_xlim(0.0, upper_bound_nm)
+    fig.suptitle(
+        "Command-step distribution by split — "
+        f"{bin_count} shared equal-width bins "
+        f"(0–{upper_bound_nm:,.0f} nm, width {bin_width_nm:,.0f} nm)".replace(
+            ",", " "
+        )
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.96))
     fig.savefig(output_path, dpi=180)
     plt.close(fig)
 
@@ -476,7 +605,8 @@ def plot_experiment_step_heatmap(
     percentages = counts.div(counts.sum(axis=1), axis=0).fillna(0) * 100.0
 
     fig_height = max(6.0, 0.55 * len(percentages))
-    fig, ax = plt.subplots(figsize=(10, fig_height))
+    fig_width = max(12.0, 0.9 * len(STEP_LABELS))
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
     image = percentage_heatmap(
         ax,
         percentages,
@@ -493,7 +623,8 @@ def plot_experiment_step_heatmaps_by_split(
 ) -> None:
     experiments = list(dict.fromkeys(windows["experiment"].astype(str)))
     fig_height = max(6.0, 0.55 * len(experiments))
-    fig, axes = plt.subplots(1, 3, figsize=(18, fig_height), sharey=True)
+    fig_width = max(24.0, 1.9 * len(STEP_LABELS))
+    fig, axes = plt.subplots(1, 3, figsize=(fig_width, fig_height), sharey=True)
     last_image = None
 
     for index, (ax, split) in enumerate(zip(axes, SPLITS)):
@@ -549,6 +680,10 @@ def save_outputs(
 
     plot_step_distribution_by_split(
         step_distribution, output_dir / "step_distribution_by_split.png"
+    )
+    plot_step_distribution_by_split_fine(
+        windows,
+        output_dir / "step_distribution_by_split_30_bins.png",
     )
     plot_experiment_distribution(
         experiment_distribution,
