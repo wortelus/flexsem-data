@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "source": "..\\hysteresis_dataset_20251114_102017.jsonl",
+  "source_sha256": "848818c06d0513a8ffdfea71493fb29afcd7647e9ec63b12f0a17ffe9146ab71",
+  "sequence_length": 16,
+  "rule": "Remove the seven confirmed reconstructed-actual outliers; each removed record creates a hard trajectory boundary.",
+  "verification": {
+    "actual_target_offset_threshold_nm": 10000.0,
+    "confidence_sanity_max": 0.4
+  },
+  "source_rows": 1509,
+  "excluded_rows": 7,
+  "output_rows": 1502,
+  "excluded_records": [
+    {
+      "iteration": 1,
+      "step": 4,
+      "confidence": 0.3121,
+      "actual_target_offset_nm": 16082.394473460723
+    },
+    {
+      "iteration": 1,
+      "step": 84,
+      "confidence": 0.3583,
+      "actual_target_offset_nm": 16915.95725934539
+    },
+    {
+      "iteration": 1,
+      "step": 88,
+      "confidence": 0.3685,
+      "actual_target_offset_nm": 16286.934395398048
+    },
+    {
+      "iteration": 1,
+      "step": 218,
+      "confidence": 0.3726,
+      "actual_target_offset_nm": 16706.063390278392
+    },
+    {
+      "iteration": 1,
+      "step": 426,
+      "confidence": 0.3299,
+      "actual_target_offset_nm": 16471.30353068633
+    },
+    {
+      "iteration": 1,
+      "step": 450,
+      "confidence": 0.3276,
+      "actual_target_offset_nm": 16548.76533158894
+    },
+    {
+      "iteration": 1,
+      "step": 458,
+      "confidence": 0.2668,
+      "actual_target_offset_nm": 15547.084260400727
+    }
+  ],
+  "chunks": [
+    {
+      "file": "run34_iteration1_part001_steps0000-0003.jsonl",
+      "iteration": 1,
+      "part": 1,
+      "start_step": 0,
+      "end_step": 3,
+      "rows": 4,
+      "generated_windows_seq16": 0,
+      "usable_for_seq16": false,
+      "sha256": "71a4d59ebe7f24db5eb76110fdb1a0e057f79b875bf26d7f85ea1a98e96a1448"
+    },
+    {
+      "file": "run34_iteration1_part002_steps0005-0083.jsonl",
+      "iteration": 1,
+      "part": 2,
+      "start_step": 5,
+      "end_step": 83,
+      "rows": 79,
+      "generated_windows_seq16": 64,
+      "usable_for_seq16": true,
+      "sha256": "07044726ecabef2eb42a3f2e3d257d0ed513d30e0446f9fbbf1ff4e607608019"
+    },
+    {
+      "file": "run34_iteration1_part003_steps0085-0087.jsonl",
+      "iteration": 1,
+      "part": 3,
+      "start_step": 85,
+      "end_step": 87,
+      "rows": 3,
+      "generated_windows_seq16": 0,
+      "usable_for_seq16": false,
+      "sha256": "44fa82676e811e3c2a61e9eab43be378c725ce6e08a626bc01dcbca7616988f5"
+    },
+    {
+      "file": "run34_iteration1_part004_steps0089-0217.jsonl",
+      "iteration": 1,
+      "part": 4,
+      "start_step": 89,
+      "end_step": 217,
+      "rows": 129,
+      "generated_windows_seq16": 114,
+      "usable_for_seq16": true,
+      "sha256": "7fd453e5bf3d9ac0d0ad8f60a657e6a12879ea3c7751db4c6e85ee3cb34c955d"
+    },
+    {
+      "file": "run34_iteration1_part005_steps0219-0425.jsonl",
+      "iteration": 1,
+      "part": 5,
+      "start_step": 219,
+      "end_step": 425,
+      "rows": 207,
+      "generated_windows_seq16": 192,
+      "usable_for_seq16": true,
+      "sha256": "762171795207c4e525cc378bbcb8328a0009a8aefeef08023ac98ceef76cbaf1"
+    },
+    {
+      "file": "run34_iteration1_part006_steps0427-0449.jsonl",
+      "iteration": 1,
+      "part": 6,
+      "start_step": 427,
+      "end_step": 449,
+      "rows": 23,
+      "generated_windows_seq16": 8,
+      "usable_for_seq16": true,
+      "sha256": "b9e369d5dd30644dd605cd5b668a88c8ddc91cf3a5c72987a38453f0be62f036"
+    },
+    {
+      "file": "run34_iteration1_part007_steps0451-0457.jsonl",
+      "iteration": 1,
+      "part": 7,
+      "start_step": 451,
+      "end_step": 457,
+      "rows": 7,
+      "generated_windows_seq16": 0,
+      "usable_for_seq16": false,
+      "sha256": "030cb8ce81670acac9ea3c177763e14da036fda94569e732c1dc9684a0b5d13a"
+    },
+    {
+      "file": "run34_iteration1_part008_steps0459-end.jsonl",
+      "iteration": 1,
+      "part": 8,
+      "start_step": 459,
+      "end_step": "end",
+      "rows": 44,
+      "generated_windows_seq16": 29,
+      "usable_for_seq16": true,
+      "sha256": "75ed86facd7afcea624ec383b2bc4c245e22d3899bce616d848f1e2c2045a7f8"
+    },
+    {
+      "file": "run34_iteration2_part001_steps0000-end.jsonl",
+      "iteration": 2,
+      "part": 1,
+      "start_step": 0,
+      "end_step": "end",
+      "rows": 503,
+      "generated_windows_seq16": 488,
+      "usable_for_seq16": true,
+      "sha256": "50657f0553bedce71d7805e2f70f44e4aae1e166e89c66aca57e035a6bbd9213"
+    },
+    {
+      "file": "run34_iteration3_part001_steps0000-end.jsonl",
+      "iteration": 3,
+      "part": 1,
+      "start_step": 0,
+      "end_step": "end",
+      "rows": 503,
+      "generated_windows_seq16": 488,
+      "usable_for_seq16": true,
+      "sha256": "59aecd7304c2e9adfda51140e3b15b382b28cd59a7bdf28d1195634116d28d39"
+    }
+  ]
+}
