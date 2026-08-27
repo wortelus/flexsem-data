@@ -1,0 +1,82 @@
+drift:
+  correction_mag: 8000
+  correction_type: Slow2
+  ignore_bottom_pix: 60
+  ignore_center_x_pix: 250
+  ignore_center_y_pix: 200
+  interval_s: 300
+  max_shift_nm_per_minute: 50
+  min_confidence: 0.5
+  precise:
+    distance_threshold: 100nm
+    enabled: false
+    max_attempts: 3
+exposure:
+  exposure_mag: 16000
+  exposure_type: Reduce1
+  steps:
+  - exposure_time_s: 5
+    site_id: auto_1
+    xyr:
+      r: 0.0deg
+      x: 0nm
+      y: 0nm
+  - exposure_time_s: 5
+    site_id: auto_2
+    xyr:
+      r: 0.0deg
+      x: -2750nm
+      y: 0nm
+  - exposure_time_s: 5
+    site_id: auto_3
+    xyr:
+      r: 0.0deg
+      x: -5500nm
+      y: 0nm
+  - exposure_time_s: 5
+    site_id: auto_4
+    xyr:
+      r: 0.0deg
+      x: 0nm
+      y: 1500nm
+  - exposure_time_s: 5
+    site_id: auto_5
+    xyr:
+      r: 0.0deg
+      x: -2750nm
+      y: 1500nm
+  - exposure_time_s: 5
+    site_id: auto_6
+    xyr:
+      r: 0.0deg
+      x: -5500nm
+      y: 1500nm
+hysteresis:
+  enabled: true
+  force_warmup: false
+  model_path: hyst-inverse
+  sanity_limit: 100nm
+  simulator: true
+  warmup_distance: 2000nm
+log:
+  backup_count: 3
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  level: INFO
+  max_bytes: 1048576
+  path: logs/last.log
+misc:
+  command_beam_timeout_s: 15
+  command_timeout_s: 10
+  max_reconnect_retries: 3
+  max_retries: 3
+  reconnect_delay_s: 15
+  retry_delay_s: 10
+  sem_scan_image_filetype: bmp
+  sem_scan_path: D:/SemImage/temp/D_Image_01
+  temp_path: ./temp
+  turn_beam_off_on_error: true
+update_reference:
+  precise:
+    distance_threshold: 200nm
+    enabled: false
+    max_attempts: 3
