@@ -11,9 +11,9 @@ from rnn.utils.loss import RelativeMSELoss
 SEED = 10
 
 # Data splits
-TRAIN_SPLIT = 0.8
-VAL_SPLIT = 0.1
-TEST_SPLIT = 0.1
+TRAIN_SPLIT = 0.7
+VAL_SPLIT = 0.15
+TEST_SPLIT = 0.15
 
 _split_total = TRAIN_SPLIT + VAL_SPLIT + TEST_SPLIT
 if any(split < 0 for split in (TRAIN_SPLIT, VAL_SPLIT, TEST_SPLIT)):
@@ -53,8 +53,8 @@ if TARGET_MODE == "residual_delta" and WINDOW_COORD_MODE != "delta":
 
 # LSTM/GRU parameters
 SEQUENCE_LENGTH = 16
-HIDDEN_SIZE = 64
-NUM_LAYERS = 1
+HIDDEN_SIZE = 32
+NUM_LAYERS = 2
 BIDIRECTIONAL = False
 INPUT_SIZE = 4  # fixed
 OUTPUT_SIZE = 2  # fixed
@@ -95,7 +95,7 @@ SCHEDULER_MIN_LR = 1e-7
 EARLY_STOPPING_PATIENCE = 100
 EARLY_STOPPING_MIN_DELTA = 0.0
 
-DROPOUT = 0.0
+DROPOUT = 0.1
 
 #
 # Directories and file paths

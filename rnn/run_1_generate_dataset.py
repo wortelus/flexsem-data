@@ -33,7 +33,7 @@ elif INPUT_SIZE == 4:
 
 EXPERIMENTS = [
     "run33-complex/hysteresis_dataset_20251104_174024.jsonl",
-    "run34-random678mag/hysteresis_dataset_20251114_102017.jsonl",
+    "run34-random678mag/no_outlier_segments",
     "run35-random9-11-12/hysteresis_dataset_20251114_125908.jsonl",
     "run36-sawtooth-decreasing/hysteresis_dataset_20251118_170631.jsonl",
     "run37-sawtooth-complex-x/hysteresis_dataset_20251128_154751.jsonl",
@@ -43,7 +43,8 @@ EXPERIMENTS = [
     "run70-data-feast-overnight-sub2/confidence_0.8_no_axis_outliers_segments",
     "run71-data-feast-overnight/confidence_0.7_segments",
     "run72-data-feast-overnight/hysteresis_dataset_20260303_203815_updated.jsonl",
-    "run84_random_walk",
+    "run84-random-walk/hysteresis_dataset_20260817_224830_446197_updated.jsonl",
+    "run85-random-walk/hysteresis_dataset_20260818_143513_530862_updated.jsonl",
 ]
 
 
