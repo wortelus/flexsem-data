@@ -95,6 +95,20 @@ SCHEDULER_MIN_LR = 1e-7
 EARLY_STOPPING_PATIENCE = 100
 EARLY_STOPPING_MIN_DELTA = 0.0
 
+# Refit plan used when VAL_SPLIT == 0.
+NO_VAL_EPOCHS = 415
+NO_VAL_LR_MILESTONES = (268, 346)
+NO_VAL_LR_GAMMA = 0.5
+
+if NO_VAL_EPOCHS <= 0:
+    raise ValueError("NO_VAL_EPOCHS must be positive")
+if tuple(sorted(set(NO_VAL_LR_MILESTONES))) != NO_VAL_LR_MILESTONES:
+    raise ValueError("NO_VAL_LR_MILESTONES must be unique and increasing")
+if any(epoch <= 0 or epoch >= NO_VAL_EPOCHS for epoch in NO_VAL_LR_MILESTONES):
+    raise ValueError("NO_VAL_LR_MILESTONES must fall inside the no-validation run")
+if not 0.0 < NO_VAL_LR_GAMMA < 1.0:
+    raise ValueError("NO_VAL_LR_GAMMA must be in (0, 1)")
+
 DROPOUT = 0.1
 
 #
@@ -121,6 +135,12 @@ def _path_token(value):
 
 _loss_tag = "mse" if LOSS_MODE == "mse" else f"relative_mse_eps{_path_token(int(RELATIVE_LOSS_EPS))}"
 
+_split_tag = (
+    f"_split{round(TRAIN_SPLIT * 100)}"
+    f"_{round(VAL_SPLIT * 100)}"
+    f"_{round(TEST_SPLIT * 100)}"
+)
+
 RUN_NAME = (
     f"{_direction}_{_model}"
     f"_h{HIDDEN_SIZE}_l{NUM_LAYERS}_b{int(BIDIRECTIONAL)}"
@@ -128,6 +148,7 @@ RUN_NAME = (
     f"_nh{_heads}_{_loss_tag}"
     f"_bs{BATCH_SIZE}_lr{_path_token(LEARNING_RATE)}"
     f"_do{_path_token(DROPOUT)}_seed{SEED}"
+    f"{_split_tag}"
 )
 
 OUTPUT_ROOT = RNN_DIR / "outputs"
@@ -178,6 +199,9 @@ RUN_CONFIG = {
     "scheduler_min_lr": SCHEDULER_MIN_LR,
     "early_stopping_patience": EARLY_STOPPING_PATIENCE,
     "early_stopping_min_delta": EARLY_STOPPING_MIN_DELTA,
+    "no_val_epochs": NO_VAL_EPOCHS,
+    "no_val_lr_milestones": NO_VAL_LR_MILESTONES,
+    "no_val_lr_gamma": NO_VAL_LR_GAMMA,
     "dropout": DROPOUT,
     "experiment_dir": EXPERIMENT_DIR,
 }

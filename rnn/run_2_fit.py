@@ -55,13 +55,27 @@ def main():
         scaler = joblib.load(SCALER_PATH) if LOSS_MODE == "relative_mse" else None
         criterion = make_criterion(scaler).to(device)
         optimizer = OPTIMIZER(model.parameters(), lr=LEARNING_RATE)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer,
-            'min',
-            patience=SCHEDULER_PATIENCE,
-            factor=SCHEDULER_FACTOR,
-            threshold=SCHEDULER_THRESHOLD,
-            min_lr=SCHEDULER_MIN_LR)
+        if val_loader:
+            scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                optimizer,
+                'min',
+                patience=SCHEDULER_PATIENCE,
+                factor=SCHEDULER_FACTOR,
+                threshold=SCHEDULER_THRESHOLD,
+                min_lr=SCHEDULER_MIN_LR)
+            training_epochs = EPOCHS
+        else:
+            scheduler = torch.optim.lr_scheduler.MultiStepLR(
+                optimizer,
+                milestones=list(NO_VAL_LR_MILESTONES),
+                gamma=NO_VAL_LR_GAMMA,
+            )
+            training_epochs = NO_VAL_EPOCHS
+            print(
+                "No validation split: using fixed full-data refit plan "
+                f"({training_epochs} epochs, LR milestones "
+                f"{list(NO_VAL_LR_MILESTONES)}, gamma={NO_VAL_LR_GAMMA})."
+            )
 
         train_loss_history = []
         val_loss_history = []
@@ -69,7 +83,7 @@ def main():
         best_val_loss = np.inf  # our metric to save the best model
         best_epoch = 0
         epochs_without_improvement = 0
-        for epoch in range(EPOCHS):
+        for epoch in range(training_epochs):
             # switch to train mode
             model.train()
             total_train_loss = 0
@@ -116,7 +130,7 @@ def main():
                 if new_lr != old_lr:
                     print(f"Learning rate reduced from {old_lr:.8f} to {new_lr:.8f}")
 
-                print(f'Epoch [{epoch + 1}/{EPOCHS}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}')
+                print(f'Epoch [{epoch + 1}/{training_epochs}], Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}')
 
                 # Save the best model
                 if avg_val_loss < best_val_loss - EARLY_STOPPING_MIN_DELTA:
@@ -135,14 +149,31 @@ def main():
                         )
                         break
             else:
-                # In case there's no validation set...
-                print(f'Epoch [{epoch + 1}/{EPOCHS}], Train Loss: {avg_train_loss:.6f}')
+                old_lr = optimizer.param_groups[0]['lr']
+                scheduler.step()
+                new_lr = optimizer.param_groups[0]['lr']
+                print(
+                    f'Epoch [{epoch + 1}/{training_epochs}], '
+                    f'Train Loss: {avg_train_loss:.6f}, LR: {new_lr:.8f}'
+                )
+                if new_lr != old_lr:
+                    print(f"Learning rate reduced from {old_lr:.8f} to {new_lr:.8f}")
+                    milestone_filename = f"{MODEL_SAVE_PATH}.epoch{epoch + 1}"
+                    torch.save(model.state_dict(), milestone_filename)
+                    print(f"Milestone checkpoint saved to '{milestone_filename}'")
 
         print("\tTRAIN LOOP FINISHED")
         if not val_loader:
             last_epoch_filename = f"{MODEL_SAVE_PATH}.last_epoch"
+            fixed_refit_filename = f"{MODEL_SAVE_PATH}.best"
             torch.save(model.state_dict(), last_epoch_filename)
-            print(f"Model (last epoch) saved do '{last_epoch_filename}")
+            torch.save(model.state_dict(), fixed_refit_filename)
+            print(f"Model (last epoch) saved to '{last_epoch_filename}'")
+            print(
+                "Fixed full-data refit has no validation-selected best epoch; "
+                f"the same final weights were saved to '{fixed_refit_filename}' "
+                "for test/export compatibility."
+            )
 
         print("Generating training loss plot...")
         plt.figure(figsize=(10, 5))
