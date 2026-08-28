@@ -39,14 +39,7 @@ def main():
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         print(f"Using device: {device}")
 
-        model = MODEL(
-            input_size=INPUT_SIZE,
-            hidden_size=HIDDEN_SIZE,
-            output_size=OUTPUT_SIZE,
-            num_layers=NUM_LAYERS,
-            dropout=DROPOUT,
-            bidirectional=BIDIRECTIONAL,
-            n_heads=N_HEADS).to(device)
+        model = build_model().to(device)
 
         # Toto aktivuje Triton backend (default='inductor') pro rychlejší běh
         print("Compiling model...")

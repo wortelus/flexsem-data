@@ -51,15 +51,7 @@ def to_actual_delta_metrics_space(y_pred_nm, y_true_nm, X_input_nm):
 
 
 def load_model(model_path, device):
-    model = MODEL(
-        input_size=INPUT_SIZE,
-        hidden_size=HIDDEN_SIZE,
-        output_size=OUTPUT_SIZE,
-        num_layers=NUM_LAYERS,
-        dropout=DROPOUT,
-        bidirectional=BIDIRECTIONAL,
-        n_heads=N_HEADS,
-    ).to(device)
+    model = build_model().to(device)
 
     checkpoint = torch.load(model_path, map_location=device, weights_only=False)
     if isinstance(checkpoint, torch.nn.Module):

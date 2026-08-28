@@ -129,13 +129,7 @@ def evaluate():
     print("Scalers loaded.")
 
     # 3. Load Model
-    model = MODEL(input_size=INPUT_SIZE,
-                  hidden_size=HIDDEN_SIZE,
-                  output_size=OUTPUT_SIZE,
-                  num_layers=NUM_LAYERS,
-                  dropout=DROPOUT,
-                  bidirectional=BIDIRECTIONAL,
-                  n_heads=N_HEADS).to(device)
+    model = build_model().to(device)
 
     # Load weights
     checkpoint = torch.load(model_path, map_location=device, weights_only=False)

@@ -1,5 +1,5 @@
 """
-Export trained GRU model to ONNX format with dynamic batch size.
+Export the configured trained model to ONNX with dynamic batch size.
 Compatible with PyTorch 2.x and ONNX Runtime inference.
 """
 
@@ -16,15 +16,7 @@ ONNX_PATH = str(EXPORT_DIR / "model.onnx")
 
 
 def load_model(model_path, device):
-    model = MODEL(
-        input_size=INPUT_SIZE,
-        hidden_size=HIDDEN_SIZE,
-        output_size=OUTPUT_SIZE,
-        num_layers=NUM_LAYERS,
-        dropout=DROPOUT,
-        bidirectional=BIDIRECTIONAL,
-        n_heads=N_HEADS,
-    ).to(device)
+    model = build_model().to(device)
 
     checkpoint = torch.load(model_path, map_location=device, weights_only=False)
     if isinstance(checkpoint, torch.nn.Module):
@@ -46,7 +38,7 @@ def export_onnx(model, device):
     # Dummy input with batch size 1 (will be dynamic)
     dummy_input = torch.randn(1, SEQUENCE_LENGTH, INPUT_SIZE, device=device)
 
-    # Legacy exporter (dynamo=False) - dynamo has numerical issues with GRU
+    # Legacy exporter is retained because it is also reliable for recurrent models.
     torch.onnx.export(
         model,
         dummy_input,

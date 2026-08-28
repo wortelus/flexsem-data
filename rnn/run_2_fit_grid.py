@@ -1,15 +1,14 @@
-"""Click-and-run grid training for inverse GRU models.
+"""Click-and-run grid training for inverse GRU/TCN models.
 
 Edit the CONFIGURATION section below and run this file. Every experiment is
 stored directly under ``rnn/outputs/<run_name>/`` using the same basic layout
 as ``run_2_fit.py``.
 
-Important: window coordinates and prediction targets are preprocessing
-choices, not GRU hyperparameters. A ``delta/residual_delta`` tensor dataset is
-not also a ``relative`` dataset. To compare representations, generate one
-train/val/test/scaler set per representation and add each set to
-``DATASET_VARIANTS``. All GRU configurations within a variant reuse and copy
-the exact same source files.
+The three default datasets compare relative/actual-position, direct delta and
+delta+residual-delta targets. Missing comparison datasets are generated once
+from the same source list and split assignment, then reused by every model.
+All results also include command-delta metrics in physical nanometres, which
+are directly comparable across the three target representations.
 """
 
 from __future__ import annotations
@@ -34,7 +33,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 
 RNN_DIR = Path(__file__).resolve().parent
 REPO_ROOT = RNN_DIR.parent
@@ -42,6 +41,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from rnn.models.model_gru import HysteresisGRU
+from rnn.models.model_tcn import HysteresisTCN
 from rnn.utils import const as current_config
 from rnn.utils.loss import RelativeMSELoss
 
@@ -51,7 +51,7 @@ OUTPUT_ROOT = RNN_DIR / "outputs"
 
 @dataclass(frozen=True)
 class DatasetVariant:
-    """One already-generated tensor representation shared by many GRU runs."""
+    """One tensor representation shared by many model runs."""
 
     name: str
     train_path: Path
@@ -61,6 +61,7 @@ class DatasetVariant:
     window_coord_mode: str
     target_mode: str
     sequence_length: int
+    command_quantization_nm: float | None = None
     input_size: int = 4
     output_size: int = 2
 
@@ -68,8 +69,10 @@ class DatasetVariant:
 @dataclass(frozen=True)
 class Experiment:
     dataset: DatasetVariant
+    model_type: str
     hidden_size: int
     num_layers: int
+    tcn_kernel_size: int
     bidirectional: bool
     dropout: float
     batch_size: int
@@ -82,49 +85,41 @@ class Experiment:
 # CONFIGURATION -- normally this is the only section you need to edit
 # =============================================================================
 
-# Every enabled representation needs its own generated .pt files and scaler.
-# The default points to the dataset selected by rnn/utils/const.py.
-DATASET_VARIANTS = (
-    DatasetVariant(
-        name="current",
-        train_path=current_config.DATASET_DIR_PATH / "train.pt",
-        val_path=current_config.DATASET_DIR_PATH / "val.pt",
-        test_path=current_config.DATASET_DIR_PATH / "test.pt",
-        scaler_path=Path(current_config.SCALER_PATH),
-        window_coord_mode=current_config.WINDOW_COORD_MODE,
-        target_mode=current_config.TARGET_MODE,
+GRID_DATASET_ROOT = OUTPUT_ROOT / "_grid_datasets"
+COMMAND_QUANTIZATION_NM = 50.0
+
+
+def generated_dataset_variant(name, window_coord_mode, target_mode):
+    root = GRID_DATASET_ROOT / name
+    return DatasetVariant(
+        name=name,
+        train_path=root / "dataset" / "train.pt",
+        val_path=root / "dataset" / "val.pt",
+        test_path=root / "dataset" / "test.pt",
+        scaler_path=root / "scalers" / "scaler.gz",
+        window_coord_mode=window_coord_mode,
+        target_mode=target_mode,
         sequence_length=current_config.SEQUENCE_LENGTH,
+        command_quantization_nm=COMMAND_QUANTIZATION_NM,
         input_size=current_config.INPUT_SIZE,
         output_size=current_config.OUTPUT_SIZE,
-    ),
+    )
 
-    # To compare all valid representations, generate their datasets first and
-    # add entries like these (with real paths):
-    # DatasetVariant(
-    #     name="delta_actual",
-    #     train_path=Path(r"C:\path\delta_actual\train.pt"),
-    #     val_path=Path(r"C:\path\delta_actual\val.pt"),
-    #     test_path=Path(r"C:\path\delta_actual\test.pt"),
-    #     scaler_path=Path(r"C:\path\delta_actual\scaler.gz"),
-    #     window_coord_mode="delta",
-    #     target_mode="actual_delta",
-    #     sequence_length=16,
-    # ),
-    # DatasetVariant(
-    #     name="relative",
-    #     train_path=Path(r"C:\path\relative\train.pt"),
-    #     val_path=Path(r"C:\path\relative\val.pt"),
-    #     test_path=Path(r"C:\path\relative\test.pt"),
-    #     scaler_path=Path(r"C:\path\relative\scaler.gz"),
-    #     window_coord_mode="relative",
-    #     target_mode="actual_delta",  # relative-position target in this mode
-    #     sequence_length=16,
-    # ),
+
+DATASET_VARIANTS = (
+    # "actual": predict the command position relative to the window origin.
+    generated_dataset_variant("actual_relative_q50", "relative", "actual_delta"),
+    # "delta": predict the executable command delta directly.
+    generated_dataset_variant("delta_actual_q50", "delta", "actual_delta"),
+    # "delta + residual Y": predict command_delta - desired_delta.
+    generated_dataset_variant("delta_residual_q50", "delta", "residual_delta"),
 )
 
-# Cartesian GRU grid. Tuples with one value keep that option fixed.
-HIDDEN_SIZES = (32, 64, 128)
-NUM_LAYERS = (1, 2)
+# Cartesian model grid. Default is TCN-only; add "gru" to compare architectures.
+MODEL_TYPES = ("tcn",)
+HIDDEN_SIZES = (32, 64)
+NUM_LAYERS = (3, 4)
+TCN_KERNEL_SIZES = (3,)
 BIDIRECTIONAL_OPTIONS = (False,)
 DROPOUTS = (0.0, 0.1)
 BATCH_SIZES = (16, 32)
@@ -160,15 +155,33 @@ NUM_WORKERS = 0
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "--prepare-datasets-only",
+        action="store_true",
+        help="Generate/validate the three shared datasets, then exit.",
+    )
+    parser.add_argument(
+        "--rebuild-datasets",
+        action="store_true",
+        help="Regenerate shared representation datasets even when they exist.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Validate datasets and print planned experiments without training.",
+        help="Print planned datasets/runs without writing or training.",
     )
     parser.add_argument(
         "--max-runs",
         type=int,
         default=None,
         help="Run only the first N configurations (useful for a smoke test).",
+    )
+    parser.add_argument(
+        "--one-per-representation",
+        action="store_true",
+        help=(
+            "Use the first identical architecture/hyperparameter combination "
+            "for each representation (three runs total)."
+        ),
     )
     parser.add_argument(
         "--epochs",
@@ -212,8 +225,11 @@ def experiment_run_name(experiment: Experiment) -> str:
         else f"relative_mse_eps{path_token(int(RELATIVE_LOSS_EPS_NM))}"
     )
     dataset = experiment.dataset
+    architecture_tag = experiment.model_type
+    if experiment.model_type == "tcn":
+        architecture_tag += f"_k{experiment.tcn_kernel_size}"
     return (
-        f"{RUN_NAME_PREFIX}inverse_gru"
+        f"{RUN_NAME_PREFIX}inverse_{architecture_tag}"
         f"_h{experiment.hidden_size}_l{experiment.num_layers}"
         f"_b{int(experiment.bidirectional)}"
         f"_seq{dataset.sequence_length}"
@@ -230,6 +246,7 @@ def experiment_run_name(experiment: Experiment) -> str:
 def build_experiments() -> list[Experiment]:
     experiments = []
     hyperparameter_product = itertools.product(
+        MODEL_TYPES,
         HIDDEN_SIZES,
         NUM_LAYERS,
         BIDIRECTIONAL_OPTIONS,
@@ -243,6 +260,7 @@ def build_experiments() -> list[Experiment]:
 
     for dataset in DATASET_VARIANTS:
         for (
+            model_type,
             hidden_size,
             num_layers,
             bidirectional,
@@ -252,25 +270,30 @@ def build_experiments() -> list[Experiment]:
             loss_mode,
             seed,
         ) in hyperparameters:
-            if (
-                SKIP_REDUNDANT_SINGLE_LAYER_DROPOUT
-                and num_layers == 1
-                and dropout != 0.0
-            ):
-                continue
-            experiments.append(
-                Experiment(
-                    dataset=dataset,
-                    hidden_size=hidden_size,
-                    num_layers=num_layers,
-                    bidirectional=bidirectional,
-                    dropout=dropout,
-                    batch_size=batch_size,
-                    learning_rate=learning_rate,
-                    loss_mode=loss_mode,
-                    seed=seed,
+            kernel_sizes = TCN_KERNEL_SIZES if model_type == "tcn" else (0,)
+            for tcn_kernel_size in kernel_sizes:
+                if (
+                    model_type == "gru"
+                    and SKIP_REDUNDANT_SINGLE_LAYER_DROPOUT
+                    and num_layers == 1
+                    and dropout != 0.0
+                ):
+                    continue
+                experiments.append(
+                    Experiment(
+                        dataset=dataset,
+                        model_type=model_type,
+                        hidden_size=hidden_size,
+                        num_layers=num_layers,
+                        tcn_kernel_size=tcn_kernel_size,
+                        bidirectional=bidirectional,
+                        dropout=dropout,
+                        batch_size=batch_size,
+                        learning_rate=learning_rate,
+                        loss_mode=loss_mode,
+                        seed=seed,
+                    )
                 )
-            )
     return experiments
 
 
@@ -329,10 +352,19 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
     if unknown_loss_modes:
         raise ValueError(f"Unsupported LOSS_MODES: {sorted(unknown_loss_modes)}")
 
+    valid_model_types = {"gru", "tcn"}
+    unknown_model_types = set(MODEL_TYPES) - valid_model_types
+    if unknown_model_types:
+        raise ValueError(f"Unsupported MODEL_TYPES: {sorted(unknown_model_types)}")
+
     if any(value <= 0 for value in HIDDEN_SIZES):
         raise ValueError("HIDDEN_SIZES must be positive")
     if any(value <= 0 for value in NUM_LAYERS):
         raise ValueError("NUM_LAYERS must be positive")
+    if any(value < 2 for value in TCN_KERNEL_SIZES):
+        raise ValueError("TCN_KERNEL_SIZES must be at least 2")
+    if "tcn" in MODEL_TYPES and any(BIDIRECTIONAL_OPTIONS):
+        raise ValueError("TCN grid cannot use bidirectional=True")
     if any(value <= 0 for value in BATCH_SIZES):
         raise ValueError("BATCH_SIZES must be positive")
     if any(value <= 0 for value in LEARNING_RATES):
@@ -343,6 +375,144 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
     run_names = [experiment_run_name(experiment) for experiment in experiments]
     if len(run_names) != len(set(run_names)):
         raise ValueError("The grid produces duplicate run directory names")
+
+
+def dataset_variant_paths(variant: DatasetVariant) -> dict[str, Path]:
+    return {
+        "train": resolve_path(variant.train_path),
+        "val": resolve_path(variant.val_path),
+        "test": resolve_path(variant.test_path),
+        "scaler": resolve_path(variant.scaler_path),
+    }
+
+
+def generate_dataset_variant(variant: DatasetVariant) -> None:
+    """Generate one representation while reusing the standard split logic."""
+    if variant.input_size != 4:
+        raise ValueError("Automatic grid dataset generation currently requires INPUT_SIZE=4")
+    if variant.sequence_length != current_config.SEQUENCE_LENGTH:
+        raise ValueError(
+            "Automatic grid dataset generation requires the sequence length "
+            "selected in const.py"
+        )
+    if not current_config.INVERSE_MODEL:
+        raise ValueError("This grid and its generated datasets are inverse-model only")
+
+    # Imports are intentionally lazy: a dry run with missing datasets remains
+    # read-only and only prints what would be generated.
+    from rnn import run_1_generate_dataset as generator
+    from rnn.preprocessing import double as preprocessing
+
+    previous_preprocessing = (
+        preprocessing.WINDOW_COORD_MODE,
+        preprocessing.TARGET_MODE,
+        preprocessing.COMMAND_QUANTIZATION_NM,
+    )
+    preprocessing.WINDOW_COORD_MODE = variant.window_coord_mode
+    preprocessing.TARGET_MODE = variant.target_mode
+    preprocessing.COMMAND_QUANTIZATION_NM = variant.command_quantization_nm
+
+    try:
+        print(
+            f"Generating {variant.name}: {variant.window_coord_mode}/"
+            f"{variant.target_mode}, Q={variant.command_quantization_nm} nm"
+        )
+        sources = generator.resolve_experiment_sources(
+            str(current_config.REPO_ROOT / current_config.EXPERIMENT_DIR),
+            generator.EXPERIMENTS,
+        )
+        (
+            (x_train_u, y_train_u),
+            (x_val_u, y_val_u),
+            (x_test_u, y_test_u),
+            _test_meta,
+            manifest_units,
+        ) = generator.load_and_split_sources(sources)
+        if len(x_train_u) == 0 or len(x_val_u) == 0 or len(x_test_u) == 0:
+            raise ValueError(
+                f"{variant.name}: generated an empty train/val/test split: "
+                f"{len(x_train_u)}/{len(x_val_u)}/{len(x_test_u)}"
+            )
+
+        rng = np.random.default_rng(current_config.SEED)
+        permutation = rng.permutation(len(x_train_u))
+        x_train_u = x_train_u[permutation]
+        y_train_u = y_train_u[permutation]
+
+        scaler = preprocessing.fit_scalers(x_train_u, y_train_u)
+        scaled = {
+            "train": preprocessing.scale_data(x_train_u, y_train_u, scaler),
+            "val": preprocessing.scale_data(x_val_u, y_val_u, scaler),
+            "test": preprocessing.scale_data(x_test_u, y_test_u, scaler),
+        }
+        datasets = {
+            split: TensorDataset(
+                torch.as_tensor(x_values, dtype=torch.float32),
+                torch.as_tensor(y_values, dtype=torch.float32),
+            )
+            for split, (x_values, y_values) in scaled.items()
+        }
+
+        paths = dataset_variant_paths(variant)
+        for path in paths.values():
+            path.parent.mkdir(parents=True, exist_ok=True)
+        for split in ("train", "val", "test"):
+            torch.save(datasets[split], paths[split])
+        joblib.dump(scaler, paths["scaler"])
+
+        root = paths["train"].parent.parent
+        config = {
+            "model": "shared_grid_dataset",
+            "inverse_model": True,
+            "window_coord_mode": variant.window_coord_mode,
+            "target_mode": variant.target_mode,
+            "command_quantization_nm": variant.command_quantization_nm,
+            "sequence_length": variant.sequence_length,
+            "input_size": variant.input_size,
+            "output_size": variant.output_size,
+            "seed": current_config.SEED,
+            "train_split": current_config.TRAIN_SPLIT,
+            "val_split": current_config.VAL_SPLIT,
+            "test_split": current_config.TEST_SPLIT,
+            "source_experiments": list(generator.EXPERIMENTS),
+            "samples": {
+                split: len(dataset) for split, dataset in datasets.items()
+            },
+        }
+        (root / "config.json").write_text(
+            json.dumps(config, indent=2, sort_keys=True), encoding="utf-8"
+        )
+        manifest = {
+            "version": 2,
+            "seed": current_config.SEED,
+            "split_fractions": generator.SPLIT_FRACTIONS,
+            "total_windows": {
+                split: len(dataset) for split, dataset in datasets.items()
+            },
+            "split_units": manifest_units,
+        }
+        (paths["train"].parent / "split_manifest.json").write_text(
+            json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+    finally:
+        (
+            preprocessing.WINDOW_COORD_MODE,
+            preprocessing.TARGET_MODE,
+            preprocessing.COMMAND_QUANTIZATION_NM,
+        ) = previous_preprocessing
+
+
+def prepare_dataset_variants(rebuild: bool = False) -> None:
+    for variant in DATASET_VARIANTS:
+        paths = dataset_variant_paths(variant)
+        missing = [path for path in paths.values() if not path.is_file()]
+        if rebuild or missing:
+            if missing:
+                print(
+                    f"Dataset {variant.name} is incomplete; missing "
+                    + ", ".join(str(path) for path in missing)
+                )
+            generate_dataset_variant(variant)
 
 
 def source_config_path(variant: DatasetVariant) -> Path:
@@ -364,6 +534,7 @@ def validate_source_metadata(variant: DatasetVariant) -> None:
         "inverse_model": True,
         "window_coord_mode": variant.window_coord_mode,
         "target_mode": variant.target_mode,
+        "command_quantization_nm": variant.command_quantization_nm,
         "sequence_length": variant.sequence_length,
         "input_size": variant.input_size,
         "output_size": variant.output_size,
@@ -406,12 +577,7 @@ def validate_tensor_dataset(dataset, split: str, variant: DatasetVariant) -> Non
 
 
 def load_dataset_bundle(variant: DatasetVariant) -> dict[str, object]:
-    paths = {
-        "train": resolve_path(variant.train_path),
-        "val": resolve_path(variant.val_path),
-        "test": resolve_path(variant.test_path),
-        "scaler": resolve_path(variant.scaler_path),
-    }
+    paths = dataset_variant_paths(variant)
     missing = [path for path in paths.values() if not path.is_file()]
     if missing:
         raise FileNotFoundError(
@@ -502,16 +668,18 @@ def prepare_run_directory(
             copy_file(split_manifest, paths["dataset"] / "split_manifest.json")
 
     config = {
-        "model": "gru",
+        "model": experiment.model_type,
         "inverse_model": True,
         "dataset_variant": experiment.dataset.name,
         "window_coord_mode": experiment.dataset.window_coord_mode,
         "target_mode": experiment.dataset.target_mode,
+        "command_quantization_nm": experiment.dataset.command_quantization_nm,
         "sequence_length": experiment.dataset.sequence_length,
         "input_size": experiment.dataset.input_size,
         "output_size": experiment.dataset.output_size,
         "hidden_size": experiment.hidden_size,
         "num_layers": experiment.num_layers,
+        "tcn_kernel_size": experiment.tcn_kernel_size,
         "bidirectional": experiment.bidirectional,
         "dropout": experiment.dropout,
         "batch_size": experiment.batch_size,
@@ -601,6 +769,115 @@ def weighted_average_loss(model, loader, criterion, device: torch.device) -> flo
     return total_loss / total_samples
 
 
+def build_experiment_model(experiment: Experiment) -> torch.nn.Module:
+    parameters = {
+        "input_size": experiment.dataset.input_size,
+        "hidden_size": experiment.hidden_size,
+        "output_size": experiment.dataset.output_size,
+        "num_layers": experiment.num_layers,
+        "dropout": experiment.dropout,
+        "bidirectional": experiment.bidirectional,
+    }
+    if experiment.model_type == "gru":
+        return HysteresisGRU(**parameters)
+    if experiment.model_type == "tcn":
+        return HysteresisTCN(
+            **parameters,
+            tcn_kernel_size=experiment.tcn_kernel_size,
+        )
+    raise ValueError(f"Unsupported model type: {experiment.model_type}")
+
+
+def inverse_scale(values: np.ndarray, scaler) -> np.ndarray:
+    shape = values.shape
+    return scaler.inverse_transform(values.reshape(-1, 1)).reshape(shape)
+
+
+def evaluate_command_delta_metrics(
+    model,
+    dataset,
+    experiment: Experiment,
+    scaler,
+    device: torch.device,
+) -> dict[str, object]:
+    """Evaluate every representation as the same physical command delta."""
+    loader = DataLoader(
+        dataset,
+        batch_size=experiment.batch_size,
+        shuffle=False,
+        num_workers=NUM_WORKERS,
+        pin_memory=device.type == "cuda",
+    )
+    scaled_sequences = []
+    scaled_labels = []
+    scaled_predictions = []
+    model.eval()
+    with torch.no_grad():
+        for sequences, labels in loader:
+            predictions = model(sequences.to(device, non_blocking=True))
+            scaled_sequences.append(sequences.numpy())
+            scaled_labels.append(labels.numpy())
+            scaled_predictions.append(predictions.cpu().numpy())
+
+    sequences_nm = inverse_scale(np.concatenate(scaled_sequences), scaler)
+    labels_nm = inverse_scale(np.concatenate(scaled_labels), scaler)
+    predictions_nm = inverse_scale(np.concatenate(scaled_predictions), scaler)
+    dataset_variant = experiment.dataset
+
+    if dataset_variant.window_coord_mode == "relative":
+        # X[-1, 2:4] is command[t-1] relative to the same window origin as Y.
+        previous_command_nm = sequences_nm[:, -1, 2:4]
+        true_command_delta_nm = labels_nm - previous_command_nm
+        predicted_command_delta_nm = predictions_nm - previous_command_nm
+    elif dataset_variant.target_mode == "residual_delta":
+        # X[-1, 0:2] is desired_delta. Y is command_delta-desired_delta.
+        desired_delta_nm = sequences_nm[:, -1, 0:2]
+        true_command_delta_nm = labels_nm + desired_delta_nm
+        predicted_command_delta_nm = predictions_nm + desired_delta_nm
+    else:
+        true_command_delta_nm = labels_nm
+        predicted_command_delta_nm = predictions_nm
+
+    error_nm = predicted_command_delta_nm - true_command_delta_nm
+    error_distance_nm = np.linalg.norm(error_nm, axis=1)
+    step_distance_nm = np.linalg.norm(true_command_delta_nm, axis=1)
+    metrics = {
+        "samples": int(len(error_nm)),
+        "mae_nm": float(np.mean(np.abs(error_nm))),
+        "rmse_nm": float(np.sqrt(np.mean(np.square(error_nm)))),
+        "rmse_x_nm": float(np.sqrt(np.mean(np.square(error_nm[:, 0])))),
+        "rmse_y_nm": float(np.sqrt(np.mean(np.square(error_nm[:, 1])))),
+        "error_distance_p50_nm": float(np.percentile(error_distance_nm, 50)),
+        "error_distance_p90_nm": float(np.percentile(error_distance_nm, 90)),
+        "true_step_distance_mean_nm": float(np.mean(step_distance_nm)),
+    }
+    step_buckets = {
+        "0_nm": step_distance_nm < 0.01,
+        "gt0_le300_nm": (step_distance_nm >= 0.01) & (step_distance_nm <= 300.0),
+        "gt300_le1000_nm": (step_distance_nm > 300.0)
+        & (step_distance_nm <= 1000.0),
+        "gt1000_lt3000_nm": (step_distance_nm > 1000.0)
+        & (step_distance_nm < 3000.0),
+        "ge3000_nm": step_distance_nm >= 3000.0,
+    }
+    metrics["by_step_size"] = {}
+    for name, mask in step_buckets.items():
+        count = int(np.sum(mask))
+        if count == 0:
+            metrics["by_step_size"][name] = {"samples": 0}
+            continue
+        bucket_error = error_nm[mask]
+        bucket_distance = error_distance_nm[mask]
+        metrics["by_step_size"][name] = {
+            "samples": count,
+            "share_pct": float(100.0 * count / len(error_nm)),
+            "mae_nm": float(np.mean(np.abs(bucket_error))),
+            "rmse_nm": float(np.sqrt(np.mean(np.square(bucket_error)))),
+            "error_distance_p90_nm": float(np.percentile(bucket_distance, 90)),
+        }
+    return metrics
+
+
 def train_experiment(
     experiment: Experiment,
     bundle: dict[str, object],
@@ -629,14 +906,8 @@ def train_experiment(
         pin_memory=use_pin_memory,
     )
 
-    raw_model = HysteresisGRU(
-        input_size=experiment.dataset.input_size,
-        hidden_size=experiment.hidden_size,
-        output_size=experiment.dataset.output_size,
-        num_layers=experiment.num_layers,
-        dropout=experiment.dropout,
-        bidirectional=experiment.bidirectional,
-    ).to(device)
+    raw_model = build_experiment_model(experiment).to(device)
+    parameter_count = sum(parameter.numel() for parameter in raw_model.parameters())
     training_model = raw_model
     compiled = False
     if compile_model:
@@ -724,7 +995,7 @@ def train_experiment(
             best_val_loss = val_loss
             best_epoch = epoch
             epochs_without_improvement = 0
-            # Save the plain GRU state dict even when the training call is compiled.
+            # Save the plain module state dict even when the training call is compiled.
             torch.save(raw_model.state_dict(), paths["model_best"])
         else:
             epochs_without_improvement += 1
@@ -737,10 +1008,35 @@ def train_experiment(
 
     save_history(history, paths["history_csv"])
     save_loss_plot(history, paths["loss_plot"])
+    best_state = torch.load(paths["model_best"], map_location=device, weights_only=True)
+    raw_model.load_state_dict(best_state)
+    val_command_metrics = evaluate_command_delta_metrics(
+        raw_model,
+        datasets["val"],
+        experiment,
+        bundle["scaler"],
+        device,
+    )
+    test_command_metrics = evaluate_command_delta_metrics(
+        raw_model,
+        datasets["test"],
+        experiment,
+        bundle["scaler"],
+        device,
+    )
     return {
         "status": "completed",
         "run_name": experiment_run_name(experiment),
+        "model": experiment.model_type,
+        "dataset_variant": experiment.dataset.name,
+        "representation": (
+            f"{experiment.dataset.window_coord_mode}/"
+            f"{experiment.dataset.target_mode}"
+        ),
+        "parameter_count": parameter_count,
         "best_val_loss": best_val_loss,
+        "val_command_metrics": val_command_metrics,
+        "test_command_metrics": test_command_metrics,
         "best_epoch": best_epoch,
         "epochs_completed": len(history),
         "requested_epochs": epochs,
@@ -774,14 +1070,17 @@ def completed_result(
     except (OSError, json.JSONDecodeError):
         return None
     expected = {
+        "model": experiment.model_type,
         "dataset_variant": experiment.dataset.name,
         "window_coord_mode": experiment.dataset.window_coord_mode,
         "target_mode": experiment.dataset.target_mode,
+        "command_quantization_nm": experiment.dataset.command_quantization_nm,
         "sequence_length": experiment.dataset.sequence_length,
         "input_size": experiment.dataset.input_size,
         "output_size": experiment.dataset.output_size,
         "hidden_size": experiment.hidden_size,
         "num_layers": experiment.num_layers,
+        "tcn_kernel_size": experiment.tcn_kernel_size,
         "bidirectional": experiment.bidirectional,
         "dropout": experiment.dropout,
         "batch_size": experiment.batch_size,
@@ -803,6 +1102,81 @@ def write_json(path: Path, value: object) -> None:
     )
 
 
+def write_ranked_summary_csv(summary: dict[str, object], path: Path) -> None:
+    rows = []
+    for result in summary["experiments"]:
+        if result.get("status") != "completed":
+            continue
+        validation = result.get("val_command_metrics", {})
+        test = result.get("test_command_metrics", {})
+        validation_buckets = validation.get("by_step_size", {})
+        test_buckets = test.get("by_step_size", {})
+        rows.append(
+            {
+                "run_name": result.get("run_name"),
+                "model": result.get("model"),
+                "dataset_variant": result.get("dataset_variant"),
+                "representation": result.get("representation"),
+                "parameter_count": result.get("parameter_count"),
+                "best_epoch": result.get("best_epoch"),
+                "best_val_scaled_loss": result.get("best_val_loss"),
+                "val_command_mae_nm": validation.get("mae_nm"),
+                "val_command_rmse_nm": validation.get("rmse_nm"),
+                "val_error_distance_p90_nm": validation.get(
+                    "error_distance_p90_nm"
+                ),
+                "val_zero_step_rmse_nm": validation_buckets.get("0_nm", {}).get(
+                    "rmse_nm"
+                ),
+                "val_small_step_rmse_nm": validation_buckets.get(
+                    "gt0_le300_nm", {}
+                ).get("rmse_nm"),
+                "test_command_mae_nm": test.get("mae_nm"),
+                "test_command_rmse_nm": test.get("rmse_nm"),
+                "test_error_distance_p90_nm": test.get("error_distance_p90_nm"),
+                "test_zero_step_rmse_nm": test_buckets.get("0_nm", {}).get(
+                    "rmse_nm"
+                ),
+                "test_small_step_rmse_nm": test_buckets.get(
+                    "gt0_le300_nm", {}
+                ).get("rmse_nm"),
+            }
+        )
+    rows.sort(
+        key=lambda row: (
+            float("inf")
+            if row["val_command_rmse_nm"] is None
+            else row["val_command_rmse_nm"]
+        )
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(
+            stream,
+            fieldnames=[
+                "run_name",
+                "model",
+                "dataset_variant",
+                "representation",
+                "parameter_count",
+                "best_epoch",
+                "best_val_scaled_loss",
+                "val_command_mae_nm",
+                "val_command_rmse_nm",
+                "val_error_distance_p90_nm",
+                "val_zero_step_rmse_nm",
+                "val_small_step_rmse_nm",
+                "test_command_mae_nm",
+                "test_command_rmse_nm",
+                "test_error_distance_p90_nm",
+                "test_zero_step_rmse_nm",
+                "test_small_step_rmse_nm",
+            ],
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def main() -> int:
     args = parse_args()
     epochs = args.epochs if args.epochs is not None else EPOCHS
@@ -813,21 +1187,40 @@ def main() -> int:
 
     experiments = build_experiments()
     validate_grid_configuration(experiments)
+    if args.one_per_representation:
+        first_by_dataset = {}
+        for experiment in experiments:
+            first_by_dataset.setdefault(experiment.dataset.name, experiment)
+        experiments = [
+            first_by_dataset[variant.name] for variant in DATASET_VARIANTS
+        ]
     if args.max_runs is not None:
         experiments = experiments[: args.max_runs]
 
     print(f"Grid contains {len(experiments)} experiment(s).")
+    for index, experiment in enumerate(experiments, 1):
+        print(f"  [{index:03d}/{len(experiments):03d}] {experiment_run_name(experiment)}")
+
+    if args.dry_run:
+        for variant in DATASET_VARIANTS:
+            paths = dataset_variant_paths(variant)
+            missing = [path for path in paths.values() if not path.is_file()]
+            action = "would rebuild" if args.rebuild_datasets else "would generate"
+            if missing or args.rebuild_datasets:
+                print(f"  Dataset {variant.name}: {action}")
+            else:
+                load_dataset_bundle(variant)
+        print("Dry run complete: nothing was written and no model was trained.")
+        return 0
+
+    prepare_dataset_variants(rebuild=args.rebuild_datasets)
     print("Loading and validating dataset variants...")
     bundles = {
         variant.name: load_dataset_bundle(variant)
         for variant in DATASET_VARIANTS
     }
-
-    for index, experiment in enumerate(experiments, 1):
-        print(f"  [{index:03d}/{len(experiments):03d}] {experiment_run_name(experiment)}")
-
-    if args.dry_run:
-        print("Dry run complete: no output directories were created and no model was trained.")
+    if args.prepare_datasets_only:
+        print("Shared datasets are ready; no model was trained.")
         return 0
 
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
@@ -910,7 +1303,10 @@ def main() -> int:
     summary["finished_at_unix"] = time.time()
     summary["failure_count"] = failures
     write_json(summary_path, summary)
+    ranked_csv_path = OUTPUT_ROOT / "grid_fit_summary.csv"
+    write_ranked_summary_csv(summary, ranked_csv_path)
     print(f"\nGrid finished. Summary: {summary_path}")
+    print(f"Validation-ranked CSV: {ranked_csv_path}")
     return 1 if failures else 0
 
 

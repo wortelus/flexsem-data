@@ -4,6 +4,7 @@ from pathlib import Path
 import torch
 
 from rnn.models.model_gru import HysteresisGRU
+from rnn.models.model_tcn import HysteresisTCN
 from rnn.models.model_transformer import HysteresisTransformer
 from rnn.utils.loss import RelativeMSELoss
 
@@ -27,6 +28,7 @@ if abs(_split_total - 1.0) > 1e-9:
 # Model selection
 # MODEL = HysteresisLSTM
 MODEL = HysteresisGRU
+# MODEL = HysteresisTCN
 # MODEL = HysteresisTransformer
 
 INVERSE_MODEL = True
@@ -51,7 +53,14 @@ if TARGET_MODE not in ("actual_delta", "residual_delta"):
 if TARGET_MODE == "residual_delta" and WINDOW_COORD_MODE != "delta":
     raise ValueError("TARGET_MODE='residual_delta' is only supported for delta models")
 
-# LSTM/GRU parameters
+# Optional command-grid correction used during preprocessing. Keep this None
+# for compatibility with already-generated production datasets. New comparison
+# datasets can set it to 50.0 nm so command deltas are differences of two
+# executable SEM positions, rather than deltas of unquantized metadata.
+COMMAND_QUANTIZATION_NM = None
+
+# Shared model parameters. For TCN + SEQUENCE_LENGTH=16, use NUM_LAYERS >= 3
+# with TCN_KERNEL_SIZE=3 so the receptive field covers the whole window.
 SEQUENCE_LENGTH = 16
 HIDDEN_SIZE = 32
 NUM_LAYERS = 2
@@ -61,6 +70,10 @@ OUTPUT_SIZE = 2  # fixed
 
 # transformer specific
 N_HEADS = 8
+
+# TCN specific. With two convolutions per block, kernel=3 and two layers have
+# a receptive field of 13 samples; three layers cover 29 samples.
+TCN_KERNEL_SIZE = 3
 
 # Loss function
 # - "mse": standard absolute-error MSE in the scaled target space
@@ -123,10 +136,12 @@ EXPERIMENT_DIR = "data_original"
 
 _model = 'transformer' \
     if MODEL == HysteresisTransformer \
+    else 'tcn' if MODEL == HysteresisTCN \
     else 'gru' if MODEL == HysteresisGRU \
     else 'lstm'
 _direction = "inverse" if INVERSE_MODEL else "forward"
 _heads = N_HEADS if _model == "transformer" else 0
+_kernel_tag = f"_k{TCN_KERNEL_SIZE}" if _model == "tcn" else ""
 
 
 def _path_token(value):
@@ -144,6 +159,7 @@ _split_tag = (
 RUN_NAME = (
     f"{_direction}_{_model}"
     f"_h{HIDDEN_SIZE}_l{NUM_LAYERS}_b{int(BIDIRECTIONAL)}"
+    f"{_kernel_tag}"
     f"_seq{SEQUENCE_LENGTH}_{WINDOW_COORD_MODE}_{TARGET_MODE}"
     f"_nh{_heads}_{_loss_tag}"
     f"_bs{BATCH_SIZE}_lr{_path_token(LEARNING_RATE)}"
@@ -180,6 +196,7 @@ RUN_CONFIG = {
     "inverse_model": INVERSE_MODEL,
     "window_coord_mode": WINDOW_COORD_MODE,
     "target_mode": TARGET_MODE,
+    "command_quantization_nm": COMMAND_QUANTIZATION_NM,
     "sequence_length": SEQUENCE_LENGTH,
     "hidden_size": HIDDEN_SIZE,
     "num_layers": NUM_LAYERS,
@@ -187,6 +204,7 @@ RUN_CONFIG = {
     "input_size": INPUT_SIZE,
     "output_size": OUTPUT_SIZE,
     "n_heads": N_HEADS,
+    "tcn_kernel_size": TCN_KERNEL_SIZE,
     "loss_mode": LOSS_MODE,
     "relative_loss_eps": RELATIVE_LOSS_EPS,
     "optimizer": OPTIMIZER.__name__,
@@ -205,6 +223,25 @@ RUN_CONFIG = {
     "dropout": DROPOUT,
     "experiment_dir": EXPERIMENT_DIR,
 }
+
+
+def build_model(**overrides):
+    """Build the selected architecture with only its relevant arguments."""
+    model_class = overrides.pop("model_class", MODEL)
+    parameters = {
+        "input_size": INPUT_SIZE,
+        "hidden_size": HIDDEN_SIZE,
+        "output_size": OUTPUT_SIZE,
+        "num_layers": NUM_LAYERS,
+        "dropout": DROPOUT,
+        "bidirectional": BIDIRECTIONAL,
+    }
+    parameters.update(overrides)
+    if model_class == HysteresisTransformer:
+        parameters.setdefault("n_heads", N_HEADS)
+    elif model_class == HysteresisTCN:
+        parameters.setdefault("tcn_kernel_size", TCN_KERNEL_SIZE)
+    return model_class(**parameters)
 
 
 def ensure_output_dirs():
