@@ -4,12 +4,10 @@ Edit the CONFIGURATION section below and run this file. Every experiment is
 stored directly under ``rnn/outputs/<run_name>/`` using the same basic layout
 as ``run_2_fit.py``.
 
-Important: window coordinates and prediction targets are preprocessing
-choices, not GRU hyperparameters. A ``delta/residual_delta`` tensor dataset is
-not also a ``relative`` dataset. To compare representations, generate one
-train/val/test/scaler set per representation and add each set to
-``DATASET_VARIANTS``. All GRU configurations within a variant reuse and copy
-the exact same source files.
+Direction, coordinate/target representation and command quantization are
+preprocessing choices, not GRU hyperparameters. The default grid therefore
+generates a separate, split-identical dataset for every configured combination
+and reuses it across all corresponding GRU configurations.
 """
 
 from __future__ import annotations
@@ -34,7 +32,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 
 RNN_DIR = Path(__file__).resolve().parent
 REPO_ROOT = RNN_DIR.parent
@@ -58,9 +56,11 @@ class DatasetVariant:
     val_path: Path
     test_path: Path
     scaler_path: Path
+    inverse_model: bool
     window_coord_mode: str
     target_mode: str
     sequence_length: int
+    command_quantization_nm: float | None = None
     input_size: int = 4
     output_size: int = 2
 
@@ -82,53 +82,109 @@ class Experiment:
 # CONFIGURATION -- normally this is the only section you need to edit
 # =============================================================================
 
-# Every enabled representation needs its own generated .pt files and scaler.
-# The default points to the dataset selected by rnn/utils/const.py.
-DATASET_VARIANTS = (
-    DatasetVariant(
-        name="current",
-        train_path=current_config.DATASET_DIR_PATH / "train.pt",
-        val_path=current_config.DATASET_DIR_PATH / "val.pt",
-        test_path=current_config.DATASET_DIR_PATH / "test.pt",
-        scaler_path=Path(current_config.SCALER_PATH),
-        window_coord_mode=current_config.WINDOW_COORD_MODE,
-        target_mode=current_config.TARGET_MODE,
-        sequence_length=current_config.SEQUENCE_LENGTH,
-        input_size=current_config.INPUT_SIZE,
-        output_size=current_config.OUTPUT_SIZE,
-    ),
+GRID_DATASET_ROOT = OUTPUT_ROOT / "_grid_datasets"
 
-    # To compare all valid representations, generate their datasets first and
-    # add entries like these (with real paths):
-    # DatasetVariant(
-    #     name="delta_actual",
-    #     train_path=Path(r"C:\path\delta_actual\train.pt"),
-    #     val_path=Path(r"C:\path\delta_actual\val.pt"),
-    #     test_path=Path(r"C:\path\delta_actual\test.pt"),
-    #     scaler_path=Path(r"C:\path\delta_actual\scaler.gz"),
-    #     window_coord_mode="delta",
-    #     target_mode="actual_delta",
-    #     sequence_length=16,
-    # ),
-    # DatasetVariant(
-    #     name="relative",
-    #     train_path=Path(r"C:\path\relative\train.pt"),
-    #     val_path=Path(r"C:\path\relative\val.pt"),
-    #     test_path=Path(r"C:\path\relative\test.pt"),
-    #     scaler_path=Path(r"C:\path\relative\scaler.gz"),
-    #     window_coord_mode="relative",
-    #     target_mode="actual_delta",  # relative-position target in this mode
-    #     sequence_length=16,
-    # ),
+# Quantization becomes a dataset axis. None reproduces legacy metadata deltas;
+# 50.0 uses Q50(command_abs[t]) - Q50(command_abs[t-1]).
+COMMAND_QUANTIZATION_OPTIONS = (None, 50.0)
+COMMON_EVALUATION_QUANTIZATION_NM = 50.0
+
+# Complete preprocessing grid:
+# - relative: positions relative to the first point in the window
+# - delta/actual_delta: one-step deltas and a direct one-step target
+# - delta/residual_delta: one-step deltas and target minus input-step residual
+DIRECTION_OPTIONS = (True, False)  # inverse, forward
+REPRESENTATION_OPTIONS = (
+    ("relative", "actual_delta"),
+    ("delta", "actual_delta"),
+    ("delta", "residual_delta"),
 )
 
+
+def quantization_tag(quantum_nm: float | None) -> str:
+    if quantum_nm is None:
+        return "qnone"
+    return f"q{float(quantum_nm):g}".replace(".", "p")
+
+
+def representation_tag(window_coord_mode: str, target_mode: str) -> str:
+    if window_coord_mode == "relative":
+        return "actual_relative"
+    target = "residual" if target_mode == "residual_delta" else "actual"
+    return f"delta_{target}"
+
+
+def direction_tag(inverse_model: bool) -> str:
+    return "inverse" if inverse_model else "forward"
+
+
+def generated_dataset_variant(
+    inverse_model: bool,
+    window_coord_mode: str,
+    target_mode: str,
+    quantum_nm: float | None,
+) -> DatasetVariant:
+    name = (
+        f"{direction_tag(inverse_model)}_"
+        f"{representation_tag(window_coord_mode, target_mode)}"
+        f"_{quantization_tag(quantum_nm)}"
+    )
+    root = GRID_DATASET_ROOT / name
+    return DatasetVariant(
+        name=name,
+        train_path=root / "dataset" / "train.pt",
+        val_path=root / "dataset" / "val.pt",
+        test_path=root / "dataset" / "test.pt",
+        scaler_path=root / "scalers" / "scaler.gz",
+        inverse_model=inverse_model,
+        window_coord_mode=window_coord_mode,
+        target_mode=target_mode,
+        sequence_length=current_config.SEQUENCE_LENGTH,
+        command_quantization_nm=quantum_nm,
+        input_size=current_config.INPUT_SIZE,
+        output_size=current_config.OUTPUT_SIZE,
+    )
+
+
+DATASET_VARIANTS = tuple(
+    generated_dataset_variant(
+        inverse_model,
+        window_coord_mode,
+        target_mode,
+        quantum_nm,
+    )
+    for inverse_model in DIRECTION_OPTIONS
+    for window_coord_mode, target_mode in REPRESENTATION_OPTIONS
+    for quantum_nm in COMMAND_QUANTIZATION_OPTIONS
+)
+
+
+def common_evaluation_variant(inverse_model: bool) -> DatasetVariant:
+    candidates = [
+        variant
+        for variant in DATASET_VARIANTS
+        if variant.inverse_model == inverse_model
+        and variant.window_coord_mode == "delta"
+        and variant.target_mode == "actual_delta"
+        and variant.command_quantization_nm
+        == COMMON_EVALUATION_QUANTIZATION_NM
+    ]
+    if len(candidates) != 1:
+        raise ValueError(
+            "Each direction requires exactly one delta/actual_delta common "
+            f"Q50 dataset; {direction_tag(inverse_model)} has "
+            f"{[variant.name for variant in candidates]}"
+        )
+    return candidates[0]
+
 # Cartesian GRU grid. Tuples with one value keep that option fixed.
-HIDDEN_SIZES = (32, 64, 128)
+# HIDDEN_SIZES = (32, 64, 128)
+HIDDEN_SIZES = (32, 64)
 NUM_LAYERS = (1, 2)
 BIDIRECTIONAL_OPTIONS = (False,)
-DROPOUTS = (0.0, 0.1)
-BATCH_SIZES = (16, 32)
-LEARNING_RATES = (1e-3, 5e-4)
+DROPOUTS = (0.0, 0.1, 0.2)      # Přidán 20% dropout pro lepší generalizaci
+BATCH_SIZES = (32,)
+LEARNING_RATES = (1e-3, 5e-4)   # Vrácen 5e-4 (včera měl absolutně nejlepší skóre)
 LOSS_MODES = ("mse",)
 SEEDS = (10,)
 
@@ -145,6 +201,7 @@ RELATIVE_LOSS_EPS_NM = 10_000.0
 # Runtime/output behavior.
 RUN_NAME_PREFIX = "grid_"
 GRID_SUMMARY_FILENAME = "grid_fit_summary.json"
+GRID_RANKING_FILENAME = "grid_fit_ranking.csv"
 COMPILE_MODEL = True
 SKIP_COMPLETED = True
 SKIP_REDUNDANT_SINGLE_LAYER_DROPOUT = True
@@ -160,9 +217,19 @@ NUM_WORKERS = 0
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "--prepare-datasets-only",
+        action="store_true",
+        help="Generate and validate quantization datasets, then exit.",
+    )
+    parser.add_argument(
+        "--rebuild-datasets",
+        action="store_true",
+        help="Regenerate quantization datasets even if they already exist.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Validate datasets and print planned experiments without training.",
+        help="Print planned datasets and experiments without writing or training.",
     )
     parser.add_argument(
         "--max-runs",
@@ -212,12 +279,14 @@ def experiment_run_name(experiment: Experiment) -> str:
         else f"relative_mse_eps{path_token(int(RELATIVE_LOSS_EPS_NM))}"
     )
     dataset = experiment.dataset
+    q_tag = quantization_tag(dataset.command_quantization_nm)
     return (
-        f"{RUN_NAME_PREFIX}inverse_gru"
+        f"{RUN_NAME_PREFIX}{direction_tag(dataset.inverse_model)}_gru"
         f"_h{experiment.hidden_size}_l{experiment.num_layers}"
         f"_b{int(experiment.bidirectional)}"
         f"_seq{dataset.sequence_length}"
         f"_{dataset.window_coord_mode}_{dataset.target_mode}"
+        f"_{q_tag}"
         f"_nh0_{loss_tag}"
         f"_bs{experiment.batch_size}"
         f"_lr{path_token(experiment.learning_rate)}"
@@ -241,23 +310,25 @@ def build_experiments() -> list[Experiment]:
     )
     hyperparameters = list(hyperparameter_product)
 
-    for dataset in DATASET_VARIANTS:
-        for (
-            hidden_size,
-            num_layers,
-            bidirectional,
-            dropout,
-            batch_size,
-            learning_rate,
-            loss_mode,
-            seed,
-        ) in hyperparameters:
-            if (
-                SKIP_REDUNDANT_SINGLE_LAYER_DROPOUT
-                and num_layers == 1
-                and dropout != 0.0
-            ):
-                continue
+    for (
+        hidden_size,
+        num_layers,
+        bidirectional,
+        dropout,
+        batch_size,
+        learning_rate,
+        loss_mode,
+        seed,
+    ) in hyperparameters:
+        if (
+            SKIP_REDUNDANT_SINGLE_LAYER_DROPOUT
+            and num_layers == 1
+            and dropout != 0.0
+        ):
+            continue
+        # Keep all preprocessing variants of one architecture adjacent so an
+        # interrupted grid still contains directly comparable groups.
+        for dataset in DATASET_VARIANTS:
             experiments.append(
                 Experiment(
                     dataset=dataset,
@@ -283,8 +354,22 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
     names = [variant.name for variant in DATASET_VARIANTS]
     if len(names) != len(set(names)):
         raise ValueError(f"Dataset variant names must be unique: {names}")
+    quantization_values = {
+        variant.command_quantization_nm for variant in DATASET_VARIANTS
+    }
+    if COMMON_EVALUATION_QUANTIZATION_NM not in quantization_values:
+        raise ValueError(
+            "COMMON_EVALUATION_QUANTIZATION_NM must be present in the dataset "
+            f"grid; got {COMMON_EVALUATION_QUANTIZATION_NM}"
+        )
+    for inverse_model in DIRECTION_OPTIONS:
+        common_evaluation_variant(inverse_model)
 
-    representations_by_files: dict[tuple[Path, Path, Path], set[tuple[str, str]]] = {}
+    representations_by_files: dict[
+        tuple[Path, Path, Path],
+        set[tuple[bool, str, str, float | None]],
+    ] = {}
+    variant_keys = []
     for variant in DATASET_VARIANTS:
         if variant.window_coord_mode not in ("delta", "relative"):
             raise ValueError(
@@ -302,13 +387,38 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
             raise ValueError(
                 f"{variant.name}: residual_delta requires delta coordinates"
             )
+        if (
+            variant.command_quantization_nm is not None
+            and variant.command_quantization_nm <= 0
+        ):
+            raise ValueError(
+                f"{variant.name}: command quantization must be positive or None"
+            )
 
         file_key = tuple(
             resolve_path(path)
             for path in (variant.train_path, variant.val_path, variant.test_path)
         )
         representations_by_files.setdefault(file_key, set()).add(
-            (variant.window_coord_mode, variant.target_mode)
+            (
+                variant.inverse_model,
+                variant.window_coord_mode,
+                variant.target_mode,
+                variant.command_quantization_nm,
+            )
+        )
+        variant_keys.append(
+            (
+                variant.inverse_model,
+                variant.window_coord_mode,
+                variant.target_mode,
+                variant.command_quantization_nm,
+            )
+        )
+
+    if len(variant_keys) != len(set(variant_keys)):
+        raise ValueError(
+            "Direction/representation/quantization combinations must be unique"
         )
 
     conflicting = {
@@ -319,8 +429,8 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
     if conflicting:
         raise ValueError(
             "The same .pt files are labelled as multiple representations. "
-            "Generate separate datasets for delta/residual_delta, "
-            "delta/actual_delta and relative before comparing them. "
+            "Generate separate datasets for each representation and "
+            "quantization setting before comparing them. "
             f"Conflicts: {conflicting}"
         )
 
@@ -345,6 +455,148 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
         raise ValueError("The grid produces duplicate run directory names")
 
 
+def dataset_variant_paths(variant: DatasetVariant) -> dict[str, Path]:
+    return {
+        "train": resolve_path(variant.train_path),
+        "val": resolve_path(variant.val_path),
+        "test": resolve_path(variant.test_path),
+        "scaler": resolve_path(variant.scaler_path),
+    }
+
+
+def generate_dataset_variant(variant: DatasetVariant) -> None:
+    """Generate one split-identical preprocessing variant."""
+    if variant.input_size != 4:
+        raise ValueError("Automatic grid dataset generation requires INPUT_SIZE=4")
+    if variant.sequence_length != current_config.SEQUENCE_LENGTH:
+        raise ValueError(
+            "Automatic generation requires the sequence length selected in const.py"
+        )
+    from rnn import run_1_generate_dataset as generator
+    from rnn.preprocessing import double as preprocessing
+
+    previous_settings = (
+        preprocessing.INVERSE_MODEL,
+        preprocessing.WINDOW_COORD_MODE,
+        preprocessing.TARGET_MODE,
+        preprocessing.COMMAND_QUANTIZATION_NM,
+    )
+    preprocessing.INVERSE_MODEL = variant.inverse_model
+    preprocessing.WINDOW_COORD_MODE = variant.window_coord_mode
+    preprocessing.TARGET_MODE = variant.target_mode
+    preprocessing.COMMAND_QUANTIZATION_NM = variant.command_quantization_nm
+
+    try:
+        print(
+            f"Generating {variant.name}: "
+            f"direction={direction_tag(variant.inverse_model)}, "
+            f"representation={variant.window_coord_mode}/{variant.target_mode}, "
+            f"quantization={variant.command_quantization_nm} nm"
+        )
+        sources = generator.resolve_experiment_sources(
+            str(current_config.REPO_ROOT / current_config.EXPERIMENT_DIR),
+            generator.EXPERIMENTS,
+        )
+        (
+            (x_train_u, y_train_u),
+            (x_val_u, y_val_u),
+            (x_test_u, y_test_u),
+            _test_meta,
+            manifest_units,
+        ) = generator.load_and_split_sources(sources)
+        if len(x_train_u) == 0 or len(x_val_u) == 0 or len(x_test_u) == 0:
+            raise ValueError(
+                f"{variant.name}: empty train/val/test split: "
+                f"{len(x_train_u)}/{len(x_val_u)}/{len(x_test_u)}"
+            )
+
+        rng = np.random.default_rng(current_config.SEED)
+        permutation = rng.permutation(len(x_train_u))
+        x_train_u = x_train_u[permutation]
+        y_train_u = y_train_u[permutation]
+
+        scaler = preprocessing.fit_scalers(x_train_u, y_train_u)
+        unscaled = {
+            "train": (x_train_u, y_train_u),
+            "val": (x_val_u, y_val_u),
+            "test": (x_test_u, y_test_u),
+        }
+        datasets = {}
+        for split, (x_values, y_values) in unscaled.items():
+            x_scaled, y_scaled = preprocessing.scale_data(
+                x_values, y_values, scaler
+            )
+            datasets[split] = TensorDataset(
+                torch.as_tensor(x_scaled, dtype=torch.float32),
+                torch.as_tensor(y_scaled, dtype=torch.float32),
+            )
+
+        paths = dataset_variant_paths(variant)
+        for path in paths.values():
+            path.parent.mkdir(parents=True, exist_ok=True)
+        for split in ("train", "val", "test"):
+            torch.save(datasets[split], paths[split])
+        joblib.dump(scaler, paths["scaler"])
+
+        root = paths["train"].parent.parent
+        config = {
+            "model": "shared_grid_dataset",
+            "inverse_model": variant.inverse_model,
+            "window_coord_mode": variant.window_coord_mode,
+            "target_mode": variant.target_mode,
+            "command_quantization_nm": variant.command_quantization_nm,
+            "sequence_length": variant.sequence_length,
+            "input_size": variant.input_size,
+            "output_size": variant.output_size,
+            "seed": current_config.SEED,
+            "train_split": current_config.TRAIN_SPLIT,
+            "val_split": current_config.VAL_SPLIT,
+            "test_split": current_config.TEST_SPLIT,
+            "source_experiments": list(generator.EXPERIMENTS),
+            "samples": {
+                split: len(dataset) for split, dataset in datasets.items()
+            },
+        }
+        (root / "config.json").write_text(
+            json.dumps(config, indent=2, sort_keys=True), encoding="utf-8"
+        )
+        manifest = {
+            "version": 2,
+            "seed": current_config.SEED,
+            "split_fractions": generator.SPLIT_FRACTIONS,
+            "total_windows": {
+                split: len(dataset) for split, dataset in datasets.items()
+            },
+            "split_units": manifest_units,
+        }
+        (paths["train"].parent / "split_manifest.json").write_text(
+            json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+    finally:
+        (
+            preprocessing.INVERSE_MODEL,
+            preprocessing.WINDOW_COORD_MODE,
+            preprocessing.TARGET_MODE,
+            preprocessing.COMMAND_QUANTIZATION_NM,
+        ) = previous_settings
+
+
+def prepare_dataset_variants(rebuild: bool = False) -> bool:
+    regenerated = False
+    for variant in DATASET_VARIANTS:
+        paths = dataset_variant_paths(variant)
+        missing = [path for path in paths.values() if not path.is_file()]
+        if rebuild or missing:
+            if missing:
+                print(
+                    f"Dataset {variant.name} is incomplete; missing "
+                    + ", ".join(str(path) for path in missing)
+                )
+            generate_dataset_variant(variant)
+            regenerated = True
+    return regenerated
+
+
 def source_config_path(variant: DatasetVariant) -> Path:
     train_path = resolve_path(variant.train_path)
     return train_path.parent.parent / "config.json"
@@ -361,9 +613,10 @@ def validate_source_metadata(variant: DatasetVariant) -> None:
 
     config = json.loads(config_path.read_text(encoding="utf-8"))
     expected = {
-        "inverse_model": True,
+        "inverse_model": variant.inverse_model,
         "window_coord_mode": variant.window_coord_mode,
         "target_mode": variant.target_mode,
+        "command_quantization_nm": variant.command_quantization_nm,
         "sequence_length": variant.sequence_length,
         "input_size": variant.input_size,
         "output_size": variant.output_size,
@@ -406,12 +659,7 @@ def validate_tensor_dataset(dataset, split: str, variant: DatasetVariant) -> Non
 
 
 def load_dataset_bundle(variant: DatasetVariant) -> dict[str, object]:
-    paths = {
-        "train": resolve_path(variant.train_path),
-        "val": resolve_path(variant.val_path),
-        "test": resolve_path(variant.test_path),
-        "scaler": resolve_path(variant.scaler_path),
-    }
+    paths = dataset_variant_paths(variant)
     missing = [path for path in paths.values() if not path.is_file()]
     if missing:
         raise FileNotFoundError(
@@ -436,7 +684,64 @@ def load_dataset_bundle(variant: DatasetVariant) -> dict[str, object]:
         f"train={len(datasets['train'])}, val={len(datasets['val'])}, "
         f"test={len(datasets['test'])}"
     )
-    return {"paths": paths, "datasets": datasets, "scaler": scaler}
+    return {
+        "variant": variant,
+        "paths": paths,
+        "datasets": datasets,
+        "scaler": scaler,
+    }
+
+def validate_common_evaluation_alignment(
+    reference_variant: DatasetVariant,
+    bundles: dict[str, dict[str, object]],
+) -> None:
+    """Ensure every preprocessing variant refers to the same split samples."""
+    reference_bundle = bundles[reference_variant.name]
+    reference_manifest_path = (
+        reference_bundle["paths"]["train"].parent / "split_manifest.json"
+    )
+    if not reference_manifest_path.is_file():
+        raise FileNotFoundError(
+            f"Common evaluation manifest is missing: {reference_manifest_path}"
+        )
+    reference_manifest = json.loads(
+        reference_manifest_path.read_text(encoding="utf-8")
+    )
+
+    for variant in DATASET_VARIANTS:
+        if variant.inverse_model != reference_variant.inverse_model:
+            continue
+
+        if (
+            variant.sequence_length != reference_variant.sequence_length
+            or variant.input_size != reference_variant.input_size
+            or variant.output_size != reference_variant.output_size
+        ):
+            raise ValueError(
+                "Common evaluation requires matching sequence/input/output "
+                f"shapes; {variant.name} differs from {reference_variant.name}."
+            )
+        bundle = bundles[variant.name]
+        manifest_path = bundle["paths"]["train"].parent / "split_manifest.json"
+        if not manifest_path.is_file():
+            raise FileNotFoundError(
+                f"Split manifest is missing for {variant.name}: {manifest_path}"
+            )
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest != reference_manifest:
+            raise ValueError(
+                f"{variant.name} and {reference_variant.name} do not have "
+                "identical split manifests; common per-sample evaluation would "
+                "not be valid. Regenerate both with --rebuild-datasets."
+            )
+        for split in ("val", "test"):
+            if len(bundle["datasets"][split]) != len(
+                reference_bundle["datasets"][split]
+            ):
+                raise ValueError(
+                    f"{variant.name}/{split} has a different sample count from "
+                    f"{reference_variant.name}/{split}."
+                )
 
 
 def set_determinism(seed: int) -> torch.Generator:
@@ -503,10 +808,11 @@ def prepare_run_directory(
 
     config = {
         "model": "gru",
-        "inverse_model": True,
+        "inverse_model": experiment.dataset.inverse_model,
         "dataset_variant": experiment.dataset.name,
         "window_coord_mode": experiment.dataset.window_coord_mode,
         "target_mode": experiment.dataset.target_mode,
+        "command_quantization_nm": experiment.dataset.command_quantization_nm,
         "sequence_length": experiment.dataset.sequence_length,
         "input_size": experiment.dataset.input_size,
         "output_size": experiment.dataset.output_size,
@@ -601,9 +907,119 @@ def weighted_average_loss(model, loader, criterion, device: torch.device) -> flo
     return total_loss / total_samples
 
 
+def inverse_transform_with_global_scaler(
+    values: np.ndarray,
+    scaler,
+) -> np.ndarray:
+    """Undo the one-feature global scaler while preserving tensor shape."""
+    values = np.asarray(values)
+    return scaler.inverse_transform(values.reshape(-1, 1)).reshape(values.shape)
+
+
+def canonical_step_delta_nm(
+    predictions_nm: np.ndarray,
+    sequences_nm: np.ndarray,
+    variant: DatasetVariant,
+) -> np.ndarray:
+    """Convert any representation to its physical one-step output delta.
+
+    For inverse models this is the predicted command delta. For forward models
+    it is the predicted actual-motion delta.
+    """
+    if variant.window_coord_mode == "relative":
+        # Relative target and the final previous-output feature share the same
+        # window reference. Their difference is the final one-step delta.
+        return predictions_nm - sequences_nm[:, -1, 2:4]
+    if variant.target_mode == "actual_delta":
+        return predictions_nm
+    if variant.target_mode == "residual_delta":
+        # In delta windows the first feature pair is desired motion (inverse)
+        # or command motion (forward). Adding it reconstructs the output delta.
+        return predictions_nm + sequences_nm[:, -1, 0:2]
+    raise ValueError(
+        f"Cannot canonicalize {variant.window_coord_mode}/{variant.target_mode}"
+    )
+
+
+def evaluate_on_common_dataset(
+    model,
+    variant: DatasetVariant,
+    model_input_dataset,
+    reference_dataset,
+    reference_scaler,
+    model_scaler,
+    batch_size: int,
+    device: torch.device,
+) -> dict[str, float | int]:
+    """Evaluate a model on shared reference samples in physical nanometres.
+
+    Inputs come from the model's own aligned dataset. Predictions from relative,
+    direct-delta and residual-delta targets are reconstructed into the same
+    physical one-step delta. Reference labels are direct deltas from the aligned
+    Q50 dataset for the same direction.
+    """
+    if len(model_input_dataset) != len(reference_dataset):
+        raise ValueError(
+            "Model and common evaluation datasets contain different sample counts: "
+            f"{len(model_input_dataset)} != {len(reference_dataset)}"
+        )
+    model_loader = DataLoader(
+        model_input_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=NUM_WORKERS,
+        pin_memory=device.type == "cuda",
+    )
+    reference_loader = DataLoader(
+        reference_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=NUM_WORKERS,
+        pin_memory=device.type == "cuda",
+    )
+    errors = []
+    model.eval()
+    with torch.no_grad():
+        for (model_sequences, _), (_, reference_labels) in zip(
+            model_loader, reference_loader, strict=True
+        ):
+            outputs = model(model_sequences.to(device, non_blocking=True))
+            predictions_nm = inverse_transform_with_global_scaler(
+                outputs.detach().cpu().numpy(), model_scaler
+            )
+            sequences_nm = inverse_transform_with_global_scaler(
+                model_sequences.numpy(), model_scaler
+            )
+            labels_nm = inverse_transform_with_global_scaler(
+                reference_labels.numpy(), reference_scaler
+            )
+            canonical_predictions_nm = canonical_step_delta_nm(
+                predictions_nm,
+                sequences_nm,
+                variant,
+            )
+            errors.append(canonical_predictions_nm - labels_nm)
+
+    if not errors:
+        raise ValueError("Common evaluation dataset yielded no samples")
+    errors_nm = np.concatenate(errors, axis=0)
+    squared_errors = np.square(errors_nm)
+    error_distances = np.linalg.norm(errors_nm, axis=1)
+    return {
+        "samples": int(len(errors_nm)),
+        "mae_nm": float(np.mean(np.abs(errors_nm))),
+        "rmse_nm": float(np.sqrt(np.mean(squared_errors))),
+        "rmse_x_nm": float(np.sqrt(np.mean(squared_errors[:, 0]))),
+        "rmse_y_nm": float(np.sqrt(np.mean(squared_errors[:, 1]))),
+        "error_distance_p50_nm": float(np.percentile(error_distances, 50)),
+        "error_distance_p90_nm": float(np.percentile(error_distances, 90)),
+    }
+
+
 def train_experiment(
     experiment: Experiment,
     bundle: dict[str, object],
+    common_evaluation_bundle: dict[str, object],
     paths: dict[str, Path],
     epochs: int,
     device: torch.device,
@@ -737,9 +1153,36 @@ def train_experiment(
 
     save_history(history, paths["history_csv"])
     save_loss_plot(history, paths["loss_plot"])
+    raw_model.load_state_dict(
+        torch.load(paths["model_best"], map_location=device, weights_only=True)
+    )
+    common_val_metrics = evaluate_on_common_dataset(
+        raw_model,
+        experiment.dataset,
+        bundle["datasets"]["val"],
+        common_evaluation_bundle["datasets"]["val"],
+        common_evaluation_bundle["scaler"],
+        bundle["scaler"],
+        experiment.batch_size,
+        device,
+    )
+    common_test_metrics = evaluate_on_common_dataset(
+        raw_model,
+        experiment.dataset,
+        bundle["datasets"]["test"],
+        common_evaluation_bundle["datasets"]["test"],
+        common_evaluation_bundle["scaler"],
+        bundle["scaler"],
+        experiment.batch_size,
+        device,
+    )
     return {
         "status": "completed",
         "run_name": experiment_run_name(experiment),
+        "dataset_variant": experiment.dataset.name,
+        "inverse_model": experiment.dataset.inverse_model,
+        "direction": direction_tag(experiment.dataset.inverse_model),
+        "command_quantization_nm": experiment.dataset.command_quantization_nm,
         "best_val_loss": best_val_loss,
         "best_epoch": best_epoch,
         "epochs_completed": len(history),
@@ -747,6 +1190,10 @@ def train_experiment(
         "elapsed_seconds": time.time() - started,
         "compiled": compiled,
         "model_path": str(paths["model_best"]),
+        "common_evaluation_quantization_nm": COMMON_EVALUATION_QUANTIZATION_NM,
+        "common_evaluation_dataset": common_evaluation_bundle["variant"].name,
+        "common_q50_val_metrics": common_val_metrics,
+        "common_q50_test_metrics": common_test_metrics,
     }
 
 
@@ -767,6 +1214,19 @@ def completed_result(
         return None
     if result.get("requested_epochs") != epochs:
         return None
+    if result.get("common_evaluation_quantization_nm") != (
+        COMMON_EVALUATION_QUANTIZATION_NM
+    ):
+        return None
+    expected_common_dataset = common_evaluation_variant(
+        experiment.dataset.inverse_model
+    ).name
+    if result.get("common_evaluation_dataset") != expected_common_dataset:
+        return None
+    if not isinstance(result.get("common_q50_val_metrics"), dict):
+        return None
+    if not isinstance(result.get("common_q50_test_metrics"), dict):
+        return None
 
     config_path = paths["run"] / "config.json"
     try:
@@ -775,8 +1235,10 @@ def completed_result(
         return None
     expected = {
         "dataset_variant": experiment.dataset.name,
+        "inverse_model": experiment.dataset.inverse_model,
         "window_coord_mode": experiment.dataset.window_coord_mode,
         "target_mode": experiment.dataset.target_mode,
+        "command_quantization_nm": experiment.dataset.command_quantization_nm,
         "sequence_length": experiment.dataset.sequence_length,
         "input_size": experiment.dataset.input_size,
         "output_size": experiment.dataset.output_size,
@@ -803,6 +1265,63 @@ def write_json(path: Path, value: object) -> None:
     )
 
 
+def write_ranking_csv(path: Path, records: list[dict[str, object]]) -> None:
+    """Write completed runs ranked by their shared Q50 validation RMSE."""
+    completed = [
+        record
+        for record in records
+        if record.get("status") == "completed"
+        and isinstance(record.get("common_q50_val_metrics"), dict)
+        and isinstance(record.get("common_q50_test_metrics"), dict)
+    ]
+    completed.sort(
+        key=lambda record: record["common_q50_val_metrics"]["rmse_nm"]
+    )
+    fieldnames = [
+        "rank",
+        "run_name",
+        "dataset_variant",
+        "command_quantization_nm",
+        "best_epoch",
+        "best_scaled_val_loss",
+        "common_q50_val_mae_nm",
+        "common_q50_val_rmse_nm",
+        "common_q50_val_error_distance_p90_nm",
+        "common_q50_test_mae_nm",
+        "common_q50_test_rmse_nm",
+        "common_q50_test_error_distance_p90_nm",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        writer.writeheader()
+        for rank, record in enumerate(completed, 1):
+            val_metrics = record["common_q50_val_metrics"]
+            test_metrics = record["common_q50_test_metrics"]
+            writer.writerow(
+                {
+                    "rank": rank,
+                    "run_name": record["run_name"],
+                    "dataset_variant": record.get("dataset_variant"),
+                    "command_quantization_nm": record.get(
+                        "command_quantization_nm"
+                    ),
+                    "best_epoch": record.get("best_epoch"),
+                    "best_scaled_val_loss": record.get("best_val_loss"),
+                    "common_q50_val_mae_nm": val_metrics["mae_nm"],
+                    "common_q50_val_rmse_nm": val_metrics["rmse_nm"],
+                    "common_q50_val_error_distance_p90_nm": val_metrics[
+                        "error_distance_p90_nm"
+                    ],
+                    "common_q50_test_mae_nm": test_metrics["mae_nm"],
+                    "common_q50_test_rmse_nm": test_metrics["rmse_nm"],
+                    "common_q50_test_error_distance_p90_nm": test_metrics[
+                        "error_distance_p90_nm"
+                    ],
+                }
+            )
+
+
 def main() -> int:
     args = parse_args()
     epochs = args.epochs if args.epochs is not None else EPOCHS
@@ -817,17 +1336,38 @@ def main() -> int:
         experiments = experiments[: args.max_runs]
 
     print(f"Grid contains {len(experiments)} experiment(s).")
+    for index, experiment in enumerate(experiments, 1):
+        print(f"  [{index:03d}/{len(experiments):03d}] {experiment_run_name(experiment)}")
+
+    if args.dry_run:
+        for variant in DATASET_VARIANTS:
+            paths = dataset_variant_paths(variant)
+            missing = [path for path in paths.values() if not path.is_file()]
+            action = "would rebuild" if args.rebuild_datasets else "would generate"
+            if missing or args.rebuild_datasets:
+                print(f"  Dataset {variant.name}: {action}")
+            else:
+                load_dataset_bundle(variant)
+        print("Dry run complete: nothing was written and no model was trained.")
+        return 0
+
+    datasets_regenerated = prepare_dataset_variants(
+        rebuild=args.rebuild_datasets
+    )
     print("Loading and validating dataset variants...")
     bundles = {
         variant.name: load_dataset_bundle(variant)
         for variant in DATASET_VARIANTS
     }
 
-    for index, experiment in enumerate(experiments, 1):
-        print(f"  [{index:03d}/{len(experiments):03d}] {experiment_run_name(experiment)}")
+    common_evaluation_bundles = {}
+    for direction in DIRECTION_OPTIONS:
+        ref_variant = common_evaluation_variant(direction)
+        validate_common_evaluation_alignment(ref_variant, bundles)
+        common_evaluation_bundles[direction] = bundles[ref_variant.name]
 
-    if args.dry_run:
-        print("Dry run complete: no output directories were created and no model was trained.")
+    if args.prepare_datasets_only:
+        print("Quantization datasets are ready; no model was trained.")
         return 0
 
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
@@ -841,9 +1381,15 @@ def main() -> int:
         "epochs": epochs,
         "device": str(device),
         "compile_model": compile_model,
+        "common_evaluation_datasets": {
+            direction_tag(direction): common_evaluation_variant(direction).name
+            for direction in DIRECTION_OPTIONS
+        },
+        "common_evaluation_quantization_nm": COMMON_EVALUATION_QUANTIZATION_NM,
         "experiments": [],
     }
     summary_path = OUTPUT_ROOT / GRID_SUMMARY_FILENAME
+    ranking_path = OUTPUT_ROOT / GRID_RANKING_FILENAME
     write_json(summary_path, summary)
     failures = 0
 
@@ -855,13 +1401,18 @@ def main() -> int:
             "model_best": run_dir / "models" / "model.pt.best",
             "fit_result": run_dir / "fit_result.json",
         }
-        previous = completed_result(candidate_paths, experiment, epochs)
+        previous = (
+            None
+            if datasets_regenerated
+            else completed_result(candidate_paths, experiment, epochs)
+        )
         if previous is not None:
             print(f"[{index}/{len(experiments)}] SKIP completed: {run_name}")
             record = dict(previous)
             record["grid_action"] = "skipped_existing"
             summary["experiments"].append(record)
             write_json(summary_path, summary)
+            write_ranking_csv(ranking_path, summary["experiments"])
             continue
 
         print("\n" + "=" * 100)
@@ -870,10 +1421,13 @@ def main() -> int:
         paths = None
         try:
             bundle = bundles[experiment.dataset.name]
+            # NOVĚ:
+            common_bundle = common_evaluation_bundles[experiment.dataset.inverse_model]
             paths = prepare_run_directory(experiment, bundle, epochs)
             result = train_experiment(
                 experiment,
                 bundle,
+                common_bundle,
                 paths,
                 epochs,
                 device,
@@ -883,7 +1437,8 @@ def main() -> int:
             summary["experiments"].append(result)
             print(
                 f"COMPLETED {run_name}: best val={result['best_val_loss']:.6g} "
-                f"at epoch {result['best_epoch']}"
+                f"at epoch {result['best_epoch']}; common Q50 val "
+                f"RMSE={result['common_q50_val_metrics']['rmse_nm']:.2f} nm"
             )
         except KeyboardInterrupt:
             summary["status"] = "interrupted"
@@ -905,12 +1460,15 @@ def main() -> int:
             if device.type == "cuda":
                 torch.cuda.empty_cache()
             write_json(summary_path, summary)
+            write_ranking_csv(ranking_path, summary["experiments"])
 
     summary["status"] = "completed" if failures == 0 else "completed_with_failures"
     summary["finished_at_unix"] = time.time()
     summary["failure_count"] = failures
     write_json(summary_path, summary)
+    write_ranking_csv(ranking_path, summary["experiments"])
     print(f"\nGrid finished. Summary: {summary_path}")
+    print(f"Q50 validation ranking: {ranking_path}")
     return 1 if failures else 0
 
 
