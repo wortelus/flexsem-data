@@ -51,6 +51,14 @@ if TARGET_MODE not in ("actual_delta", "residual_delta"):
 if TARGET_MODE == "residual_delta" and WINDOW_COORD_MODE != "delta":
     raise ValueError("TARGET_MODE='residual_delta' is only supported for delta models")
 
+# SEM executes commands on a 50 nm absolute-position grid. Quantize each
+# absolute command before computing command deltas, i.e.
+# Q50(command[t]) - Q50(command[t - 1]). Set to None only to reproduce legacy
+# datasets that used the unquantized metadata values.
+COMMAND_QUANTIZATION_NM = 50.0
+if COMMAND_QUANTIZATION_NM is not None and COMMAND_QUANTIZATION_NM <= 0:
+    raise ValueError("COMMAND_QUANTIZATION_NM must be positive or None")
+
 # LSTM/GRU parameters
 SEQUENCE_LENGTH = 16
 HIDDEN_SIZE = 32
@@ -134,6 +142,11 @@ def _path_token(value):
 
 
 _loss_tag = "mse" if LOSS_MODE == "mse" else f"relative_mse_eps{_path_token(int(RELATIVE_LOSS_EPS))}"
+_quantization_tag = (
+    ""
+    if COMMAND_QUANTIZATION_NM is None
+    else f"_q{_path_token(f'{COMMAND_QUANTIZATION_NM:g}')}"
+)
 
 _split_tag = (
     f"_split{round(TRAIN_SPLIT * 100)}"
@@ -145,6 +158,7 @@ RUN_NAME = (
     f"{_direction}_{_model}"
     f"_h{HIDDEN_SIZE}_l{NUM_LAYERS}_b{int(BIDIRECTIONAL)}"
     f"_seq{SEQUENCE_LENGTH}_{WINDOW_COORD_MODE}_{TARGET_MODE}"
+    f"{_quantization_tag}"
     f"_nh{_heads}_{_loss_tag}"
     f"_bs{BATCH_SIZE}_lr{_path_token(LEARNING_RATE)}"
     f"_do{_path_token(DROPOUT)}_seed{SEED}"
@@ -180,6 +194,7 @@ RUN_CONFIG = {
     "inverse_model": INVERSE_MODEL,
     "window_coord_mode": WINDOW_COORD_MODE,
     "target_mode": TARGET_MODE,
+    "command_quantization_nm": COMMAND_QUANTIZATION_NM,
     "sequence_length": SEQUENCE_LENGTH,
     "hidden_size": HIDDEN_SIZE,
     "num_layers": NUM_LAYERS,
