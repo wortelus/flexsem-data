@@ -1,13 +1,8 @@
-"""Click-and-run grid training for inverse GRU models.
+"""Grid-search history length for the best inverse GRU configuration.
 
-Edit the CONFIGURATION section below and run this file. Every experiment is
-stored directly under ``rnn/outputs/<run_name>/`` using the same basic layout
-as ``run_2_fit.py``.
-
-Direction, coordinate/target representation and command quantization are
-preprocessing choices, not GRU hyperparameters. The default grid therefore
-generates a separate, split-identical dataset for every configured combination
-and reuses it across all corresponding GRU configurations.
+Only the sequence/history length changes: 16, 18, 20, 24, 28 and 32. All other
+settings are fixed to the best inverse architecture from the preceding grid.
+Commands are not quantized during preprocessing.
 """
 
 from __future__ import annotations
@@ -84,21 +79,19 @@ class Experiment:
 
 GRID_DATASET_ROOT = OUTPUT_ROOT / "_grid_datasets"
 
-# Quantization becomes a dataset axis. None reproduces legacy metadata deltas;
-# 50.0 uses Q50(command_abs[t]) - Q50(command_abs[t-1]).
-COMMAND_QUANTIZATION_OPTIONS = (None, 50.0)
-COMMON_EVALUATION_QUANTIZATION_NM = 50.0
+# Use raw command metadata; Q50 is intentionally disabled.
+COMMAND_QUANTIZATION_OPTIONS = (None,)
+COMMON_EVALUATION_QUANTIZATION_NM = None
 
 # Complete preprocessing grid:
 # - relative: positions relative to the first point in the window
 # - delta/actual_delta: one-step deltas and a direct one-step target
 # - delta/residual_delta: one-step deltas and target minus input-step residual
-DIRECTION_OPTIONS = (True, False)  # inverse, forward
+DIRECTION_OPTIONS = (True,)  # inverse only
 REPRESENTATION_OPTIONS = (
-    ("relative", "actual_delta"),
-    ("delta", "actual_delta"),
     ("delta", "residual_delta"),
 )
+HISTORY_LENGTHS = (6, 8, 10, 12, 14)
 
 
 def quantization_tag(quantum_nm: float | None) -> str:
@@ -123,11 +116,16 @@ def generated_dataset_variant(
     window_coord_mode: str,
     target_mode: str,
     quantum_nm: float | None,
+    sequence_length: int | None = None,
 ) -> DatasetVariant:
+    explicit_sequence_length = sequence_length is not None
+    if sequence_length is None:
+        sequence_length = current_config.SEQUENCE_LENGTH
     name = (
         f"{direction_tag(inverse_model)}_"
         f"{representation_tag(window_coord_mode, target_mode)}"
         f"_{quantization_tag(quantum_nm)}"
+        f"{'_seq' + str(sequence_length) if explicit_sequence_length else ''}"
     )
     root = GRID_DATASET_ROOT / name
     return DatasetVariant(
@@ -139,7 +137,7 @@ def generated_dataset_variant(
         inverse_model=inverse_model,
         window_coord_mode=window_coord_mode,
         target_mode=target_mode,
-        sequence_length=current_config.SEQUENCE_LENGTH,
+        sequence_length=sequence_length,
         command_quantization_nm=quantum_nm,
         input_size=current_config.INPUT_SIZE,
         output_size=current_config.OUTPUT_SIZE,
@@ -152,39 +150,59 @@ DATASET_VARIANTS = tuple(
         window_coord_mode,
         target_mode,
         quantum_nm,
+        sequence_length,
     )
     for inverse_model in DIRECTION_OPTIONS
     for window_coord_mode, target_mode in REPRESENTATION_OPTIONS
     for quantum_nm in COMMAND_QUANTIZATION_OPTIONS
+    for sequence_length in HISTORY_LENGTHS
 )
 
 
-def common_evaluation_variant(inverse_model: bool) -> DatasetVariant:
+def common_evaluation_variant(
+    inverse_model: bool,
+    sequence_length: int | None = None,
+) -> DatasetVariant:
     candidates = [
         variant
         for variant in DATASET_VARIANTS
         if variant.inverse_model == inverse_model
-        and variant.window_coord_mode == "delta"
-        and variant.target_mode == "actual_delta"
         and variant.command_quantization_nm
         == COMMON_EVALUATION_QUANTIZATION_NM
+        and (
+            sequence_length is None
+            or variant.sequence_length == sequence_length
+        )
     ]
-    if len(candidates) != 1:
+    direct_delta_candidates = [
+        variant
+        for variant in candidates
+        if variant.window_coord_mode == "delta"
+        and variant.target_mode == "actual_delta"
+    ]
+    if len(direct_delta_candidates) == 1:
+        return direct_delta_candidates[0]
+    # A single residual dataset is also a valid canonical reference: its
+    # label plus the final desired/input delta reconstructs the true output
+    # delta. This is useful for one-representation ablation grids.
+    if not direct_delta_candidates and len(candidates) == 1:
+        return candidates[0]
+    if len(direct_delta_candidates) != 1:
         raise ValueError(
-            "Each direction requires exactly one delta/actual_delta common "
-            f"Q50 dataset; {direction_tag(inverse_model)} has "
+            "Each direction/sequence length requires exactly one usable "
+            f"evaluation dataset; {direction_tag(inverse_model)} "
+            f"sequence_length={sequence_length} has "
             f"{[variant.name for variant in candidates]}"
         )
-    return candidates[0]
+    return direct_delta_candidates[0]
 
-# Cartesian GRU grid. Tuples with one value keep that option fixed.
-# HIDDEN_SIZES = (32, 64, 128)
-HIDDEN_SIZES = (32, 64)
-NUM_LAYERS = (1, 2)
+# Best inverse architecture; history length is the only grid axis.
+HIDDEN_SIZES = (32,)
+NUM_LAYERS = (2,)
 BIDIRECTIONAL_OPTIONS = (False,)
-DROPOUTS = (0.0, 0.1, 0.2)      # Přidán 20% dropout pro lepší generalizaci
+DROPOUTS = (0.0,)
 BATCH_SIZES = (32,)
-LEARNING_RATES = (1e-3, 5e-4)   # Vrácen 5e-4 (včera měl absolutně nejlepší skóre)
+LEARNING_RATES = (5e-4,)
 LOSS_MODES = ("mse",)
 SEEDS = (10,)
 
@@ -362,12 +380,16 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
             "COMMON_EVALUATION_QUANTIZATION_NM must be present in the dataset "
             f"grid; got {COMMON_EVALUATION_QUANTIZATION_NM}"
         )
-    for inverse_model in DIRECTION_OPTIONS:
-        common_evaluation_variant(inverse_model)
+    direction_sequence_pairs = {
+        (variant.inverse_model, variant.sequence_length)
+        for variant in DATASET_VARIANTS
+    }
+    for inverse_model, sequence_length in direction_sequence_pairs:
+        common_evaluation_variant(inverse_model, sequence_length)
 
     representations_by_files: dict[
         tuple[Path, Path, Path],
-        set[tuple[bool, str, str, float | None]],
+        set[tuple[bool, str, str, float | None, int]],
     ] = {}
     variant_keys = []
     for variant in DATASET_VARIANTS:
@@ -405,6 +427,7 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
                 variant.window_coord_mode,
                 variant.target_mode,
                 variant.command_quantization_nm,
+                variant.sequence_length,
             )
         )
         variant_keys.append(
@@ -413,12 +436,14 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
                 variant.window_coord_mode,
                 variant.target_mode,
                 variant.command_quantization_nm,
+                variant.sequence_length,
             )
         )
 
     if len(variant_keys) != len(set(variant_keys)):
         raise ValueError(
-            "Direction/representation/quantization combinations must be unique"
+            "Direction/representation/quantization/sequence combinations "
+            "must be unique"
         )
 
     conflicting = {
@@ -441,6 +466,8 @@ def validate_grid_configuration(experiments: list[Experiment]) -> None:
 
     if any(value <= 0 for value in HIDDEN_SIZES):
         raise ValueError("HIDDEN_SIZES must be positive")
+    if any(variant.sequence_length <= 0 for variant in DATASET_VARIANTS):
+        raise ValueError("Dataset sequence lengths must be positive")
     if any(value <= 0 for value in NUM_LAYERS):
         raise ValueError("NUM_LAYERS must be positive")
     if any(value <= 0 for value in BATCH_SIZES):
@@ -468,10 +495,6 @@ def generate_dataset_variant(variant: DatasetVariant) -> None:
     """Generate one split-identical preprocessing variant."""
     if variant.input_size != 4:
         raise ValueError("Automatic grid dataset generation requires INPUT_SIZE=4")
-    if variant.sequence_length != current_config.SEQUENCE_LENGTH:
-        raise ValueError(
-            "Automatic generation requires the sequence length selected in const.py"
-        )
     from rnn import run_1_generate_dataset as generator
     from rnn.preprocessing import double as preprocessing
 
@@ -480,18 +503,21 @@ def generate_dataset_variant(variant: DatasetVariant) -> None:
         preprocessing.WINDOW_COORD_MODE,
         preprocessing.TARGET_MODE,
         preprocessing.COMMAND_QUANTIZATION_NM,
+        generator.SEQUENCE_LENGTH,
     )
     preprocessing.INVERSE_MODEL = variant.inverse_model
     preprocessing.WINDOW_COORD_MODE = variant.window_coord_mode
     preprocessing.TARGET_MODE = variant.target_mode
     preprocessing.COMMAND_QUANTIZATION_NM = variant.command_quantization_nm
+    generator.SEQUENCE_LENGTH = variant.sequence_length
 
     try:
         print(
             f"Generating {variant.name}: "
             f"direction={direction_tag(variant.inverse_model)}, "
             f"representation={variant.window_coord_mode}/{variant.target_mode}, "
-            f"quantization={variant.command_quantization_nm} nm"
+            f"quantization={variant.command_quantization_nm} nm, "
+            f"sequence_length={variant.sequence_length}"
         )
         sources = generator.resolve_experiment_sources(
             str(current_config.REPO_ROOT / current_config.EXPERIMENT_DIR),
@@ -578,6 +604,7 @@ def generate_dataset_variant(variant: DatasetVariant) -> None:
             preprocessing.WINDOW_COORD_MODE,
             preprocessing.TARGET_MODE,
             preprocessing.COMMAND_QUANTIZATION_NM,
+            generator.SEQUENCE_LENGTH,
         ) = previous_settings
 
 
@@ -709,12 +736,14 @@ def validate_common_evaluation_alignment(
     )
 
     for variant in DATASET_VARIANTS:
-        if variant.inverse_model != reference_variant.inverse_model:
+        if (
+            variant.inverse_model != reference_variant.inverse_model
+            or variant.sequence_length != reference_variant.sequence_length
+        ):
             continue
 
         if (
-            variant.sequence_length != reference_variant.sequence_length
-            or variant.input_size != reference_variant.input_size
+            variant.input_size != reference_variant.input_size
             or variant.output_size != reference_variant.output_size
         ):
             raise ValueError(
@@ -946,6 +975,7 @@ def evaluate_on_common_dataset(
     variant: DatasetVariant,
     model_input_dataset,
     reference_dataset,
+    reference_variant: DatasetVariant,
     reference_scaler,
     model_scaler,
     batch_size: int,
@@ -955,8 +985,8 @@ def evaluate_on_common_dataset(
 
     Inputs come from the model's own aligned dataset. Predictions from relative,
     direct-delta and residual-delta targets are reconstructed into the same
-    physical one-step delta. Reference labels are direct deltas from the aligned
-    Q50 dataset for the same direction.
+    physical one-step delta. Reference labels are converted to the same
+    physical delta representation using the configured evaluation dataset.
     """
     if len(model_input_dataset) != len(reference_dataset):
         raise ValueError(
@@ -980,7 +1010,7 @@ def evaluate_on_common_dataset(
     errors = []
     model.eval()
     with torch.no_grad():
-        for (model_sequences, _), (_, reference_labels) in zip(
+        for (model_sequences, _), (reference_sequences, reference_labels) in zip(
             model_loader, reference_loader, strict=True
         ):
             outputs = model(model_sequences.to(device, non_blocking=True))
@@ -993,12 +1023,20 @@ def evaluate_on_common_dataset(
             labels_nm = inverse_transform_with_global_scaler(
                 reference_labels.numpy(), reference_scaler
             )
+            reference_sequences_nm = inverse_transform_with_global_scaler(
+                reference_sequences.numpy(), reference_scaler
+            )
             canonical_predictions_nm = canonical_step_delta_nm(
                 predictions_nm,
                 sequences_nm,
                 variant,
             )
-            errors.append(canonical_predictions_nm - labels_nm)
+            canonical_labels_nm = canonical_step_delta_nm(
+                labels_nm,
+                reference_sequences_nm,
+                reference_variant,
+            )
+            errors.append(canonical_predictions_nm - canonical_labels_nm)
 
     if not errors:
         raise ValueError("Common evaluation dataset yielded no samples")
@@ -1161,6 +1199,7 @@ def train_experiment(
         experiment.dataset,
         bundle["datasets"]["val"],
         common_evaluation_bundle["datasets"]["val"],
+        common_evaluation_bundle["variant"],
         common_evaluation_bundle["scaler"],
         bundle["scaler"],
         experiment.batch_size,
@@ -1171,6 +1210,7 @@ def train_experiment(
         experiment.dataset,
         bundle["datasets"]["test"],
         common_evaluation_bundle["datasets"]["test"],
+        common_evaluation_bundle["variant"],
         common_evaluation_bundle["scaler"],
         bundle["scaler"],
         experiment.batch_size,
@@ -1183,6 +1223,7 @@ def train_experiment(
         "inverse_model": experiment.dataset.inverse_model,
         "direction": direction_tag(experiment.dataset.inverse_model),
         "command_quantization_nm": experiment.dataset.command_quantization_nm,
+        "sequence_length": experiment.dataset.sequence_length,
         "best_val_loss": best_val_loss,
         "best_epoch": best_epoch,
         "epochs_completed": len(history),
@@ -1192,8 +1233,8 @@ def train_experiment(
         "model_path": str(paths["model_best"]),
         "common_evaluation_quantization_nm": COMMON_EVALUATION_QUANTIZATION_NM,
         "common_evaluation_dataset": common_evaluation_bundle["variant"].name,
-        "common_q50_val_metrics": common_val_metrics,
-        "common_q50_test_metrics": common_test_metrics,
+        "evaluation_val_metrics": common_val_metrics,
+        "evaluation_test_metrics": common_test_metrics,
     }
 
 
@@ -1219,13 +1260,14 @@ def completed_result(
     ):
         return None
     expected_common_dataset = common_evaluation_variant(
-        experiment.dataset.inverse_model
+        experiment.dataset.inverse_model,
+        experiment.dataset.sequence_length,
     ).name
     if result.get("common_evaluation_dataset") != expected_common_dataset:
         return None
-    if not isinstance(result.get("common_q50_val_metrics"), dict):
+    if not isinstance(result.get("evaluation_val_metrics"), dict):
         return None
-    if not isinstance(result.get("common_q50_test_metrics"), dict):
+    if not isinstance(result.get("evaluation_test_metrics"), dict):
         return None
 
     config_path = paths["run"] / "config.json"
@@ -1266,56 +1308,58 @@ def write_json(path: Path, value: object) -> None:
 
 
 def write_ranking_csv(path: Path, records: list[dict[str, object]]) -> None:
-    """Write completed runs ranked by their shared Q50 validation RMSE."""
+    """Write completed runs ranked by validation RMSE in nanometres."""
     completed = [
         record
         for record in records
         if record.get("status") == "completed"
-        and isinstance(record.get("common_q50_val_metrics"), dict)
-        and isinstance(record.get("common_q50_test_metrics"), dict)
+        and isinstance(record.get("evaluation_val_metrics"), dict)
+        and isinstance(record.get("evaluation_test_metrics"), dict)
     ]
     completed.sort(
-        key=lambda record: record["common_q50_val_metrics"]["rmse_nm"]
+        key=lambda record: record["evaluation_val_metrics"]["rmse_nm"]
     )
     fieldnames = [
         "rank",
         "run_name",
         "dataset_variant",
+        "sequence_length",
         "command_quantization_nm",
         "best_epoch",
         "best_scaled_val_loss",
-        "common_q50_val_mae_nm",
-        "common_q50_val_rmse_nm",
-        "common_q50_val_error_distance_p90_nm",
-        "common_q50_test_mae_nm",
-        "common_q50_test_rmse_nm",
-        "common_q50_test_error_distance_p90_nm",
+        "val_mae_nm",
+        "val_rmse_nm",
+        "val_error_distance_p90_nm",
+        "test_mae_nm",
+        "test_rmse_nm",
+        "test_error_distance_p90_nm",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fieldnames)
         writer.writeheader()
         for rank, record in enumerate(completed, 1):
-            val_metrics = record["common_q50_val_metrics"]
-            test_metrics = record["common_q50_test_metrics"]
+            val_metrics = record["evaluation_val_metrics"]
+            test_metrics = record["evaluation_test_metrics"]
             writer.writerow(
                 {
                     "rank": rank,
                     "run_name": record["run_name"],
                     "dataset_variant": record.get("dataset_variant"),
+                    "sequence_length": record.get("sequence_length"),
                     "command_quantization_nm": record.get(
                         "command_quantization_nm"
                     ),
                     "best_epoch": record.get("best_epoch"),
                     "best_scaled_val_loss": record.get("best_val_loss"),
-                    "common_q50_val_mae_nm": val_metrics["mae_nm"],
-                    "common_q50_val_rmse_nm": val_metrics["rmse_nm"],
-                    "common_q50_val_error_distance_p90_nm": val_metrics[
+                    "val_mae_nm": val_metrics["mae_nm"],
+                    "val_rmse_nm": val_metrics["rmse_nm"],
+                    "val_error_distance_p90_nm": val_metrics[
                         "error_distance_p90_nm"
                     ],
-                    "common_q50_test_mae_nm": test_metrics["mae_nm"],
-                    "common_q50_test_rmse_nm": test_metrics["rmse_nm"],
-                    "common_q50_test_error_distance_p90_nm": test_metrics[
+                    "test_mae_nm": test_metrics["mae_nm"],
+                    "test_rmse_nm": test_metrics["rmse_nm"],
+                    "test_error_distance_p90_nm": test_metrics[
                         "error_distance_p90_nm"
                     ],
                 }
@@ -1360,11 +1404,19 @@ def main() -> int:
         for variant in DATASET_VARIANTS
     }
 
+    direction_sequence_pairs = sorted(
+        {
+            (variant.inverse_model, variant.sequence_length)
+            for variant in DATASET_VARIANTS
+        }
+    )
     common_evaluation_bundles = {}
-    for direction in DIRECTION_OPTIONS:
-        ref_variant = common_evaluation_variant(direction)
+    for direction, sequence_length in direction_sequence_pairs:
+        ref_variant = common_evaluation_variant(direction, sequence_length)
         validate_common_evaluation_alignment(ref_variant, bundles)
-        common_evaluation_bundles[direction] = bundles[ref_variant.name]
+        common_evaluation_bundles[(direction, sequence_length)] = bundles[
+            ref_variant.name
+        ]
 
     if args.prepare_datasets_only:
         print("Quantization datasets are ready; no model was trained.")
@@ -1382,8 +1434,10 @@ def main() -> int:
         "device": str(device),
         "compile_model": compile_model,
         "common_evaluation_datasets": {
-            direction_tag(direction): common_evaluation_variant(direction).name
-            for direction in DIRECTION_OPTIONS
+            f"{direction_tag(direction)}_seq{sequence_length}": (
+                common_evaluation_variant(direction, sequence_length).name
+            )
+            for direction, sequence_length in direction_sequence_pairs
         },
         "common_evaluation_quantization_nm": COMMON_EVALUATION_QUANTIZATION_NM,
         "experiments": [],
@@ -1422,7 +1476,12 @@ def main() -> int:
         try:
             bundle = bundles[experiment.dataset.name]
             # NOVĚ:
-            common_bundle = common_evaluation_bundles[experiment.dataset.inverse_model]
+            common_bundle = common_evaluation_bundles[
+                (
+                    experiment.dataset.inverse_model,
+                    experiment.dataset.sequence_length,
+                )
+            ]
             paths = prepare_run_directory(experiment, bundle, epochs)
             result = train_experiment(
                 experiment,
@@ -1437,8 +1496,8 @@ def main() -> int:
             summary["experiments"].append(result)
             print(
                 f"COMPLETED {run_name}: best val={result['best_val_loss']:.6g} "
-                f"at epoch {result['best_epoch']}; common Q50 val "
-                f"RMSE={result['common_q50_val_metrics']['rmse_nm']:.2f} nm"
+                f"at epoch {result['best_epoch']}; validation "
+                f"RMSE={result['evaluation_val_metrics']['rmse_nm']:.2f} nm"
             )
         except KeyboardInterrupt:
             summary["status"] = "interrupted"
@@ -1468,7 +1527,7 @@ def main() -> int:
     write_json(summary_path, summary)
     write_ranking_csv(ranking_path, summary["experiments"])
     print(f"\nGrid finished. Summary: {summary_path}")
-    print(f"Q50 validation ranking: {ranking_path}")
+    print(f"Validation ranking: {ranking_path}")
     return 1 if failures else 0
 
 
