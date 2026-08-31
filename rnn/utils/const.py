@@ -51,11 +51,9 @@ if TARGET_MODE not in ("actual_delta", "residual_delta"):
 if TARGET_MODE == "residual_delta" and WINDOW_COORD_MODE != "delta":
     raise ValueError("TARGET_MODE='residual_delta' is only supported for delta models")
 
-# SEM executes commands on a 50 nm absolute-position grid. Quantize each
-# absolute command before computing command deltas, i.e.
-# Q50(command[t]) - Q50(command[t - 1]). Set to None only to reproduce legacy
-# datasets that used the unquantized metadata values.
-COMMAND_QUANTIZATION_NM = 50.0
+# Use the raw absolute command positions from the dataset. Command
+# quantization is intentionally disabled for training and evaluation.
+COMMAND_QUANTIZATION_NM = None
 if COMMAND_QUANTIZATION_NM is not None and COMMAND_QUANTIZATION_NM <= 0:
     raise ValueError("COMMAND_QUANTIZATION_NM must be positive or None")
 
