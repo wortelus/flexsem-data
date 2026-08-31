@@ -2,7 +2,22 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
-from rnn.utils.const import INVERSE_MODEL, TARGET_MODE, WINDOW_COORD_MODE
+from rnn.utils.const import (
+    COMMAND_QUANTIZATION_NM,
+    INVERSE_MODEL,
+    TARGET_MODE,
+    WINDOW_COORD_MODE,
+)
+
+
+def quantize_command_positions(values, quantum_nm):
+    """Quantize absolute SEM commands; half-grid ties go towards +infinity."""
+    values = np.asarray(values, dtype=float)
+    if quantum_nm is None:
+        return values
+    if quantum_nm <= 0:
+        raise ValueError("command quantization must be positive or None")
+    return quantum_nm * np.floor(values / quantum_nm + 0.5)
 
 
 def _iter_segments(df):
@@ -49,12 +64,14 @@ def create_windows(df, window_size):
         # 1. Prepare raw data (N, 2). Previous values are segment-local;
         # the first row uses itself, producing zero previous-delta.
         if INVERSE_MODEL:
-            _fill_previous_from_current(segment, 'prev_x_target', 'x_target_abs')
-            _fill_previous_from_current(segment, 'prev_y_target', 'y_target_abs')
-
-            actuals = segment[['x_actual_abs', 'y_actual_abs']].values  # "desired positions"
-            targets = segment[['x_target_abs', 'y_target_abs']].values  # "commands needed"
-            prev_targets = segment[['prev_x_target', 'prev_y_target']].values
+            actuals = segment[['x_actual_abs', 'y_actual_abs']].to_numpy(dtype=float)
+            targets = quantize_command_positions(
+                segment[['x_target_abs', 'y_target_abs']].to_numpy(dtype=float),
+                COMMAND_QUANTIZATION_NM,
+            )
+            # Previous commands must come from the already-quantized absolute
+            # sequence. Quantizing raw deltas would produce different results.
+            prev_targets = np.vstack([targets[0], targets[:-1]])
 
             # Combined: [actual_x, actual_y, prev_target_x, prev_target_y]
             combined_data = np.hstack([actuals, prev_targets])
@@ -63,7 +80,10 @@ def create_windows(df, window_size):
             _fill_previous_from_current(segment, 'prev_y_actual', 'y_actual_abs')
             true_actuals = segment[['x_actual_abs', 'y_actual_abs']].values
 
-            targets = segment[['x_target_abs', 'y_target_abs']].values
+            targets = quantize_command_positions(
+                segment[['x_target_abs', 'y_target_abs']].to_numpy(dtype=float),
+                COMMAND_QUANTIZATION_NM,
+            )
             prev_actuals = segment[['prev_x_actual', 'prev_y_actual']].values
 
             combined_data = np.hstack([targets, prev_actuals])
